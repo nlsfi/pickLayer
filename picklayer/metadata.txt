@@ -25,7 +25,7 @@ tags= layer, functions, change, snap, properties, editing, hide, context menu, c
 homepage=http://geogear.wordpress.com/
 tracker=https://github.com/enricofer/pickLayer/issues
 repository=https://github.com/enricofer/pickLayer
-icon=icon.png
+icon=resources/icons/icon.png
 # experimental flag
 experimental=False
 

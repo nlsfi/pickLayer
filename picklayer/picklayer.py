@@ -87,7 +87,7 @@ class pickLayer:
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
 
         #icon_path = ':/plugins/pickLayer/icon.png'
-        icon_path = os.path.join(self.plugin_dir, "icons", "pickLayer.png")
+        icon_path = os.path.join(self.plugin_dir, "resources/icons", "pickLayer.png")
         # map tool action
         self.mapToolAction = QtWidgets.QAction(QtGui.QIcon(icon_path),"Pick to Layer", self.iface.mainWindow())
         self.mapToolAction.setCheckable(True)
@@ -153,29 +153,34 @@ class pickLayer:
                 self.clipboardAreaAction = contextMenu.addAction("Area: "+str(self.area))
                 self.clipboardAreaAction.triggered.connect(self.clipboardAreaFunc)
         contextMenu.addSeparator()
-        self.setCurrentAction = contextMenu.addAction(QtGui.QIcon(os.path.join(self.plugin_dir, "icons", "mSetCurrentLayer.png")), "Set current layer")
-        self.hideAction = contextMenu.addAction(QtGui.QIcon(os.path.join(self.plugin_dir, "icons", "off.png")), "Hide")
-        self.openPropertiesAction = contextMenu.addAction(QtGui.QIcon(os.path.join(self.plugin_dir, "icons", "settings.svg")), "Open properties dialog")
-        self.zoomToLayerAction = contextMenu.addAction(QtGui.QIcon(os.path.join(self.plugin_dir, "icons", "zoomToLayer.png")), "Zoom to layer extension")
+        self.setCurrentAction = contextMenu.addAction(QtGui.QIcon(os.path.join(self.plugin_dir, "resources/icons", "mSetCurrentLayer.png")), "Set current layer")
+        self.hideAction = contextMenu.addAction(QtGui.QIcon(os.path.join(self.plugin_dir, "resources/icons", "off.png")), "Hide")
+        self.openPropertiesAction = contextMenu.addAction(QtGui.QIcon(os.path.join(self.plugin_dir, "resources/icons", "settings.svg")), "Open properties dialog")
+        self.zoomToLayerAction = contextMenu.addAction(QtGui.QIcon(os.path.join(self.plugin_dir, "resources/icons", "zoomToLayer.png")), "Zoom to layer extension")
         self.setCurrentAction.triggered.connect(self.setCurrentFunc)
         self.hideAction.triggered.connect(self.hideFunc)
         self.openPropertiesAction.triggered.connect(self.openPropertiesFunc)
         self.zoomToLayerAction.triggered.connect(self.zoomToLayerFunc)
         if self.selectedLayer.type() == core.QgsMapLayer.VectorLayer:
-            self.openAttributeTableAction = contextMenu.addAction(QtGui.QIcon(os.path.join(self.plugin_dir, "icons", "mActionOpenTable.png")), "Open attribute table")
+            self.openAttributeTableAction = contextMenu.addAction(QtGui.QIcon(os.path.join(self.plugin_dir,
+                                                                                           "resources/icons", "mActionOpenTable.png")), "Open attribute table")
             self.openAttributeTableAction.triggered.connect(self.openAttributeTableFunc)
             if self.selectedLayer.isEditable():
-                self.stopEditingAction = contextMenu.addAction(QtGui.QIcon(os.path.join(self.plugin_dir, "icons", "mIconEditableEdits.png")), "Stop editing")
+                self.stopEditingAction = contextMenu.addAction(QtGui.QIcon(os.path.join(self.plugin_dir,
+                                                                                        "resources/icons", "mIconEditableEdits.png")), "Stop editing")
                 self.stopEditingAction.triggered.connect(self.stopEditingFunc)
             else:
-                self.startEditingAction = contextMenu.addAction(QtGui.QIcon(os.path.join(self.plugin_dir, "icons", "mIconEditable.png")), "Start editing")
+                self.startEditingAction = contextMenu.addAction(QtGui.QIcon(os.path.join(self.plugin_dir,
+                                                                                         "resources/icons", "mIconEditable.png")), "Start editing")
                 self.startEditingAction.triggered.connect(self.startEditingFunc)
             contextMenu.addSeparator()
-            self.zoomToFeatureAction = contextMenu.addAction(QtGui.QIcon(os.path.join(self.plugin_dir, "icons", "zoomToFeature.png")), "Zoom to feature")
+            self.zoomToFeatureAction = contextMenu.addAction(QtGui.QIcon(os.path.join(self.plugin_dir,
+                                                                                      "resources/icons", "zoomToFeature.png")), "Zoom to feature")
             self.zoomToFeatureAction.triggered.connect(self.zoomToFeatureFunc)
             if self.isSnappingOn(self.selectedLayer):
                 self.snap_control = not core.QgsProject.instance().snappingConfig().individualLayerSettings(self.selectedLayer).enabled()
-                self.snappingOptionsAction = contextMenu.addAction(QtGui.QIcon(os.path.join(self.plugin_dir, "icons", "snapIcon.png")), enable_disable[self.snap_control] + " snap")
+                self.snappingOptionsAction = contextMenu.addAction(QtGui.QIcon(os.path.join(self.plugin_dir,
+                                                                                            "resources/icons", "snapIcon.png")), enable_disable[self.snap_control] + " snap")
                 self.snappingOptionsAction.triggered.connect(self.snappingOptionsFunc)
             if len(QtWidgets.QApplication.clipboard().text().splitlines()) > 1:
                 clipFeatLineTXT = QtWidgets.QApplication.clipboard().text().splitlines()[1]
@@ -185,24 +190,27 @@ class pickLayer:
                 self.clipGeom = core.QgsGeometry.fromWkt(clipFeatsTXT[0])
                 #if self.clipGeom.isGeosValid():
                 if self.selectedLayer.isEditable() and self.clipGeom:
-                    self.pasteGeomAction = contextMenu.addAction(QtGui.QIcon(os.path.join(self.plugin_dir, "icons", "pasteIcon.png")), "Paste geometry on feature")
+                    self.pasteGeomAction = contextMenu.addAction(QtGui.QIcon(os.path.join(self.plugin_dir,
+                                                                                          "resources/icons", "pasteIcon.png")), "Paste geometry on feature")
                     self.pasteGeomAction.triggered.connect(self.pasteGeomFunc)
-                    self.pasteAttrsAction = contextMenu.addAction(QtGui.QIcon(os.path.join(self.plugin_dir, "icons", "pasteIcon.png")), "Paste attributes on feature")
+                    self.pasteAttrsAction = contextMenu.addAction(QtGui.QIcon(os.path.join(self.plugin_dir,
+                                                                                           "resources/icons", "pasteIcon.png")), "Paste attributes on feature")
                     self.pasteAttrsAction.triggered.connect(self.pasteAttrsFunc)
-            self.clipFeatureAction = contextMenu.addAction(QtGui.QIcon(os.path.join(self.plugin_dir, "icons", "subtractIcon.png")), "Select feature and Subtract")
+            self.clipFeatureAction = contextMenu.addAction(QtGui.QIcon(os.path.join(self.plugin_dir, "resources/icons", "subtractIcon.png")), "Select feature and Subtract")
             self.clipFeatureAction.triggered.connect(self.clipFeatureFunc)
             self.clipFeatureAction.setEnabled(self.selectedLayer.isEditable())
-            self.mergeFeatureAction = contextMenu.addAction(QtGui.QIcon(os.path.join(self.plugin_dir, "icons", "mergeIcon.png")), "Select feature and Merge")
+            self.mergeFeatureAction = contextMenu.addAction(QtGui.QIcon(os.path.join(self.plugin_dir, "resources/icons", "mergeIcon.png")), "Select feature and Merge")
             self.mergeFeatureAction.triggered.connect(self.mergeFeatureFunc)
             self.mergeFeatureAction.setEnabled(self.selectedLayer.isEditable())
-            self.makeValidFeatureAction = contextMenu.addAction(QtGui.QIcon(os.path.join(self.plugin_dir, "icons", "makeValidIcon.png")), "Make Valid Geometry")
+            self.makeValidFeatureAction = contextMenu.addAction(QtGui.QIcon(os.path.join(self.plugin_dir,
+                                                                                         "resources/icons", "makeValidIcon.png")), "Make Valid Geometry")
             self.makeValidFeatureAction.triggered.connect(self.makeValidFeatureFunc)
             self.makeValidFeatureAction.setEnabled(self.selectedLayer.isEditable())
-            self.copyFeatureAction = contextMenu.addAction(QtGui.QIcon(os.path.join(self.plugin_dir, "icons", "copyIcon.png")), "Copy feature")
+            self.copyFeatureAction = contextMenu.addAction(QtGui.QIcon(os.path.join(self.plugin_dir, "resources/icons", "copyIcon.png")), "Copy feature")
             self.copyFeatureAction.triggered.connect(self.copyFeatureFunc)
-            self.attributeMenu = contextMenu.addMenu(QtGui.QIcon(os.path.join(self.plugin_dir, "icons", "viewAttributes.png")), "Feature attributes view")
+            self.attributeMenu = contextMenu.addMenu(QtGui.QIcon(os.path.join(self.plugin_dir, "resources/icons", "viewAttributes.png")), "Feature attributes view")
             self.populateAttributesMenu(self.attributeMenu)
-            self.editFeatureAction = contextMenu.addAction(QtGui.QIcon(os.path.join(self.plugin_dir, "icons", "mActionPropertyItem.png")), "Feature attributes edit")
+            self.editFeatureAction = contextMenu.addAction(QtGui.QIcon(os.path.join(self.plugin_dir, "resources/icons", "mActionPropertyItem.png")), "Feature attributes edit")
             self.editFeatureAction.triggered.connect(self.editFeatureFunc)
             if self.selectedLayer.actions().actions():
                 actionOrder = 0
@@ -211,7 +219,7 @@ class pickLayer:
                     try:
                         customIcon = action.icon()
                     except:
-                        customIcon = QtGui.QIcon(os.path.join(self.plugin_dir, "icons", "customAction.png"))
+                        customIcon = QtGui.QIcon(os.path.join(self.plugin_dir, "resources/icons", "customAction.png"))
                     newActionItem = contextMenu.addAction(customIcon,action.name())
                     newActionItem.triggered.connect(partial(self.customAction,actionOrder))
                     actionOrder += 1
