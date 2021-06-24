@@ -8,3 +8,6 @@ test/
 .DS_Store
 plugin_upload.py
 /.idea/
+.vscode
+*/.pytest_cache
+__pycache__

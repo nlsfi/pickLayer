@@ -1,0 +1,2 @@
+[report]
+omit = picklayer/qgis_plugin_tools/*
