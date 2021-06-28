@@ -1,12 +1,19 @@
-*.pyc
-Makefile
-*.log
-help/
-/i18n/
-scripts/
 .DS_Store
-plugin_upload.py
-/.idea/
+
+# IDE
 .vscode
-*/.pytest_cache
+.vs
+/.idea/
+start_ide.bat
+
+# python venv & cache
+venv/
+.venv/
+*.pytest_cache
+.mypy_cache
 __pycache__
+*.coverage
+*.pyc
+
+*logs/
+*.log

@@ -1,2 +1,11 @@
 pre-commit>=2.12.1
 pytest~=6.2.3
+
+# libraries that pre-commit uses
+mypy==0.812
+black==20.8b1
+flake8==3.9.1
+flake8-bugbear~=21.4.3
+pep8-naming~=0.11.1
+flake8-annotations~=2.6.2
+flake8-qgis>=0.1.2
