@@ -371,7 +371,7 @@ class PickLayer:
                         )
                     new_action_item = context_menu.addAction(custom_icon, action.name())
                     new_action_item.triggered.connect(
-                        partial(self.custom_action, action_order)
+                        partial(self.custom_action, action.id())
                     )
                     action_order += 1
         context_menu.exec_(QtGui.QCursor.pos())
