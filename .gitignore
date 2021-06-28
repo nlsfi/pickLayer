@@ -4,7 +4,6 @@ Makefile
 help/
 i18n/
 scripts/
-test/
 .DS_Store
 plugin_upload.py
 /.idea/
