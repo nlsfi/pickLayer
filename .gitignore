@@ -2,7 +2,7 @@
 Makefile
 *.log
 help/
-i18n/
+/i18n/
 scripts/
 .DS_Store
 plugin_upload.py
