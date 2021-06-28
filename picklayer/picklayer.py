@@ -32,6 +32,7 @@ from qgis.PyQt.QtCore import QUuid
 from qgis.utils import iface, plugins
 
 from picklayer.identifygeometry import IdentifyGeometry
+from picklayer.qgis_plugin_tools.tools.i18n import tr
 
 enable_disable = {True: "Enable", False: "Disable"}
 
@@ -89,7 +90,7 @@ class PickLayer:
         icon_path = os.path.join(self.plugin_dir, "resources/icons", "pickLayer.png")
         # map tool action
         self.map_tool_action = QtWidgets.QAction(
-            QtGui.QIcon(icon_path), "Pick to Layer", iface.mainWindow()
+            QtGui.QIcon(icon_path), tr("Pick to Layer"), iface.mainWindow()
         )
         self.map_tool_action.setCheckable(True)
         self.map_tool = IdentifyGeometry(self.map_canvas)
@@ -101,7 +102,7 @@ class PickLayer:
 
         self.map_tool_action.triggered.connect(self.set_map_tool)
         iface.addToolBarIcon(self.map_tool_action)
-        iface.addPluginToMenu("&Pick to Layer", self.map_tool_action)
+        iface.addPluginToMenu(tr("&Pick to Layer"), self.map_tool_action)
 
     def populate_attributes_menu(self, attribute_menu: QtWidgets.QMenu) -> None:
         field_names = [field.name() for field in self.selected_layer.fields()]
@@ -123,7 +124,7 @@ class PickLayer:
     def context_menu_request(self) -> None:
         context_menu = QtWidgets.QMenu()
         self.clipboard_layer_action = context_menu.addAction(
-            "Layer: " + self.selected_layer.name()
+            tr("Layer: {}", self.selected_layer.name())
         )
         if self.selected_layer.type() == core.QgsMapLayer.VectorLayer:
             context_menu.addSeparator()
@@ -147,10 +148,10 @@ class PickLayer:
                 self.clipboard_x_action.triggered.connect(self.clipboard_xy_func)
                 self.clipboard_y_action.triggered.connect(self.clipboard_xy_func)
                 self.clipboard_lon_action = context_menu.addAction(
-                    "Lon: " + str(round(pg.x(), 6))
+                    tr("Lon: {}", str(round(pg.x(), 6)))
                 )
                 self.clipboard_lat_action = context_menu.addAction(
-                    "Lat: " + str(round(pg.y(), 6))
+                    tr("Lat: {}", str(round(pg.y(), 6)))
                 )
                 self.clipboard_lon_action.triggered.connect(self.clipboard_lon_lat_func)
                 self.clipboard_lat_action.triggered.connect(self.clipboard_lon_lat_func)
@@ -158,19 +159,19 @@ class PickLayer:
                 self.leng = round(self.selected_feature.geometry().length(), 2)
                 bound = self.selected_feature.geometry().boundingBox()
                 self.clipboard_north_action = context_menu.addAction(
-                    "North: " + str(round(bound.yMaximum(), 4))
+                    tr("North: {}", str(round(bound.yMaximum(), 4)))
                 )
                 self.clipboard_south_action = context_menu.addAction(
-                    "South: " + str(round(bound.yMinimum(), 4))
+                    tr("South: {}", str(round(bound.yMinimum(), 4)))
                 )
                 self.clipboard_east_action = context_menu.addAction(
-                    "East: " + str(round(bound.xMinimum(), 4))
+                    tr("East: {}", str(round(bound.xMinimum(), 4)))
                 )
                 self.clipboard_west_action = context_menu.addAction(
-                    "West: " + str(round(bound.xMaximum(), 4))
+                    tr("West: {}", str(round(bound.xMaximum(), 4)))
                 )
                 self.clipboard_leng_action = context_menu.addAction(
-                    "Length: " + str(self.leng)
+                    tr("Length: {}", str(self.leng))
                 )
                 self.clipboard_leng_action.triggered.connect(self.clipboard_leng_func)
             elif self.selected_layer.geometryType() == core.QgsWkbTypes.PolygonGeometry:
@@ -178,23 +179,23 @@ class PickLayer:
                 self.leng = round(self.selected_feature.geometry().length(), 2)
                 bound = self.selected_feature.geometry().boundingBox()
                 self.clipboard_north_action = context_menu.addAction(
-                    "North: " + str(round(bound.yMaximum(), 4))
+                    tr("North: {}", str(round(bound.yMaximum(), 4)))
                 )
                 self.clipboard_south_action = context_menu.addAction(
-                    "South: " + str(round(bound.yMinimum(), 4))
+                    tr("South: {}", str(round(bound.yMinimum(), 4)))
                 )
                 self.clipboard_east_action = context_menu.addAction(
-                    "East: " + str(round(bound.xMinimum(), 4))
+                    tr("East: {}", str(round(bound.xMinimum(), 4)))
                 )
                 self.clipboard_west_action = context_menu.addAction(
-                    "West: " + str(round(bound.xMaximum(), 4))
+                    tr("West: {}", str(round(bound.xMaximum(), 4)))
                 )
                 self.clipboard_leng_action = context_menu.addAction(
-                    "Perimeter: " + str(self.leng)
+                    tr("Perimeter: {}", str(self.leng))
                 )
                 self.clipboard_leng_action.triggered.connect(self.clipboard_leng_func)
                 self.clipboard_area_action = context_menu.addAction(
-                    "Area: " + str(self.area)
+                    tr("Area: {}", str(self.area))
                 )
                 self.clipboard_area_action.triggered.connect(self.clipboard_area_func)
         context_menu.addSeparator()
@@ -202,23 +203,23 @@ class PickLayer:
             QtGui.QIcon(
                 os.path.join(self.plugin_dir, "resources/icons", "mSetCurrentLayer.png")
             ),
-            "Set current layer",
+            tr("Set current layer"),
         )
         self.hide_action = context_menu.addAction(
             QtGui.QIcon(os.path.join(self.plugin_dir, "resources/icons", "off.png")),
-            "Hide",
+            tr("Hide"),
         )
         self.open_properties_action = context_menu.addAction(
             QtGui.QIcon(
                 os.path.join(self.plugin_dir, "resources/icons", "settings.svg")
             ),
-            "Open properties dialog",
+            tr("Open properties dialog"),
         )
         self.zoom_to_layer_action = context_menu.addAction(
             QtGui.QIcon(
                 os.path.join(self.plugin_dir, "resources/icons", "zoomToLayer.png")
             ),
-            "Zoom to layer extension",
+            tr("Zoom to layer extension"),
         )
         self.set_current_action.triggered.connect(self.set_current_func)
         self.hide_action.triggered.connect(self.hide_func)
@@ -231,7 +232,7 @@ class PickLayer:
                         self.plugin_dir, "resources/icons", "mActionOpenTable.png"
                     )
                 ),
-                "Open attribute table",
+                tr("Open attribute table"),
             )
             self.open_attribute_table_action.triggered.connect(
                 self.open_attribute_table_func
@@ -243,7 +244,7 @@ class PickLayer:
                             self.plugin_dir, "resources/icons", "mIconEditableEdits.png"
                         )
                     ),
-                    "Stop editing",
+                    tr("Stop editing"),
                 )
                 self.stop_editing_action.triggered.connect(self.stop_editing_func)
             else:
@@ -253,7 +254,7 @@ class PickLayer:
                             self.plugin_dir, "resources/icons", "mIconEditable.png"
                         )
                     ),
-                    "Start editing",
+                    tr("Start editing"),
                 )
                 self.start_editing_action.triggered.connect(self.start_editing_func)
             context_menu.addSeparator()
@@ -263,7 +264,7 @@ class PickLayer:
                         self.plugin_dir, "resources/icons", "zoomToFeature.png"
                     )
                 ),
-                "Zoom to feature",
+                tr("Zoom to feature"),
             )
             self.zoom_to_feature_action.triggered.connect(self.zoom_to_feature_func)
             if self.is_snapping_on(self.selected_layer):
@@ -303,7 +304,7 @@ class PickLayer:
                                 self.plugin_dir, "resources/icons", "pasteIcon.png"
                             )
                         ),
-                        "Paste geometry on feature",
+                        tr("Paste geometry on feature"),
                     )
                     self.paste_geom_action.triggered.connect(self.paste_geom_func)
                     self.paste_attrs_action = context_menu.addAction(
@@ -312,14 +313,14 @@ class PickLayer:
                                 self.plugin_dir, "resources/icons", "pasteIcon.png"
                             )
                         ),
-                        "Paste attributes on feature",
+                        tr("Paste attributes on feature"),
                     )
                     self.paste_attrs_action.triggered.connect(self.paste_attrs_func)
             self.clip_feature_action = context_menu.addAction(
                 QtGui.QIcon(
                     os.path.join(self.plugin_dir, "resources/icons", "subtractIcon.png")
                 ),
-                "Select feature and Subtract",
+                tr("Select feature and Subtract"),
             )
             self.clip_feature_action.triggered.connect(self.clip_feature_func)
             self.clip_feature_action.setEnabled(self.selected_layer.isEditable())
@@ -327,7 +328,7 @@ class PickLayer:
                 QtGui.QIcon(
                     os.path.join(self.plugin_dir, "resources/icons", "mergeIcon.png")
                 ),
-                "Select feature and Merge",
+                tr("Select feature and Merge"),
             )
             self.merge_feature_action.triggered.connect(self.merge_feature_func)
             self.merge_feature_action.setEnabled(self.selected_layer.isEditable())
@@ -337,7 +338,7 @@ class PickLayer:
                         self.plugin_dir, "resources/icons", "makeValidIcon.png"
                     )
                 ),
-                "Make Valid Geometry",
+                tr("Make Valid Geometry"),
             )
             self.make_valid_feature_action.triggered.connect(
                 self.make_valid_feature_func
@@ -347,7 +348,7 @@ class PickLayer:
                 QtGui.QIcon(
                     os.path.join(self.plugin_dir, "resources/icons", "copyIcon.png")
                 ),
-                "Copy feature",
+                tr("Copy feature"),
             )
             self.copy_feature_action.triggered.connect(self.copy_feature_func)
             self.attribute_menu = context_menu.addMenu(
@@ -356,7 +357,7 @@ class PickLayer:
                         self.plugin_dir, "resources/icons", "viewAttributes.png"
                     )
                 ),
-                "Feature attributes view",
+                tr("Feature attributes view"),
             )
             self.populate_attributes_menu(self.attribute_menu)
             self.edit_feature_action = context_menu.addAction(
@@ -365,7 +366,7 @@ class PickLayer:
                         self.plugin_dir, "resources/icons", "mActionPropertyItem.png"
                     )
                 ),
-                "Feature attributes edit",
+                tr("Feature attributes edit"),
             )
             self.edit_feature_action.triggered.connect(self.edit_feature_func)
             if self.selected_layer.actions().actions():
@@ -509,7 +510,7 @@ class PickLayer:
         self.context_menu_request()
 
     def unload(self) -> None:
-        iface.removePluginMenu("&Pick to Layer", self.map_tool_action)
+        iface.removePluginMenu(tr("&Pick to Layer"), self.map_tool_action)
         iface.removeToolBarIcon(self.map_tool_action)
 
     def set_map_tool(self) -> None:
@@ -560,8 +561,8 @@ class PickLayer:
     ) -> None:
         if clip_feature.geometry().type() != self.selected_feature.geometry().type():
             iface.messageBar().pushMessage(
-                "PickLayer plugin",
-                "Can't perform spatial function on different geometry types",
+                tr("PickLayer plugin"),
+                tr("Can't perform spatial function on different geometry types"),
                 level=Qgis.Warning,
                 duration=4,
             )
@@ -574,16 +575,16 @@ class PickLayer:
                     self.selected_layer.deleteFeature(clip_feature.id())
                 self.selected_layer.triggerRepaint()
                 iface.messageBar().pushMessage(
-                    "PickLayer plugin",
-                    "Source Geometry succesfully " + self.spatial_predicate,
+                    tr("PickLayer plugin"),
+                    tr("Source Geometry succesfully {}", self.spatial_predicate),
                     level=Qgis.Success,
                     duration=4,
                 )
                 self.highlight(clipped_geometry)
             else:
                 iface.messageBar().pushMessage(
-                    "PickLayer plugin",
-                    "Invalid processed geometry",
+                    tr("PickLayer plugin"),
+                    tr("Invalid processed geometry"),
                     level=Qgis.Warning,
                     duration=4,
                 )
