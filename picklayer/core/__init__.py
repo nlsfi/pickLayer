@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 #  Copyright (C) 2014-2019 Enrico Ferreguti (enricofer@gmail.com)
 #  Copyright (C) 2021 National Land Survey of Finland
 #  (https://www.maanmittauslaitos.fi/en).
@@ -19,16 +17,3 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with PickLayer.  If not, see <https://www.gnu.org/licenses/>.
-
-
-# noinspection PyPep8Naming
-def classFactory(iface):  # noqa N802 QGS105
-    """Load pickLayer class from file picklayer.
-
-    :param iface: A QGIS interface instance.
-    :type iface: QgsInterface
-    """
-    #
-    from picklayer.core.picklayer import PickLayer
-
-    return PickLayer()

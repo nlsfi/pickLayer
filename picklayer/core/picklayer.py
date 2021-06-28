@@ -43,13 +43,7 @@ class PickLayer:
     def __init__(
         self,
     ) -> None:
-        """Constructor.
-
-        :param iface: An interface instance that will be passed to this class
-            which provides the hook by which you can manipulate the QGIS
-            application at run time.
-        :type iface: QgsInterface
-        """
+        """Constructor."""
         # Save reference to the QGIS interface
         self.map_canvas = iface.mapCanvas()
         self.utils = iface.mapCanvas().snappingUtils()
@@ -87,7 +81,7 @@ class PickLayer:
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
 
         # icon_path = ':/plugins/pickLayer/icon.png'
-        icon_path = os.path.join(self.plugin_dir, "resources/icons", "pickLayer.png")
+        icon_path = os.path.join(self.plugin_dir, "../resources/icons", "pickLayer.png")
         # map tool action
         self.map_tool_action = QtWidgets.QAction(
             QtGui.QIcon(icon_path), tr("Pick to Layer"), iface.mainWindow()
@@ -201,23 +195,25 @@ class PickLayer:
         context_menu.addSeparator()
         self.set_current_action = context_menu.addAction(
             QtGui.QIcon(
-                os.path.join(self.plugin_dir, "resources/icons", "mSetCurrentLayer.png")
+                os.path.join(
+                    self.plugin_dir, "../resources/icons", "mSetCurrentLayer.png"
+                )
             ),
             tr("Set current layer"),
         )
         self.hide_action = context_menu.addAction(
-            QtGui.QIcon(os.path.join(self.plugin_dir, "resources/icons", "off.png")),
+            QtGui.QIcon(os.path.join(self.plugin_dir, "../resources/icons", "off.png")),
             tr("Hide"),
         )
         self.open_properties_action = context_menu.addAction(
             QtGui.QIcon(
-                os.path.join(self.plugin_dir, "resources/icons", "settings.svg")
+                os.path.join(self.plugin_dir, "../resources/icons", "settings.svg")
             ),
             tr("Open properties dialog"),
         )
         self.zoom_to_layer_action = context_menu.addAction(
             QtGui.QIcon(
-                os.path.join(self.plugin_dir, "resources/icons", "zoomToLayer.png")
+                os.path.join(self.plugin_dir, "../resources/icons", "zoomToLayer.png")
             ),
             tr("Zoom to layer extension"),
         )
@@ -229,7 +225,7 @@ class PickLayer:
             self.open_attribute_table_action = context_menu.addAction(
                 QtGui.QIcon(
                     os.path.join(
-                        self.plugin_dir, "resources/icons", "mActionOpenTable.png"
+                        self.plugin_dir, "../resources/icons", "mActionOpenTable.png"
                     )
                 ),
                 tr("Open attribute table"),
@@ -241,7 +237,9 @@ class PickLayer:
                 self.stop_editing_action = context_menu.addAction(
                     QtGui.QIcon(
                         os.path.join(
-                            self.plugin_dir, "resources/icons", "mIconEditableEdits.png"
+                            self.plugin_dir,
+                            "../resources/icons",
+                            "mIconEditableEdits.png",
                         )
                     ),
                     tr("Stop editing"),
@@ -251,7 +249,7 @@ class PickLayer:
                 self.start_editing_action = context_menu.addAction(
                     QtGui.QIcon(
                         os.path.join(
-                            self.plugin_dir, "resources/icons", "mIconEditable.png"
+                            self.plugin_dir, "../resources/icons", "mIconEditable.png"
                         )
                     ),
                     tr("Start editing"),
@@ -261,7 +259,7 @@ class PickLayer:
             self.zoom_to_feature_action = context_menu.addAction(
                 QtGui.QIcon(
                     os.path.join(
-                        self.plugin_dir, "resources/icons", "zoomToFeature.png"
+                        self.plugin_dir, "../resources/icons", "zoomToFeature.png"
                     )
                 ),
                 tr("Zoom to feature"),
@@ -276,7 +274,9 @@ class PickLayer:
                 )
                 self.snapping_options_action = context_menu.addAction(
                     QtGui.QIcon(
-                        os.path.join(self.plugin_dir, "resources/icons", "snapIcon.png")
+                        os.path.join(
+                            self.plugin_dir, "../resources/icons", "snapIcon.png"
+                        )
                     ),
                     enable_disable[self.snap_control] + " snap",
                 )
@@ -301,7 +301,7 @@ class PickLayer:
                     self.paste_geom_action = context_menu.addAction(
                         QtGui.QIcon(
                             os.path.join(
-                                self.plugin_dir, "resources/icons", "pasteIcon.png"
+                                self.plugin_dir, "../resources/icons", "pasteIcon.png"
                             )
                         ),
                         tr("Paste geometry on feature"),
@@ -310,7 +310,7 @@ class PickLayer:
                     self.paste_attrs_action = context_menu.addAction(
                         QtGui.QIcon(
                             os.path.join(
-                                self.plugin_dir, "resources/icons", "pasteIcon.png"
+                                self.plugin_dir, "../resources/icons", "pasteIcon.png"
                             )
                         ),
                         tr("Paste attributes on feature"),
@@ -318,7 +318,9 @@ class PickLayer:
                     self.paste_attrs_action.triggered.connect(self.paste_attrs_func)
             self.clip_feature_action = context_menu.addAction(
                 QtGui.QIcon(
-                    os.path.join(self.plugin_dir, "resources/icons", "subtractIcon.png")
+                    os.path.join(
+                        self.plugin_dir, "../resources/icons", "subtractIcon.png"
+                    )
                 ),
                 tr("Select feature and Subtract"),
             )
@@ -326,7 +328,7 @@ class PickLayer:
             self.clip_feature_action.setEnabled(self.selected_layer.isEditable())
             self.merge_feature_action = context_menu.addAction(
                 QtGui.QIcon(
-                    os.path.join(self.plugin_dir, "resources/icons", "mergeIcon.png")
+                    os.path.join(self.plugin_dir, "../resources/icons", "mergeIcon.png")
                 ),
                 tr("Select feature and Merge"),
             )
@@ -335,7 +337,7 @@ class PickLayer:
             self.make_valid_feature_action = context_menu.addAction(
                 QtGui.QIcon(
                     os.path.join(
-                        self.plugin_dir, "resources/icons", "makeValidIcon.png"
+                        self.plugin_dir, "../resources/icons", "makeValidIcon.png"
                     )
                 ),
                 tr("Make Valid Geometry"),
@@ -346,7 +348,7 @@ class PickLayer:
             self.make_valid_feature_action.setEnabled(self.selected_layer.isEditable())
             self.copy_feature_action = context_menu.addAction(
                 QtGui.QIcon(
-                    os.path.join(self.plugin_dir, "resources/icons", "copyIcon.png")
+                    os.path.join(self.plugin_dir, "../resources/icons", "copyIcon.png")
                 ),
                 tr("Copy feature"),
             )
@@ -354,7 +356,7 @@ class PickLayer:
             self.attribute_menu = context_menu.addMenu(
                 QtGui.QIcon(
                     os.path.join(
-                        self.plugin_dir, "resources/icons", "viewAttributes.png"
+                        self.plugin_dir, "../resources/icons", "viewAttributes.png"
                     )
                 ),
                 tr("Feature attributes view"),
@@ -363,7 +365,7 @@ class PickLayer:
             self.edit_feature_action = context_menu.addAction(
                 QtGui.QIcon(
                     os.path.join(
-                        self.plugin_dir, "resources/icons", "mActionPropertyItem.png"
+                        self.plugin_dir, "../resources/icons", "mActionPropertyItem.png"
                     )
                 ),
                 tr("Feature attributes edit"),
@@ -378,7 +380,7 @@ class PickLayer:
                     except Exception:
                         custom_icon = QtGui.QIcon(
                             os.path.join(
-                                self.plugin_dir, "resources/icons", "ustomAction.png"
+                                self.plugin_dir, "../resources/icons", "ustomAction.png"
                             )
                         )
                     new_action_item = context_menu.addAction(custom_icon, action.name())
