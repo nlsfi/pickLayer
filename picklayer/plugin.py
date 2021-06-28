@@ -19,6 +19,7 @@
 
 from typing import Callable, Dict, Optional
 
+from qgis.core import QgsApplication
 from qgis.PyQt.QtCore import QCoreApplication, QTranslator
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction, QWidget
@@ -31,6 +32,7 @@ from picklayer.qgis_plugin_tools.tools.custom_logging import (
 )
 from picklayer.qgis_plugin_tools.tools.i18n import setup_translation, tr
 from picklayer.qgis_plugin_tools.tools.resources import plugin_name, resources_path
+from picklayer.ui.settings_dialog import SettingsDialog
 
 
 class Plugin:
@@ -64,6 +66,7 @@ class Plugin:
         status_tip: Optional[str] = None,
         whats_this: Optional[str] = None,
         parent: Optional[QWidget] = None,
+        icon: Optional[QIcon] = None,
     ) -> QAction:
         """Add a toolbar icon to the toolbar.
 
@@ -96,7 +99,7 @@ class Plugin:
         :rtype: QAction
         """
 
-        icon = QIcon(icon_path)
+        icon = QIcon(icon_path) if icon is None else icon
         action = QAction(icon, text, parent)
         # noinspection PyUnresolvedReferences
         action.triggered.connect(callback)
@@ -128,6 +131,14 @@ class Plugin:
             callback=self.run,
             parent=iface.mainWindow(),
         )
+        self.add_action(
+            "",
+            text=tr("Settings"),
+            callback=self.open_settings_dialg,
+            parent=iface.mainWindow(),
+            add_to_toolbar=False,
+            icon=QgsApplication.getThemeIcon("/propertyicons/settings.svg"),
+        )
 
     def onClosePlugin(self) -> None:  # noqa N802
         """Cleanup necessary items here when plugin dockwidget is closed"""
@@ -145,3 +156,7 @@ class Plugin:
         self.pick_layer = PickLayer()
         self.pick_layer.map_tool.setAction(self.actions[plugin_name()])
         self.pick_layer.set_map_tool()
+
+    def open_settings_dialg(self) -> None:
+        dlg = SettingsDialog(iface.mainWindow())
+        dlg.open()
