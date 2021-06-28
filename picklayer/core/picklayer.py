@@ -20,7 +20,6 @@
 #  You should have received a copy of the GNU General Public License
 #  along with PickLayer.  If not, see <https://www.gnu.org/licenses/>.
 import logging
-import os.path
 from functools import partial
 from time import sleep
 
@@ -51,7 +50,6 @@ class PickLayer:
         self.map_canvas = iface.mapCanvas()
         self.utils = iface.mapCanvas().snappingUtils()
         # initialize plugin directory
-        self.plugin_dir = os.path.dirname(__file__)
         self.cb = QtWidgets.QApplication.clipboard()
 
         self.map_tool = IdentifyGeometry(self.map_canvas)
@@ -211,8 +209,7 @@ class PickLayer:
                 self.stop_editing_action = context_menu.addAction(
                     QtGui.QIcon(
                         resources_path(
-                            self.plugin_dir,
-                            "../resources/icons",
+                            "icons",
                             "mIconEditableEdits.png",
                         )
                     ),
