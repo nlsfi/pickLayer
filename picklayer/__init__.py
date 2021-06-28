@@ -37,7 +37,7 @@ if debugger in {"debugpy", "ptvsd", "pydevd"}:
 
 
 # noinspection PyPep8Naming
-def classFactory(iface):  # noqa N802 QGS105
+def classFactory(iface):  # noqa N802
     """Load pickLayer class from file picklayer.
 
     :param iface: A QGIS interface instance.
