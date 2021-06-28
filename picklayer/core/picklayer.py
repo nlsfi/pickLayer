@@ -31,7 +31,7 @@ from qgis.PyQt import QtGui, QtWidgets
 from qgis.PyQt.QtCore import QUuid
 from qgis.utils import iface, plugins
 
-from picklayer.identifygeometry import IdentifyGeometry
+from picklayer.core.identifygeometry import IdentifyGeometry
 from picklayer.qgis_plugin_tools.tools.i18n import tr
 
 enable_disable = {True: "Enable", False: "Disable"}
@@ -49,9 +49,13 @@ class PickLayer:
         self.utils = iface.mapCanvas().snappingUtils()
         # initialize plugin directory
         self.plugin_dir = os.path.dirname(__file__)
-        # self.snapDlg = snappingDialog(iface)
-        # self.tra = trace()
         self.cb = QtWidgets.QApplication.clipboard()
+
+        self.map_tool = IdentifyGeometry(self.map_canvas)
+        self.map_tool.geom_identified.connect(self.edit_feature)
+
+        self.clip_tool = IdentifyGeometry(self.map_canvas, layerType="VectorLayer")
+        self.clip_tool.geom_identified.connect(self.perform_spatial_function)
 
     def transform_to_current_srs(
         self, p_point: core.QgsPointXY, srs: int
@@ -76,27 +80,6 @@ class PickLayer:
             crs_src, crs_dest, core.QgsProject.instance()
         )
         return xform.transform(p_point)  # forward transformation: src -> dest
-
-    def initGui(self) -> None:  # noqa N802
-        """Create the menu entries and toolbar icons inside the QGIS GUI."""
-
-        # icon_path = ':/plugins/pickLayer/icon.png'
-        icon_path = os.path.join(self.plugin_dir, "../resources/icons", "pickLayer.png")
-        # map tool action
-        self.map_tool_action = QtWidgets.QAction(
-            QtGui.QIcon(icon_path), tr("Pick to Layer"), iface.mainWindow()
-        )
-        self.map_tool_action.setCheckable(True)
-        self.map_tool = IdentifyGeometry(self.map_canvas)
-        self.map_tool.geom_identified.connect(self.edit_feature)
-        self.map_tool.setAction(self.map_tool_action)
-
-        self.clip_tool = IdentifyGeometry(self.map_canvas, layerType="VectorLayer")
-        self.clip_tool.geom_identified.connect(self.perform_spatial_function)
-
-        self.map_tool_action.triggered.connect(self.set_map_tool)
-        iface.addToolBarIcon(self.map_tool_action)
-        iface.addPluginToMenu(tr("&Pick to Layer"), self.map_tool_action)
 
     def populate_attributes_menu(self, attribute_menu: QtWidgets.QMenu) -> None:
         field_names = [field.name() for field in self.selected_layer.fields()]
@@ -510,10 +493,6 @@ class PickLayer:
         self.selected_feature = feature
         self.highlight(feature.geometry())
         self.context_menu_request()
-
-    def unload(self) -> None:
-        iface.removePluginMenu(tr("&Pick to Layer"), self.map_tool_action)
-        iface.removeToolBarIcon(self.map_tool_action)
 
     def set_map_tool(self) -> None:
         self.map_canvas.setMapTool(self.map_tool)

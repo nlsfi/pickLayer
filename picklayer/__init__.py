@@ -28,7 +28,6 @@ def classFactory(iface):  # noqa N802 QGS105
     :param iface: A QGIS interface instance.
     :type iface: QgsInterface
     """
-    #
-    from picklayer.core.picklayer import PickLayer
+    from picklayer.plugin import Plugin
 
-    return PickLayer()
+    return Plugin()
