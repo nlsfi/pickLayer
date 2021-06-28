@@ -56,7 +56,7 @@ class SettingsDialog(QDialog, FORM_CLASS):
         # Search radius
         self.spin_box_search_radius.setValue(Settings.search_radius.get())
         self.spin_box_search_radius.valueChanged.connect(
-            lambda v: Settings.search_radius.set(v)
+            lambda v: Settings.search_radius.set(float(v))
         )
 
         # Logging
