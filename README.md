@@ -1,8 +1,8 @@
 # pickLayer
 
-Set Layer properties and options straight from map canvas. 
+Set Layer properties and options straight from map canvas.
 
-Originally created and maintained by [enricofer](https://github.com/enricofer) 
+Originally created and maintained by [enricofer](https://github.com/enricofer)
 in https://github.com/enricofer/pickLayer.
 
 ## Development

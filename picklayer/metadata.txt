@@ -5,7 +5,7 @@ name=pickLayer
 qgisMinimumVersion=3.0
 qgisMaximumVersion=3.99
 description=pick to feature on map canvas to perform layer and feature commands
-version=3.1 
+version=3.1
 author=Enrico Ferreguti
 email=enricofer@gmail.com
 
@@ -31,4 +31,3 @@ experimental=False
 
 # deprecated flag (applies to the whole plugin, not just a single version)
 deprecated=False
-
