@@ -31,7 +31,7 @@ from qgis.PyQt import QtGui, QtWidgets
 from qgis.PyQt.QtCore import QUuid
 from qgis.utils import iface, plugins
 
-from .identifygeometry import IdentifyGeometry
+from picklayer.identifygeometry import IdentifyGeometry
 
 enable_disable = {True: "Enable", False: "Disable"}
 
@@ -478,7 +478,7 @@ class PickLayer:
     def copy_feature_func(self) -> None:
         bak_active_layer = iface.activeLayer()
         iface.setActiveLayer(self.selected_layer)
-        self.selected_layer.setSelectedFeatures([self.selected_feature.id()])
+        self.selected_layer.selectByIds([self.selected_feature.id()])
         if "attributePainter" in plugins:
             ap = plugins["attributePainter"]
             ap.setSourceFeature(self.selected_layer, self.selected_feature)
@@ -507,7 +507,6 @@ class PickLayer:
         self.selected_feature = feature
         self.highlight(feature.geometry())
         self.context_menu_request()
-        pass
 
     def unload(self) -> None:
         iface.removePluginMenu("&Pick to Layer", self.map_tool_action)
