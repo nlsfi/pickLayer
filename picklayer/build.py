@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-#  Copyright (C) 2021 National Land Survey of Finland  (https://www.maanmittauslaitos.fi/en).
+#  Copyright (C) 2021 National Land Survey of Finland
+#  (https://www.maanmittauslaitos.fi/en).
 #
 #
 #  This file is part of PickLayer.
