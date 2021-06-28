@@ -19,13 +19,12 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with PickLayer.  If not, see <https://www.gnu.org/licenses/>.
-
+import logging
 import os.path
 from functools import partial
 from time import sleep
 
 from qgis import core
-from qgis.core import Qgis
 from qgis.gui import QgsRubberBand
 from qgis.PyQt import QtGui, QtWidgets
 from qgis.PyQt.QtCore import QUuid
@@ -33,8 +32,12 @@ from qgis.utils import iface, plugins
 
 from picklayer.core.identifygeometry import IdentifyGeometry
 from picklayer.qgis_plugin_tools.tools.i18n import tr
+from picklayer.qgis_plugin_tools.tools.messages import MsgBar
+from picklayer.qgis_plugin_tools.tools.resources import plugin_name
 
 enable_disable = {True: "Enable", False: "Disable"}
+
+LOGGER = logging.getLogger(plugin_name())
 
 
 class PickLayer:
@@ -541,11 +544,8 @@ class PickLayer:
         self, clip_layer: core.QgsVectorLayer, clip_feature: core.QgsFeature
     ) -> None:
         if clip_feature.geometry().type() != self.selected_feature.geometry().type():
-            iface.messageBar().pushMessage(
-                tr("PickLayer plugin"),
-                tr("Can't perform spatial function on different geometry types"),
-                level=Qgis.Warning,
-                duration=4,
+            MsgBar.warning(
+                tr("Can't perform spatial function on different geometry types")
             )
         else:
             clipped_geometry = self.spatial_function(clip_feature.geometry())
@@ -555,18 +555,15 @@ class PickLayer:
                 if clip_layer == self.selected_layer:
                     self.selected_layer.deleteFeature(clip_feature.id())
                 self.selected_layer.triggerRepaint()
-                iface.messageBar().pushMessage(
-                    tr("PickLayer plugin"),
-                    tr("Source Geometry succesfully {}", self.spatial_predicate),
-                    level=Qgis.Success,
-                    duration=4,
+                MsgBar.info(
+                    tr(
+                        "Source Geometry succesfully clipped: {}",
+                        self.spatial_predicate,
+                    ),
+                    success=True,
                 )
                 self.highlight(clipped_geometry)
             else:
-                iface.messageBar().pushMessage(
-                    tr("PickLayer plugin"),
-                    tr("Invalid processed geometry"),
-                    level=Qgis.Warning,
-                    duration=4,
-                )
+                MsgBar.warning(tr("Invalid processed geometry"))
+
         self.map_canvas.setMapTool(self.map_tool)
