@@ -63,6 +63,7 @@ class Plugin:
         enabled_flag: bool = True,
         add_to_menu: bool = True,
         add_to_toolbar: bool = True,
+        set_checkable: bool = False,
         status_tip: Optional[str] = None,
         whats_this: Optional[str] = None,
         parent: Optional[QWidget] = None,
@@ -104,7 +105,7 @@ class Plugin:
         # noinspection PyUnresolvedReferences
         action.triggered.connect(callback)
         action.setEnabled(enabled_flag)
-        action.setCheckable(True)
+        action.setCheckable(set_checkable)
 
         if status_tip is not None:
             action.setStatusTip(status_tip)
@@ -130,6 +131,7 @@ class Plugin:
             text=plugin_name(),
             callback=self.run,
             parent=iface.mainWindow(),
+            set_checkable=True,
         )
         self.add_action(
             "",
