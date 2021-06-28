@@ -6,7 +6,7 @@ qgisMinimumVersion=3.0
 qgisMaximumVersion=3.99
 description=pick to feature on map canvas to perform layer and feature commands
 version=3.1
-author=Enrico Ferreguti
+author=National Land Survey of Finland
 email=enricofer@gmail.com
 
 about=The plugin allows to perform layer and features operations by a contextual menu clicking over features on map canvas. This is useful when many layers are loaded in the project and is difficult to find them in a crowded legend.
@@ -22,9 +22,9 @@ changelog=3.0 code migration to QGIS3
 # Tags are comma separated with spaces allowed
 tags= layer, functions, change, snap, properties, editing, hide, context menu, context, menu, datasource, data source
 
-homepage=http://geogear.wordpress.com/
-tracker=https://github.com/enricofer/pickLayer/issues
-repository=https://github.com/enricofer/pickLayer
+homepage=https://github.com/nlsfi/pickLayer
+tracker=https://github.com/nlsfi/pickLayer/issues
+repository=https://github.com/nlsfi/pickLayer
 icon=resources/icons/icon.png
 # experimental flag
 experimental=False
