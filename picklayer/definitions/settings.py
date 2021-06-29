@@ -42,7 +42,8 @@ from picklayer.qgis_plugin_tools.tools.settings import get_setting, set_setting
 
 class Settings(enum.Enum):
     identify_tool_search_radius = "Map/searchRadiusMM"  # QGIS setting key
-    search_radius = 100.0
+    # No default value, if this is not set, use the same value as identify tool
+    search_radius = -1.0
 
     def get(self, typehint: type = str) -> Any:
         """Gets the value of the setting"""
@@ -57,6 +58,7 @@ class Settings(enum.Enum):
                     typehint=float,
                     internal=False,
                 ),
+                typehint=float,
             )
         else:
             value = get_setting(self.name, self.value, typehint)
