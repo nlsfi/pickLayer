@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with PickLayer.  If not, see <https://www.gnu.org/licenses/>.
 
-from typing import Callable, Dict, Optional
+from typing import Callable, List, Optional
 
 from qgis.core import QgsApplication
 from qgis.PyQt.QtCore import QCoreApplication, QTranslator
@@ -51,9 +51,10 @@ class Plugin:
         else:
             pass
 
-        self.actions: Dict[str, QAction] = {}
+        self.actions: List[QAction] = []
         self.menu = tr(plugin_name())
         self.pick_layer: Optional[PickLayer] = None
+        self.pick_layer_action: Optional[QAction] = None
 
     def add_action(
         self,
@@ -120,13 +121,13 @@ class Plugin:
         if add_to_menu:
             iface.addPluginToMenu(self.menu, action)
 
-        self.actions[text] = action
+        self.actions.append(action)
 
         return action
 
     def initGui(self) -> None:  # noqa N802
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
-        self.add_action(
+        self.pick_layer_action = self.add_action(
             resources_path("icons", "pickLayer.png"),
             text=plugin_name(),
             callback=self.run,
@@ -148,15 +149,15 @@ class Plugin:
 
     def unload(self) -> None:
         """Removes the plugin menu item and icon from QGIS GUI."""
-        for name, action in self.actions.items():
-            iface.removePluginMenu(name, action)
+        for action in self.actions:
+            iface.removePluginMenu(plugin_name(), action)
             iface.removeToolBarIcon(action)
         teardown_logger(plugin_name())
 
     def run(self) -> None:
         """Run method that performs all the real work"""
         self.pick_layer = PickLayer()
-        self.pick_layer.map_tool.setAction(self.actions[plugin_name()])
+        self.pick_layer.map_tool.setAction(self.pick_layer_action)
         self.pick_layer.set_map_tool()
 
     def open_settings_dialg(self) -> None:
