@@ -26,6 +26,7 @@ from qgis.PyQt.QtCore import pyqtSignal
 from qgis.PyQt.QtGui import QCursor
 
 # from cursor import Cursor
+from pickLayer.definitions.settings import Settings
 from pickLayer.qgis_plugin_tools.tools.i18n import tr
 from pickLayer.qgis_plugin_tools.tools.messages import MsgBar
 from pickLayer.qgis_plugin_tools.tools.resources import plugin_name
@@ -45,9 +46,11 @@ class IdentifyGeometry(QgsMapToolIdentify):
         self.setCursor(QCursor())
 
     def canvasReleaseEvent(self, mouse_event) -> None:  # noqa N802
-        # results = self.identify(mouseEvent.x(), mouseEvent.y(),
-        # self.LayerSelection,[self.targetLayer],self.AllLayers)
+        orig_search_radius = Settings.identify_tool_search_radius.get()
         try:
+            search_radius = Settings.search_radius.get()
+            LOGGER.debug(f"Setting search radius to {search_radius}")
+            Settings.identify_tool_search_radius.set(search_radius)
             results = self.identify(
                 mouse_event.x(), mouse_event.y(), self.LayerSelection, self.layer_type
             )
@@ -56,8 +59,11 @@ class IdentifyGeometry(QgsMapToolIdentify):
                 tr("Error occurred: {}", str(e)), tr("Check log for more details.")
             )
             results = []
+        finally:
+            Settings.identify_tool_search_radius.set(orig_search_radius)
+
         if len(results) > 0:
-            LOGGER.info(f"Attributes: {results[0].mFeature.attributes()}")
+            LOGGER.debug("Feature found")
             self.geom_identified.emit(
                 results[0].mLayer, QgsFeature(results[0].mFeature)
             )

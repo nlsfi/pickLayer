@@ -17,8 +17,9 @@
 #  You should have received a copy of the GNU General Public License
 #  along with PickLayer.  If not, see <https://www.gnu.org/licenses/>.
 
-from typing import Callable, Dict, Optional
+from typing import Callable, List, Optional
 
+from qgis.core import QgsApplication
 from qgis.PyQt.QtCore import QCoreApplication, QTranslator
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction, QWidget
@@ -31,6 +32,7 @@ from pickLayer.qgis_plugin_tools.tools.custom_logging import (
 )
 from pickLayer.qgis_plugin_tools.tools.i18n import setup_translation, tr
 from pickLayer.qgis_plugin_tools.tools.resources import plugin_name, resources_path
+from pickLayer.ui.settings_dialog import SettingsDialog
 
 
 class Plugin:
@@ -49,9 +51,10 @@ class Plugin:
         else:
             pass
 
-        self.actions: Dict[str, QAction] = {}
+        self.actions: List[QAction] = []
         self.menu = tr(plugin_name())
         self.pick_layer: Optional[PickLayer] = None
+        self.pick_layer_action: Optional[QAction] = None
 
     def add_action(
         self,
@@ -61,9 +64,11 @@ class Plugin:
         enabled_flag: bool = True,
         add_to_menu: bool = True,
         add_to_toolbar: bool = True,
+        set_checkable: bool = False,
         status_tip: Optional[str] = None,
         whats_this: Optional[str] = None,
         parent: Optional[QWidget] = None,
+        icon: Optional[QIcon] = None,
     ) -> QAction:
         """Add a toolbar icon to the toolbar.
 
@@ -96,12 +101,12 @@ class Plugin:
         :rtype: QAction
         """
 
-        icon = QIcon(icon_path)
+        icon = QIcon(icon_path) if icon is None else icon
         action = QAction(icon, text, parent)
         # noinspection PyUnresolvedReferences
         action.triggered.connect(callback)
         action.setEnabled(enabled_flag)
-        action.setCheckable(True)
+        action.setCheckable(set_checkable)
 
         if status_tip is not None:
             action.setStatusTip(status_tip)
@@ -116,17 +121,26 @@ class Plugin:
         if add_to_menu:
             iface.addPluginToMenu(self.menu, action)
 
-        self.actions[text] = action
+        self.actions.append(action)
 
         return action
 
     def initGui(self) -> None:  # noqa N802
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
-        self.add_action(
+        self.pick_layer_action = self.add_action(
             resources_path("icons", "pickLayer.png"),
             text=plugin_name(),
             callback=self.run,
             parent=iface.mainWindow(),
+            set_checkable=True,
+        )
+        self.add_action(
+            "",
+            text=tr("Settings"),
+            callback=self.open_settings_dialg,
+            parent=iface.mainWindow(),
+            add_to_toolbar=False,
+            icon=QgsApplication.getThemeIcon("/propertyicons/settings.svg"),
         )
 
     def onClosePlugin(self) -> None:  # noqa N802
@@ -135,13 +149,17 @@ class Plugin:
 
     def unload(self) -> None:
         """Removes the plugin menu item and icon from QGIS GUI."""
-        for name, action in self.actions.items():
-            iface.removePluginMenu(name, action)
+        for action in self.actions:
+            iface.removePluginMenu(plugin_name(), action)
             iface.removeToolBarIcon(action)
         teardown_logger(plugin_name())
 
     def run(self) -> None:
         """Run method that performs all the real work"""
         self.pick_layer = PickLayer()
-        self.pick_layer.map_tool.setAction(self.actions[plugin_name()])
+        self.pick_layer.map_tool.setAction(self.pick_layer_action)
         self.pick_layer.set_map_tool()
+
+    def open_settings_dialg(self) -> None:
+        dlg = SettingsDialog(iface.mainWindow())
+        dlg.open()
