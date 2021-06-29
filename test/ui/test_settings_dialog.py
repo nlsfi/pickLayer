@@ -30,7 +30,6 @@ def test_set_search_radius(settings_dialog, qtbot):
     assert Settings.search_radius.get() == 21.5
 
 
-@pytest.mark.skip(reason="feature may not work on Windows")
 def test_set_log_level(settings_dialog, qtbot):
     qtbot.mouseMove(settings_dialog.combo_box_log_level_file)
     qtbot.keyClicks(settings_dialog.combo_box_log_level_file, "D")
