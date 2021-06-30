@@ -36,6 +36,7 @@ def settings_dialog(initialize_ui, qtbot):
     # Setup
     Settings.search_radius.set(ORIGINAL_RADIUS)
     set_setting(get_log_level_key(LogTarget.FILE), "INFO")
+    set_setting(get_log_level_key(LogTarget.STREAM), "INFO")
 
     settings_dialog = SettingsDialog()
     settings_dialog.show()
@@ -49,8 +50,15 @@ def test_set_search_radius(settings_dialog, qtbot):
     assert Settings.search_radius.get() == 21.5
 
 
-def test_set_log_level(settings_dialog, qtbot):
+def test_set_file_log_level(settings_dialog, qtbot):
     qtbot.mouseMove(settings_dialog.combo_box_log_level_file)
     qtbot.keyClicks(settings_dialog.combo_box_log_level_file, "D")
 
     assert get_log_level_name(LogTarget.FILE) == "DEBUG"
+
+
+def test_set_console_log_level(settings_dialog, qtbot):
+    qtbot.mouseMove(settings_dialog.combo_box_log_level_console)
+    qtbot.keyClicks(settings_dialog.combo_box_log_level_console, "E")
+
+    assert get_log_level_name(LogTarget.STREAM) == "ERROR"
