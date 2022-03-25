@@ -5,6 +5,7 @@ This class contains fixtures and common helper function to keep the test files s
 """
 
 import pytest
+from qgis.PyQt.QtWidgets import QToolBar
 
 from pickLayer.qgis_plugin_tools.tools.messages import MsgBar
 
@@ -18,3 +19,9 @@ def initialize_ui(mocker) -> None:
             raise args[1]
 
     mocker.patch.object(MsgBar, "exception", mock_msg_bar)
+
+
+@pytest.fixture(scope="session")
+def mock_iface(session_mocker, qgis_iface, qgis_parent) -> None:
+    qgis_iface.removePluginMenu = lambda *args: None
+    session_mocker.patch.object(qgis_iface, "addToolBar", lambda *args: QToolBar(*args))

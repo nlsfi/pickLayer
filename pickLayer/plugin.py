@@ -22,7 +22,7 @@ from typing import Callable, List, Optional
 from qgis.core import QgsApplication
 from qgis.PyQt.QtCore import QCoreApplication, QTranslator
 from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtWidgets import QAction, QWidget
+from qgis.PyQt.QtWidgets import QAction, QToolBar, QToolButton, QWidget
 from qgis.utils import iface
 
 from pickLayer.core.picklayer import PickLayer
@@ -52,6 +52,7 @@ class Plugin:
             pass
 
         self.actions: List[QAction] = []
+        self.toolbar: Optional[QToolBar] = None
         self.menu = "&pick layer"
         self.pick_layer: Optional[PickLayer] = None
         self.pick_layer_action: Optional[QAction] = None
@@ -114,9 +115,12 @@ class Plugin:
         if whats_this is not None:
             action.setWhatsThis(whats_this)
 
-        if add_to_toolbar:
-            # Adds plugin icon to Plugins toolbar
-            iface.addToolBarIcon(action)
+        if (
+            add_to_toolbar
+            and not self._action_exists(self.toolbar, action)
+            and self.toolbar is not None
+        ):
+            self.toolbar.addAction(action)
 
         if add_to_menu:
             iface.addPluginToMenu(self.menu, action)
@@ -127,12 +131,17 @@ class Plugin:
 
     def initGui(self) -> None:  # noqa N802
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
+
+        self.toolbar = iface.addToolBar(plugin_name())
+        self.toolbar.setObjectName(plugin_name())
+
         self.pick_layer_action = self.add_action(
             resources_path("icons", "pickLayer.png"),
             text=plugin_name(),
             callback=self.run,
             parent=iface.mainWindow(),
             set_checkable=True,
+            add_to_toolbar=True,
         )
         self.add_action(
             "",
@@ -154,6 +163,9 @@ class Plugin:
             iface.removeToolBarIcon(action)
         teardown_logger(plugin_name())
 
+        # Remove toolbar from QGIS by deleting it
+        del self.toolbar
+
     def run(self) -> None:
         """Run method that performs all the real work"""
         self.pick_layer = PickLayer()
@@ -163,3 +175,11 @@ class Plugin:
     def open_settings_dialg(self) -> None:
         dlg = SettingsDialog(iface.mainWindow())
         dlg.open()
+
+    def _action_exists(self, toolbar: QToolBar, action: QAction) -> bool:
+        """Check if toolbar contains the action"""
+        return any(
+            item.defaultAction() is not None
+            and item.defaultAction().objectName() == action.objectName()
+            for item in toolbar.findChildren(QToolButton)
+        )
