@@ -2,7 +2,7 @@
 
 [general]
 name=pickLayer
-qgisMinimumVersion=3.0
+qgisMinimumVersion=3.10
 qgisMaximumVersion=3.99
 description=pick to feature on map canvas to perform layer and feature commands
 version=3.1
@@ -19,7 +19,7 @@ about=The plugin allows to perform layer and features operations by a contextual
 changelog=
 
 # Tags are comma separated with spaces allowed
-tags= layer, functions, change, snap, properties, editing, hide, context menu, context, menu, datasource, data source
+tags= layer, active layer, functions, change, snap, properties, editing, hide, context menu, context, menu, datasource, data source
 
 homepage=https://github.com/nlsfi/pickLayer
 tracker=https://github.com/nlsfi/pickLayer/issues

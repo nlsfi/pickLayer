@@ -1,4 +1,4 @@
-#  Copyright (C) 2021 National Land Survey of Finland
+#  Copyright (C) 2021-2022 National Land Survey of Finland
 #  (https://www.maanmittauslaitos.fi/en).
 #
 #
@@ -11,21 +11,23 @@
 #
 #  SpatialDataPackageExport is distributed in the hope that it will be useful,
 #  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #  GNU General Public License for more details.
 #
 #  You should have received a copy of the GNU General Public License
-#  along with PickLayer.  If not, see <https://www.gnu.org/licenses/>.
+#  along with PickLayer. If not, see <https://www.gnu.org/licenses/>.
 
 from typing import Callable, List, Optional
 
-from qgis.core import QgsApplication
+from qgis.core import QgsApplication, QgsPointXY
+from qgis.gui import QgsGui, QgsMapTool
 from qgis.PyQt.QtCore import QCoreApplication, QTranslator
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction, QToolBar, QToolButton, QWidget
 from qgis.utils import iface
 
 from pickLayer.core.picklayer import PickLayer
+from pickLayer.core.set_active_layer_tool import SetActiveLayerTool
 from pickLayer.qgis_plugin_tools.tools.custom_logging import (
     setup_logger,
     teardown_logger,
@@ -54,10 +56,94 @@ class Plugin:
         self.actions: List[QAction] = []
         self.toolbar: Optional[QToolBar] = None
         self.menu = "&pick layer"
-        self.pick_layer: Optional[PickLayer] = None
+        self.pick_layer_tool: Optional[PickLayer] = None
         self.pick_layer_action: Optional[QAction] = None
+        self.set_active_layer_tool = SetActiveLayerTool(iface.mapCanvas())
+        self.set_active_layer_action: Optional[QAction] = None
 
-    def add_action(
+    def get_set_active_layer_tool_action(self) -> QAction:
+        """
+        Public method for getting action that sets active layer.
+
+        Can be used to set shortcut key from other plugins.
+        """
+        return self.set_active_layer_action
+
+    def set_active_layer_using_closest_feature(
+        self, point_xy: QgsPointXY, search_radius: Optional[float] = None
+    ) -> None:
+        """
+        Public method for setting layer active based on given map coordinates.
+
+        If multiple features are found, active layer is selected using this order:
+        vectorlayer(point), vectorlayer(linestring), vectorlayer(polygon),
+        other layers.
+
+        Args:
+            point_xy: Map coordinates
+            search_radius: Search radius to use in map units. By default uses
+              search radius defined in PickLayer settings.
+        """
+
+        canvas_point = QgsMapTool(iface.mapCanvas()).toCanvasCoordinates(point_xy)
+
+        self.set_active_layer_tool.set_active_layer_using_closest_feature(
+            canvas_point.x(), canvas_point.y(), search_radius
+        )
+
+    def initGui(self) -> None:  # noqa N802
+        """Create the menu entries and toolbar icons inside the QGIS GUI."""
+
+        self.toolbar = iface.addToolBar(plugin_name())
+        self.toolbar.setObjectName(plugin_name())
+
+        self.pick_layer_action = self._add_action(
+            resources_path("icons", "pickLayer.png"),
+            text=plugin_name(),
+            callback=self._activate_pick_layer,
+            parent=iface.mainWindow(),
+            set_checkable=True,
+            add_to_toolbar=True,
+        )
+        self._add_action(
+            "",
+            text=tr("Settings"),
+            callback=self._open_settings_dialg,
+            parent=iface.mainWindow(),
+            add_to_toolbar=False,
+            icon=QgsApplication.getThemeIcon("/propertyicons/settings.svg"),
+        )
+
+        self.set_active_layer_action = self._add_action(
+            resources_path("icons", "setActiveLayer.png"),
+            text=tr("Set active layer"),
+            status_tip=tr("Set layer active based on closest feature"),
+            callback=self._set_active_layer_tool_selected,
+            parent=iface.mainWindow(),
+            set_checkable=True,
+            add_to_toolbar=True,
+            add_keyboard_shortcut=True,
+        )
+
+        self.set_active_layer_tool.setAction(self.set_active_layer_action)
+
+    def onClosePlugin(self) -> None:  # noqa N802
+        """Cleanup necessary items here when plugin dockwidget is closed"""
+        pass
+
+    def unload(self) -> None:
+        """Removes the plugin menu item and icon from QGIS GUI."""
+        for action in self.actions:
+            iface.removePluginMenu(plugin_name(), action)
+            iface.removeToolBarIcon(action)
+            iface.unregisterMainWindowAction(action)
+
+        teardown_logger(plugin_name())
+
+        # Remove toolbar from QGIS by deleting it
+        del self.toolbar
+
+    def _add_action(
         self,
         icon_path: str,
         text: str,
@@ -70,6 +156,7 @@ class Plugin:
         whats_this: Optional[str] = None,
         parent: Optional[QWidget] = None,
         icon: Optional[QIcon] = None,
+        add_keyboard_shortcut: bool = False,
     ) -> QAction:
         """Add a toolbar icon to the toolbar.
 
@@ -107,6 +194,7 @@ class Plugin:
         # noinspection PyUnresolvedReferences
         action.triggered.connect(callback)
         action.setEnabled(enabled_flag)
+        action.setObjectName(text)
         action.setCheckable(set_checkable)
 
         if status_tip is not None:
@@ -116,63 +204,33 @@ class Plugin:
             action.setWhatsThis(whats_this)
 
         if (
-            add_to_toolbar
+            add_to_toolbar is True
             and not self._action_exists(self.toolbar, action)
             and self.toolbar is not None
         ):
             self.toolbar.addAction(action)
 
-        if add_to_menu:
+        if add_to_menu is True:
             iface.addPluginToMenu(self.menu, action)
+
+        if add_keyboard_shortcut is True:
+            QgsGui.shortcutsManager().registerAction(action, None)
 
         self.actions.append(action)
 
         return action
 
-    def initGui(self) -> None:  # noqa N802
-        """Create the menu entries and toolbar icons inside the QGIS GUI."""
+    def _activate_pick_layer(self) -> None:
+        """Activates pick layer tool"""
+        self.pick_layer_tool = PickLayer()
+        self.pick_layer_tool.map_tool.setAction(self.pick_layer_action)
+        self.pick_layer_tool.set_map_tool()
 
-        self.toolbar = iface.addToolBar(plugin_name())
-        self.toolbar.setObjectName(plugin_name())
+    def _set_active_layer_tool_selected(self) -> None:
+        """Activates set active layer tool"""
+        iface.mapCanvas().setMapTool(self.set_active_layer_tool)
 
-        self.pick_layer_action = self.add_action(
-            resources_path("icons", "pickLayer.png"),
-            text=plugin_name(),
-            callback=self.run,
-            parent=iface.mainWindow(),
-            set_checkable=True,
-            add_to_toolbar=True,
-        )
-        self.add_action(
-            "",
-            text=tr("Settings"),
-            callback=self.open_settings_dialg,
-            parent=iface.mainWindow(),
-            add_to_toolbar=False,
-            icon=QgsApplication.getThemeIcon("/propertyicons/settings.svg"),
-        )
-
-    def onClosePlugin(self) -> None:  # noqa N802
-        """Cleanup necessary items here when plugin dockwidget is closed"""
-        pass
-
-    def unload(self) -> None:
-        """Removes the plugin menu item and icon from QGIS GUI."""
-        for action in self.actions:
-            iface.removePluginMenu(plugin_name(), action)
-            iface.removeToolBarIcon(action)
-        teardown_logger(plugin_name())
-
-        # Remove toolbar from QGIS by deleting it
-        del self.toolbar
-
-    def run(self) -> None:
-        """Run method that performs all the real work"""
-        self.pick_layer = PickLayer()
-        self.pick_layer.map_tool.setAction(self.pick_layer_action)
-        self.pick_layer.set_map_tool()
-
-    def open_settings_dialg(self) -> None:
+    def _open_settings_dialg(self) -> None:
         dlg = SettingsDialog(iface.mainWindow())
         dlg.open()
 

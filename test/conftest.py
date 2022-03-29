@@ -10,7 +10,7 @@ from qgis.PyQt.QtWidgets import QToolBar
 from pickLayer.qgis_plugin_tools.tools.messages import MsgBar
 
 
-@pytest.fixture
+@pytest.fixture()
 def initialize_ui(mocker) -> None:
     """ Throws unhandled exception even though it is caught with log_if_fails """
 
@@ -24,4 +24,5 @@ def initialize_ui(mocker) -> None:
 @pytest.fixture(scope="session")
 def mock_iface(session_mocker, qgis_iface, qgis_parent) -> None:
     qgis_iface.removePluginMenu = lambda *args: None
+    qgis_iface.unregisterMainWindowAction = lambda *args: None
     session_mocker.patch.object(qgis_iface, "addToolBar", lambda *args: QToolBar(*args))

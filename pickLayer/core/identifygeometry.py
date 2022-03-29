@@ -1,5 +1,5 @@
 #  Copyright (C) 2014-2019 Enrico Ferreguti (enricofer@gmail.com)
-#  Copyright (C) 2021 National Land Survey of Finland
+#  Copyright (C) 2022 National Land Survey of Finland
 #  (https://www.maanmittauslaitos.fi/en).
 #
 #
@@ -12,11 +12,11 @@
 #
 #  SpatialDataPackageExport is distributed in the hope that it will be useful,
 #  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #  GNU General Public License for more details.
 #
 #  You should have received a copy of the GNU General Public License
-#  along with PickLayer.  If not, see <https://www.gnu.org/licenses/>.
+#  along with PickLayer. If not, see <https://www.gnu.org/licenses/>.
 
 import logging
 
@@ -25,7 +25,6 @@ from qgis.gui import QgsMapCanvas, QgsMapToolIdentify
 from qgis.PyQt.QtCore import pyqtSignal
 from qgis.PyQt.QtGui import QCursor
 
-# from cursor import Cursor
 from pickLayer.definitions.settings import Settings
 from pickLayer.qgis_plugin_tools.tools.i18n import tr
 from pickLayer.qgis_plugin_tools.tools.messages import MsgBar
