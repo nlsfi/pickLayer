@@ -104,6 +104,7 @@ class Plugin:
             parent=iface.mainWindow(),
             set_checkable=True,
             add_to_toolbar=True,
+            add_keyboard_shortcut=True,
         )
         self._add_action(
             "",
