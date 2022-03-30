@@ -1,6 +1,5 @@
 import pytest
 from qgis.core import QgsPointXY
-from qgis.PyQt.QtCore import QPoint
 
 from pickLayer import classFactory
 
@@ -31,25 +30,16 @@ def test_get_set_active_layer_tool_action(plugin_initialized):
     )
 
 
-def test_set_active_layer_using_closest_feature_should_convert_input_to_map_canvas_xy(
-    plugin_initialized, qgis_iface, mocker
-):
-    m_set_active_layer_using_closest_feature = mocker.patch.object(
+def test_set_active_layer_using_closest_feature_called(plugin_initialized, mocker):
+    m_choose_layer_from_identify_results = mocker.patch.object(
         plugin_initialized.set_active_layer_tool,
-        "set_active_layer_using_closest_feature",
+        "_choose_layer_from_identify_results",
         return_value=None,
         autospec=True,
     )
 
-    coordinates = QgsPointXY(100000, 200000)
-
-    plugin_initialized.set_active_layer_using_closest_feature(coordinates)
-
-    x, y, _ = m_set_active_layer_using_closest_feature.call_args.args
-
-    result_as_point_xy = (
-        qgis_iface.mapCanvas().getCoordinateTransform().toMapCoordinates(QPoint(x, y))
+    plugin_initialized.set_active_layer_using_closest_feature(
+        QgsPointXY(100000, 200000)
     )
 
-    assert result_as_point_xy.x() == coordinates.x()
-    assert result_as_point_xy.y() == coordinates.y()
+    m_choose_layer_from_identify_results.assert_called_once()

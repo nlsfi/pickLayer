@@ -1,4 +1,4 @@
-# pickLayer
+# PickLayer
 
 ![tests](https://github.com/nlsfi/pickLayer/workflows/Tests/badge.svg)
 [![codecov.io](https://codecov.io/github/nlsfi/pickLayer/coverage.svg?branch=main)](https://codecov.io/github/nlsfi/pickLayer?branch=main)
@@ -23,7 +23,7 @@ from qgis.utils import plugins
 
 some_point = QgsPointXY(123, 456)
 
-# Activates layer if any found near given point
+# Activates layer if features are found near given point
 plugins["pickLayer"].set_active_layer_using_closest_feature(point_xy=some_point)
 
 # Activates layer with custom search radius (in map units)

@@ -20,7 +20,7 @@
 from typing import Callable, List, Optional
 
 from qgis.core import QgsApplication, QgsPointXY
-from qgis.gui import QgsGui, QgsMapTool
+from qgis.gui import QgsGui
 from qgis.PyQt.QtCore import QCoreApplication, QTranslator
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction, QToolBar, QToolButton, QWidget
@@ -85,10 +85,8 @@ class Plugin:
               search radius defined in PickLayer settings.
         """
 
-        canvas_point = QgsMapTool(iface.mapCanvas()).toCanvasCoordinates(point_xy)
-
         self.set_active_layer_tool.set_active_layer_using_closest_feature(
-            canvas_point.x(), canvas_point.y(), search_radius
+            point_xy, search_radius
         )
 
     def initGui(self) -> None:  # noqa N802

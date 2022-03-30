@@ -3,6 +3,7 @@ import itertools
 import pytest
 from qgis.core import (
     QgsGeometry,
+    QgsPointXY,
     QgsProject,
     QgsRasterLayer,
     QgsVectorLayer,
@@ -22,6 +23,8 @@ LINE_AND_POLYGON_LAYERS = [
     QgsVectorLayer("LineString", "LineString", "memory"),
     QgsVectorLayer("Polygon", "Polygon", "memory"),
 ]
+
+MOUSE_LOCATION = QgsPointXY(0, 0)
 
 
 @pytest.fixture()
@@ -62,32 +65,27 @@ def test_layers():
 
 @pytest.mark.parametrize(
     argnames=(
-        "mouse_x",
-        "mouse_y",
         "search_radius",
         "expected_num_results",
     ),
     argvalues=[
-        (0, 0, 0, 0),
-        (0, 0, 1, 3),
-        (0, 0, 2, 6),
+        (0.5, 0),
+        (1.5, 3),
+        (2.5, 6),
     ],
     ids=[
-        "radius-0m-none-found",
-        "radius-1m-half-found",
-        "radius-2m-all-found",
+        "radius-0.5m-none-found",
+        "radius-1.5m-half-found",
+        "radius-2.5m-all-found",
     ],
 )
 def test_set_active_layer_using_closest_feature(
     map_tool,
     test_layers,
-    mouse_x,
-    mouse_y,
     search_radius,
     expected_num_results,
     mocker,
 ):
-
     m_choose_layer_from_identify_results = mocker.patch.object(
         map_tool,
         "_choose_layer_from_identify_results",
@@ -95,7 +93,7 @@ def test_set_active_layer_using_closest_feature(
         autospec=True,
     )
 
-    map_tool.set_active_layer_using_closest_feature(mouse_x, mouse_y, search_radius)
+    map_tool.set_active_layer_using_closest_feature(MOUSE_LOCATION, search_radius)
 
     identify_results = m_choose_layer_from_identify_results.call_args.args[0]
     assert len(identify_results) == expected_num_results
@@ -117,7 +115,7 @@ def test_set_active_layer_using_closest_feature_sets_returned_layer_active(
         qgis_iface, "setActiveLayer", return_value=None
     )
 
-    map_tool.set_active_layer_using_closest_feature(0, 0)
+    map_tool.set_active_layer_using_closest_feature(MOUSE_LOCATION)
 
     m_choose_layer_from_identify_results.assert_called_once()
     assert m_set_active_layer.call_args.args[0] == mock_return_layer
@@ -138,7 +136,7 @@ def test_set_active_layer_using_closest_feature_does_nothing_if_layer_not_found(
         qgis_iface, "setActiveLayer", return_value=None
     )
 
-    map_tool.set_active_layer_using_closest_feature(0, 0)
+    map_tool.set_active_layer_using_closest_feature(MOUSE_LOCATION)
 
     m_choose_layer_from_identify_results.assert_called_once()
     m_set_active_layer.assert_not_called()
@@ -188,3 +186,29 @@ def test_choose_layer_should_return_vector_layer(map_tool):
     )
 
     assert resulting_layer.name() == "Point"
+
+
+def test_choose_layer_should_preserve_order_of_layers(map_tool):
+
+    resulting_layer = map_tool._choose_layer(
+        [
+            QgsVectorLayer("LineString", "LineString", "memory"),
+            QgsVectorLayer("Point", "Point_closest", "memory"),
+            QgsVectorLayer("Point", "Point_second_closest", "memory"),
+        ]
+    )
+
+    assert resulting_layer.name() == "Point_closest"
+
+
+def test_from_canvas_to_map_coordinates(map_tool):
+
+    test_point_xy = QgsPointXY(100000, 200000)
+    canvas_point = map_tool.toCanvasCoordinates(test_point_xy)
+
+    resulting_point_xy = map_tool._from_canvas_to_map_coordinates(
+        canvas_point.x(), canvas_point.y()
+    )
+
+    assert resulting_point_xy.x() == test_point_xy.x()
+    assert resulting_point_xy.y() == test_point_xy.y()

@@ -19,11 +19,11 @@
 #  You should have received a copy of the GNU General Public License
 #  along with PickLayer. If not, see <https://www.gnu.org/licenses/>.
 import logging
-from collections import OrderedDict
-from typing import Dict, List, Optional, cast
+from typing import List, Optional
 
-from qgis.core import QgsMapLayer, QgsVectorLayer, QgsWkbTypes
-from qgis.gui import QgsMapCanvas, QgsMapToolIdentify
+from qgis.core import QgsGeometry, QgsMapLayer, QgsPointXY, QgsVectorLayer, QgsWkbTypes
+from qgis.gui import QgsMapCanvas, QgsMapMouseEvent, QgsMapToolIdentify
+from qgis.PyQt.QtCore import QPoint
 from qgis.PyQt.QtGui import QCursor
 from qgis.utils import iface
 
@@ -40,39 +40,42 @@ class SetActiveLayerTool(QgsMapToolIdentify):
     Map tool for selecting feature and its versions.
     """
 
-    def __init__(self, canvas: QgsMapCanvas, layer_type: str = "AllLayers") -> None:
+    def __init__(
+        self,
+        canvas: QgsMapCanvas,
+        layer_type: QgsMapToolIdentify.Type = QgsMapToolIdentify.AllLayers,
+    ) -> None:
 
-        self.layer_type = getattr(QgsMapToolIdentify, layer_type)
-        self.canvas = canvas
-        QgsMapToolIdentify.__init__(self, canvas)
+        self.layer_type = layer_type
+        super().__init__(canvas)
         self.setCursor(QCursor())
 
-    def canvasReleaseEvent(self, mouse_event) -> None:  # noqa N802
-        orig_search_radius = Settings.identify_tool_search_radius.get()
+    def searchRadiusMM(self) -> float:  # noqa N802
+        return Settings.search_radius.get()
+
+    def canvasReleaseEvent(self, mouse_event: QgsMapMouseEvent) -> None:  # noqa N802
         try:
-            search_radius = Settings.search_radius.get()
-            LOGGER.debug(f"Setting search radius to {search_radius}")
-            Settings.identify_tool_search_radius.set(search_radius)
 
             self.set_active_layer_using_closest_feature(
-                mouse_event.x(), mouse_event.y()
+                self._from_canvas_to_map_coordinates(mouse_event.x(), mouse_event.y())
             )
         except Exception as e:
             MsgBar.exception(
                 tr("Error occurred: {}", str(e)), tr("Check log for more details.")
             )
-        finally:
-            Settings.identify_tool_search_radius.set(orig_search_radius)
 
     def set_active_layer_using_closest_feature(
-        self, mouse_x: int, mouse_y: int, search_radius: Optional[float] = None
+        self, location: QgsPointXY, search_radius: Optional[float] = None
     ) -> None:
 
         if search_radius is not None:
             self.setCanvasPropertiesOverrides(search_radius)
 
         results = self.identify(
-            mouse_x, mouse_y, self.TopDownAll, [], layerType=self.layer_type
+            geometry=QgsGeometry.fromPointXY(location),
+            mode=self.TopDownAll,
+            layerList=[],
+            layerType=self.layer_type,
         )
 
         if search_radius is not None:
@@ -83,6 +86,9 @@ class SetActiveLayerTool(QgsMapToolIdentify):
         if layer_to_activate is not None:
             LOGGER.info(tr("Activating layer {}", layer_to_activate.name()))
             iface.setActiveLayer(layer_to_activate)
+
+    def _from_canvas_to_map_coordinates(self, x: int, y: int) -> QgsPointXY:
+        return iface.mapCanvas().getCoordinateTransform().toMapCoordinates(QPoint(x, y))
 
     def _choose_layer_from_identify_results(
         self, results: QgsMapToolIdentify.IdentifyResult
@@ -100,38 +106,17 @@ class SetActiveLayerTool(QgsMapToolIdentify):
         Picks one layer from input layers (may contain duplicates) in
         following order: point, line, polygon, other layers
         """
-        if len(layers) == 1:
-            return layers[0]
-        else:
-            closest_layers: Dict[str, Optional[QgsMapLayer]] = OrderedDict()
-            closest_layers[QgsWkbTypes.PointGeometry] = None
-            closest_layers[QgsWkbTypes.LineGeometry] = None
-            closest_layers[QgsWkbTypes.PolygonGeometry] = None
-            closest_layers["closest_other_layer"] = None
+        preferred_geometry_type_order = {
+            QgsWkbTypes.PointGeometry: 1,
+            QgsWkbTypes.LineGeometry: 2,
+            QgsWkbTypes.PolygonGeometry: 3,
+        }
 
-            for layer in layers:
-                if layer.type() == QgsMapLayer.VectorLayer:
-                    layer = cast(QgsVectorLayer, layer)
-                    geometry_type = layer.geometryType()
-
-                    if closest_layers[geometry_type] is None:
-                        closest_layers[geometry_type] = layer
-
-                    elif (
-                        geometry_type
-                        not in [
-                            QgsWkbTypes.PointGeometry,
-                            QgsWkbTypes.LineGeometry,
-                            QgsWkbTypes.PolygonGeometry,
-                        ]
-                        and closest_layers["closest_other_layer"] is None
-                    ):
-                        closest_layers["closest_other_layer"] = layer
-
-                else:
-                    if closest_layers["closest_other_layer"] is None:
-                        closest_layers["closest_other_layer"] = layer
-
-            for layer in closest_layers.values():
-                if layer is not None:
-                    return layer
+        return sorted(
+            layers,
+            key=lambda layer: preferred_geometry_type_order.get(
+                layer.geometryType(), 99
+            )
+            if isinstance(layer, QgsVectorLayer)
+            else 99,
+        )[0]
