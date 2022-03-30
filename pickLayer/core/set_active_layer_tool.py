@@ -21,7 +21,14 @@
 import logging
 from typing import List, Optional
 
-from qgis.core import QgsGeometry, QgsMapLayer, QgsPointXY, QgsVectorLayer, QgsWkbTypes
+from qgis.core import (
+    QgsGeometry,
+    QgsMapLayer,
+    QgsPointXY,
+    QgsRenderContext,
+    QgsVectorLayer,
+    QgsWkbTypes,
+)
 from qgis.gui import QgsMapCanvas, QgsMapMouseEvent, QgsMapToolIdentify
 from qgis.PyQt.QtCore import QPoint
 from qgis.PyQt.QtGui import QCursor
@@ -50,14 +57,10 @@ class SetActiveLayerTool(QgsMapToolIdentify):
         super().__init__(canvas)
         self.setCursor(QCursor())
 
-    def searchRadiusMM(self) -> float:  # noqa N802
-        return Settings.search_radius.get()
-
     def canvasReleaseEvent(self, mouse_event: QgsMapMouseEvent) -> None:  # noqa N802
         try:
-
             self.set_active_layer_using_closest_feature(
-                self._from_canvas_to_map_coordinates(mouse_event.x(), mouse_event.y())
+                self.toMapCoordinates(QPoint(mouse_event.x(), mouse_event.y()))
             )
         except Exception as e:
             MsgBar.exception(
@@ -68,8 +71,10 @@ class SetActiveLayerTool(QgsMapToolIdentify):
         self, location: QgsPointXY, search_radius: Optional[float] = None
     ) -> None:
 
-        if search_radius is not None:
-            self.setCanvasPropertiesOverrides(search_radius)
+        if search_radius is None:
+            search_radius = self._get_default_search_radius()
+
+        self.setCanvasPropertiesOverrides(search_radius)
 
         results = self.identify(
             geometry=QgsGeometry.fromPointXY(location),
@@ -78,8 +83,7 @@ class SetActiveLayerTool(QgsMapToolIdentify):
             layerType=self.layer_type,
         )
 
-        if search_radius is not None:
-            self.restoreCanvasPropertiesOverrides()
+        self.restoreCanvasPropertiesOverrides()
 
         layer_to_activate = self._choose_layer_from_identify_results(results)
 
@@ -87,8 +91,15 @@ class SetActiveLayerTool(QgsMapToolIdentify):
             LOGGER.info(tr("Activating layer {}", layer_to_activate.name()))
             iface.setActiveLayer(layer_to_activate)
 
-    def _from_canvas_to_map_coordinates(self, x: int, y: int) -> QgsPointXY:
-        return iface.mapCanvas().getCoordinateTransform().toMapCoordinates(QPoint(x, y))
+    def _get_default_search_radius(self) -> float:
+        # For some reason overriding searchRadiusMM does not seem to affect
+        # searchRadiusMU. Logic copied here from QgsMapTool.searchRadiusMU
+        context = QgsRenderContext.fromMapSettings(self.canvas().mapSettings())
+        return (
+            float(Settings.search_radius.get())
+            * context.scaleFactor()
+            * context.mapToPixel().mapUnitsPerPixel()
+        )
 
     def _choose_layer_from_identify_results(
         self, results: QgsMapToolIdentify.IdentifyResult

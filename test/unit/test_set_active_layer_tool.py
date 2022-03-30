@@ -30,6 +30,7 @@ from qgis.core import (
 )
 
 from pickLayer.core.set_active_layer_tool import SetActiveLayerTool
+from pickLayer.definitions.settings import Settings
 from pickLayer.qgis_plugin_tools.tools.resources import plugin_test_data_path
 
 ALL_LAYER_TYPES = [
@@ -116,6 +117,20 @@ def test_set_active_layer_using_closest_feature(
 
     identify_results = m_choose_layer_from_identify_results.call_args.args[0]
     assert len(identify_results) == expected_num_results
+
+
+def test_get_default_search_radius_changes_if_settings_changed(
+    map_tool,
+):
+    Settings.search_radius.set(0)
+    radius = map_tool._get_default_search_radius()
+
+    assert radius == 0
+
+    Settings.search_radius.set(2)
+    radius_after_settings_changed = map_tool._get_default_search_radius()
+
+    assert radius_after_settings_changed > radius
 
 
 def test_set_active_layer_using_closest_feature_sets_returned_layer_active(
@@ -218,16 +233,3 @@ def test_choose_layer_should_preserve_order_of_layers(map_tool):
     )
 
     assert resulting_layer.name() == "Point_closest"
-
-
-def test_from_canvas_to_map_coordinates(map_tool):
-
-    test_point_xy = QgsPointXY(100000, 200000)
-    canvas_point = map_tool.toCanvasCoordinates(test_point_xy)
-
-    resulting_point_xy = map_tool._from_canvas_to_map_coordinates(
-        canvas_point.x(), canvas_point.y()
-    )
-
-    assert resulting_point_xy.x() == test_point_xy.x()
-    assert resulting_point_xy.y() == test_point_xy.y()
