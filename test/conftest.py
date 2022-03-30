@@ -40,4 +40,3 @@ def initialize_ui(mocker) -> None:
 def mock_iface(session_mocker, qgis_iface, qgis_parent) -> None:
     qgis_iface.removePluginMenu = lambda *args: None
     qgis_iface.unregisterMainWindowAction = lambda *args: None
-    session_mocker.patch.object(qgis_iface, "addToolBar", lambda *args: QToolBar(*args))
