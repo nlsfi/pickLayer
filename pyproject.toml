@@ -1,0 +1,2 @@
+[tool.qgis_plugin_dev_tools]
+plugin_package_name = "pickLayer"

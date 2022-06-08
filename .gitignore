@@ -14,6 +14,9 @@ venv/
 __pycache__
 *.coverage
 *.pyc
+*.egg-info
 
 *logs/
 *.log
+
+.env
