@@ -63,7 +63,7 @@ jobs:
       - name: Run tests
         shell: pwsh
         run: |
-          $env:QGIS_PATH = (dir "C:\Program Files\QGIS *" -Name | Select -First 1)
+          $env:QGIS_PATH = (Get-ChildItem "C:\Program Files\QGIS *" | Select-Object -First 1 -ExpandProperty FullName)
           $env:PATH="$env:QGIS_PATH;$env:PATH"
           $env:QGIS_PLUGIN_IN_CI=1
           python-qgis-ltr.bat -m pip install -qr requirements-dev.txt
