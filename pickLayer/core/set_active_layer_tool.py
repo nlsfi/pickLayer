@@ -22,6 +22,7 @@ import logging
 from typing import List, Optional
 
 from qgis.core import (
+    QgsFeature,
     QgsGeometry,
     QgsMapLayer,
     QgsPointXY,
@@ -50,10 +51,7 @@ class SetActiveLayerTool(QgsMapToolIdentify):
     def __init__(
         self,
         canvas: QgsMapCanvas,
-        layer_type: QgsMapToolIdentify.Type = QgsMapToolIdentify.AllLayers,
     ) -> None:
-
-        self.layer_type = layer_type
         super().__init__(canvas)
         self.setCursor(QCursor())
 
@@ -78,14 +76,13 @@ class SetActiveLayerTool(QgsMapToolIdentify):
 
         results = self.identify(
             geometry=QgsGeometry.fromPointXY(location),
-            mode=self.TopDownAll,
-            layerList=[],
-            layerType=self.layer_type,
+            mode=QgsMapToolIdentify.TopDownAll,
+            layerType=QgsMapToolIdentify.AllLayers,
         )
 
         self.restoreCanvasPropertiesOverrides()
 
-        layer_to_activate = self._choose_layer_from_identify_results(results)
+        layer_to_activate = self._choose_layer_from_identify_results(results, location)
 
         if layer_to_activate is not None:
             LOGGER.info(tr("Activating layer {}", layer_to_activate.name()))
@@ -101,33 +98,63 @@ class SetActiveLayerTool(QgsMapToolIdentify):
             * context.mapToPixel().mapUnitsPerPixel()
         )
 
+    def _get_distance_to_feature_on_layer(
+        self,
+        layer: QgsVectorLayer,
+        feature: QgsFeature,
+        origin_map_point: QgsPointXY,
+    ) -> float:
+        # for unknown reasons saving all geoms to variables avoids fatal exs
+        origin_layer_point = self.toLayerCoordinates(layer, origin_map_point)
+        origin_geom = QgsGeometry.fromPointXY(origin_layer_point)
+        feature_geom = feature.geometry()
+        closest_geom = feature_geom.nearestPoint(origin_geom)
+        closest_layer_point = closest_geom.asPoint()
+        closest_map_point = self.toMapCoordinates(layer, closest_layer_point)
+        return origin_map_point.distance(closest_map_point)
+
     def _choose_layer_from_identify_results(
-        self, results: QgsMapToolIdentify.IdentifyResult
+        self,
+        results: List[QgsMapToolIdentify.IdentifyResult],
+        origin_map_coordinates: QgsPointXY,
     ) -> Optional[QgsMapLayer]:
 
-        # Preserve IdentifyResult order
-        resulting_layers = [result.mLayer for result in results]
-        if len(results) == 0:
-            return None
-        else:
-            return self._choose_layer(resulting_layers)
-
-    def _choose_layer(self, layers: List[QgsMapLayer]) -> QgsMapLayer:
-        """
-        Picks one layer from input layers (may contain duplicates) in
-        following order: point, line, polygon, other layers
-        """
-        preferred_geometry_type_order = {
-            QgsWkbTypes.PointGeometry: 1,
+        type_preference = {
+            QgsWkbTypes.PointGeometry: 3,
             QgsWkbTypes.LineGeometry: 2,
-            QgsWkbTypes.PolygonGeometry: 3,
+            QgsWkbTypes.PolygonGeometry: 1,
         }
 
-        return sorted(
-            layers,
-            key=lambda layer: preferred_geometry_type_order.get(
-                layer.geometryType(), 99
-            )
-            if isinstance(layer, QgsVectorLayer)
-            else 99,
-        )[0]
+        best_match: Optional[QgsVectorLayer] = None
+        best_match_type_preference = 0
+        best_match_distance = 0.0
+
+        for result in results:
+            # sanity check even if identify type is vector layer, helps with type hints
+            if not isinstance(result.mLayer, QgsVectorLayer):
+                continue
+
+            if (
+                best_match is None
+                or type_preference.get(result.mLayer.geometryType(), 0)
+                > best_match_type_preference
+                or (
+                    type_preference.get(result.mLayer.geometryType(), 0)
+                    == best_match_type_preference
+                    and self._get_distance_to_feature_on_layer(
+                        result.mLayer, result.mFeature, origin_map_coordinates
+                    )
+                    < best_match_distance
+                )
+            ):
+                best_match = result.mLayer
+                best_match_type_preference = type_preference.get(
+                    result.mLayer.geometryType(), 0
+                )
+                best_match_distance = self._get_distance_to_feature_on_layer(
+                    result.mLayer,
+                    result.mFeature,
+                    origin_map_coordinates,
+                )
+
+        return best_match

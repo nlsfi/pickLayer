@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## Unreleased
+- pick active by clicking now considers distance between same type of layers
+
 ## 3.3.0 - 2022-04-04
 - adds a new tool to set active layer by clicking features on map
 - if multiple layers are found, active layer is chosen in this order: point layer, line layer, polygon layer, other map layers
