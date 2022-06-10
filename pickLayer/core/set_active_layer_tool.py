@@ -77,7 +77,7 @@ class SetActiveLayerTool(QgsMapToolIdentify):
         results = self.identify(
             geometry=QgsGeometry.fromPointXY(location),
             mode=QgsMapToolIdentify.TopDownAll,
-            layerType=QgsMapToolIdentify.AllLayers,
+            layerType=QgsMapToolIdentify.VectorLayer,
         )
 
         self.restoreCanvasPropertiesOverrides()
@@ -119,28 +119,27 @@ class SetActiveLayerTool(QgsMapToolIdentify):
         origin_map_coordinates: QgsPointXY,
     ) -> Optional[QgsMapLayer]:
 
-        type_preference = {
-            QgsWkbTypes.PointGeometry: 3,
+        geom_type_preference = {
+            QgsWkbTypes.PointGeometry: 1,
             QgsWkbTypes.LineGeometry: 2,
-            QgsWkbTypes.PolygonGeometry: 1,
+            QgsWkbTypes.PolygonGeometry: 3,
         }
 
         best_match: Optional[QgsVectorLayer] = None
-        best_match_type_preference = 0
+        best_match_geom_type_preference = 0
         best_match_distance = 0.0
 
         for result in results:
-            # sanity check even if identify type is vector layer, helps with type hints
             if not isinstance(result.mLayer, QgsVectorLayer):
                 continue
 
             if (
                 best_match is None
-                or type_preference.get(result.mLayer.geometryType(), 0)
-                > best_match_type_preference
+                or geom_type_preference.get(result.mLayer.geometryType(), 99)
+                < best_match_geom_type_preference
                 or (
-                    type_preference.get(result.mLayer.geometryType(), 0)
-                    == best_match_type_preference
+                    geom_type_preference.get(result.mLayer.geometryType(), 99)
+                    == best_match_geom_type_preference
                     and self._get_distance_to_feature_on_layer(
                         result.mLayer, result.mFeature, origin_map_coordinates
                     )
@@ -148,8 +147,8 @@ class SetActiveLayerTool(QgsMapToolIdentify):
                 )
             ):
                 best_match = result.mLayer
-                best_match_type_preference = type_preference.get(
-                    result.mLayer.geometryType(), 0
+                best_match_geom_type_preference = geom_type_preference.get(
+                    result.mLayer.geometryType(), 99
                 )
                 best_match_distance = self._get_distance_to_feature_on_layer(
                     result.mLayer,

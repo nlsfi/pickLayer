@@ -30,6 +30,7 @@ from qgis.core import (
     QgsMemoryProviderUtils,
     QgsPointXY,
     QgsProject,
+    QgsRasterLayer,
     QgsVectorLayer,
     QgsVectorLayerUtils,
 )
@@ -37,6 +38,7 @@ from qgis.gui import QgsMapToolIdentify
 
 from pickLayer.core.set_active_layer_tool import SetActiveLayerTool
 from pickLayer.definitions.settings import Settings
+from pickLayer.qgis_plugin_tools.tools.resources import plugin_test_data_path
 
 MOUSE_LOCATION = QgsPointXY(0, 0)
 
@@ -258,6 +260,7 @@ def test_closest_of_same_type_chosen_even_if_project_and_layer_crs_differs(
     map_tool: SetActiveLayerTool,
     mocker: MockerFixture,
     qgis_iface: QgisInterface,
+    qgis_new_project,
 ):
     results = create_identify_result(
         [
@@ -290,6 +293,7 @@ def test_line_crossing_origin_chosen_as_closest(
     map_tool: SetActiveLayerTool,
     mocker: MockerFixture,
     qgis_iface: QgisInterface,
+    qgis_new_project,
 ):
     results = create_identify_result(
         [
@@ -320,6 +324,7 @@ def test_top_polygon_chosen_from_multiple_nested_even_if_top_not_closest(
     map_tool: SetActiveLayerTool,
     mocker: MockerFixture,
     qgis_iface: QgisInterface,
+    qgis_new_project,
 ):
     results = create_identify_result(
         [
@@ -345,3 +350,26 @@ def test_top_polygon_chosen_from_multiple_nested_even_if_top_not_closest(
     args, _ = m_set_active_layer.call_args_list[0]
     call_layer = args[0]
     assert call_layer.name() == "polygon-0-10"
+
+
+def test_only_raster_present_no_change_active_layer(
+    map_tool: SetActiveLayerTool,
+    mocker: MockerFixture,
+    qgis_iface: QgisInterface,
+    qgis_new_project,
+):
+    # raster file is 1,1 -> 2,2 bbox in 4326 crs
+    raster_file = plugin_test_data_path("raster", "simple_raster_layer.tif")
+    raster_layer = QgsRasterLayer(raster_file)
+    QgsProject.instance().addMapLayer(raster_layer)
+
+    QgsProject.instance().setCrs(QgsCoordinateReferenceSystem("EPSG:4326"))
+    map_tool.canvas().setDestinationCrs(QgsCoordinateReferenceSystem("EPSG:4326"))
+
+    m_set_active_layer = mocker.patch.object(
+        qgis_iface, "setActiveLayer", return_value=None
+    )
+
+    map_tool.set_active_layer_using_closest_feature(QgsPointXY(1.5, 1.5))
+
+    m_set_active_layer.assert_not_called()
