@@ -17,10 +17,11 @@
 #  You should have received a copy of the GNU General Public License
 #  along with PickLayer. If not, see <https://www.gnu.org/licenses/>.
 
+import logging
 from typing import Callable, List, Optional
 
 from qgis.core import QgsApplication, QgsPointXY
-from qgis.gui import QgsGui
+from qgis.gui import QgsGui, QgsMapTool
 from qgis.PyQt.QtCore import QCoreApplication, QTranslator
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction, QToolBar, QToolButton, QWidget
@@ -35,6 +36,8 @@ from pickLayer.qgis_plugin_tools.tools.custom_logging import (
 from pickLayer.qgis_plugin_tools.tools.i18n import setup_translation, tr
 from pickLayer.qgis_plugin_tools.tools.resources import plugin_name, resources_path
 from pickLayer.ui.settings_dialog import SettingsDialog
+
+LOGGER = logging.getLogger(plugin_name())
 
 
 class Plugin:
@@ -227,6 +230,15 @@ class Plugin:
 
     def _set_active_layer_tool_selected(self) -> None:
         """Activates set active layer tool"""
+        if iface.mapCanvas().mapTool() is not None:
+            current_map_tool: QgsMapTool = iface.mapCanvas().mapTool()
+            LOGGER.debug(
+                tr(
+                    "Current map tool before activating Set Active Layer tool is {}",
+                    current_map_tool.toolName(),
+                )
+            )
+            self.set_active_layer_tool.previous_map_tool = current_map_tool
         iface.mapCanvas().setMapTool(self.set_active_layer_tool)
 
     def _open_settings_dialg(self) -> None:
