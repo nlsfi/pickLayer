@@ -20,3 +20,6 @@ __pycache__
 *.log
 
 .env
+
+# build
+dist/

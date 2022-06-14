@@ -1,7 +1,6 @@
 Development of pickLayer plugin
 ===========================
 
-
 This project uses [qgis_plugin_tools](https://github.com/nlsfi/qgis_plugin_tools) submodule,
 so set git setting value: `git config --global submodule.recurse true`.
 
@@ -9,11 +8,11 @@ When cloning use `--recurse-submodules` like so:
 `git clone --recurse-submodules https://github.com/nlsfi/pickLayer.git`
 
 When pulling from existing repo:
+
 ```sh
 git submodule init
 git submodule update
 ```
-
 
 The code for the plugin is in the [pickLayer](../pickLayer) folder. Make sure you have required tools, such as
 Qt with Qt Editor and Qt Linquist installed by following this
@@ -27,14 +26,16 @@ For building the plugin use platform independent [build.py](../pickLayer/build.p
   * On Windows OSGeo4W v2 installs use `<osgeo>/apps/PythonXX/python.exe` with [necessary patches](./osgeo-python-patch.md)
 * Activate the venv
 * Install the dependencies for runtime and development (testing & linting): `pip install -r requirements.txt -r requirements-dev.txt`
+* Install pre-commit: `pre-commit install`
 * Create a `.env` from `.env.example`, and configure at least the QGIS executable path
 * Launch development QGIS: `qpdt s`
 
-## Adding or editing  source files
+## Adding or editing source files
 
 If you create or edit source files make sure that:
 
 * they contain absolute imports:
+
     ```python
 
     from pickLayer.utils.exceptions import TestException # Good
@@ -43,6 +44,7 @@ If you create or edit source files make sure that:
 
 
     ```
+
 * they will be found by [build.py](../pickLayer/build.py) script (`py_files` and `ui_files` values)
 * you consider adding test files for the new functionality
 
@@ -142,6 +144,7 @@ plugin to QGIS plugin repository.
 
 For local release install [qgis-plugin-ci](https://github.com/opengisch/qgis-plugin-ci) (possibly to different venv
 to avoid Qt related problems on some environments) and follow these steps:
+
 ```shell
 cd pickLayer
 qgis-plugin-ci package --disable-submodule-update 0.1.0
