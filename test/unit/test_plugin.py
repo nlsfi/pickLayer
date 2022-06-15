@@ -18,6 +18,7 @@
 #  along with PickLayer. If not, see <https://www.gnu.org/licenses/>.
 import pytest
 from qgis.core import QgsPointXY
+from qgis.gui import QgsMapTool
 
 from pickLayer import classFactory
 
@@ -61,3 +62,26 @@ def test_set_active_layer_using_closest_feature_called(plugin_initialized, mocke
     )
 
     m_choose_layer_from_identify_results.assert_called_once()
+
+
+def test_set_active_layer_tool_selected_saves_current_map_tool_if_tool_present(
+    qgis_iface, plugin_initialized
+):
+    dummy_map_tool = QgsMapTool(qgis_iface.mapCanvas())
+    qgis_iface.mapCanvas().setMapTool(dummy_map_tool)
+    assert plugin_initialized.set_active_layer_tool.previous_map_tool is None
+
+    plugin_initialized._set_active_layer_tool_selected()
+
+    assert plugin_initialized.set_active_layer_tool.previous_map_tool == dummy_map_tool
+
+
+def test_set_active_layer_tool_selected_doesnt_save_current_map_tool_if_tool_not_present(
+    qgis_iface, plugin_initialized
+):
+    assert plugin_initialized.set_active_layer_tool.previous_map_tool is None
+    assert qgis_iface.mapCanvas().mapTool() is None
+
+    plugin_initialized._set_active_layer_tool_selected()
+
+    assert plugin_initialized.set_active_layer_tool.previous_map_tool is None
