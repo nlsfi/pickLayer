@@ -185,6 +185,10 @@ def test_set_active_layer_using_closest_feature_does_nothing_if_layer_not_found(
         return_value=None,
         autospec=True,
     )
+    # Spy is used instead of patch in order to double check setActiveLayer is never called
+    spy_activate_layer_and_previous_map_tool = mocker.spy(
+        map_tool, "_activate_layer_and_previous_map_tool"
+    )
     m_set_active_layer = mocker.patch.object(
         qgis_iface, "setActiveLayer", return_value=None
     )
@@ -192,6 +196,7 @@ def test_set_active_layer_using_closest_feature_does_nothing_if_layer_not_found(
     map_tool.set_active_layer_using_closest_feature(MOUSE_LOCATION)
 
     m_choose_layer_from_identify_results.assert_called_once()
+    spy_activate_layer_and_previous_map_tool.assert_not_called()
     m_set_active_layer.assert_not_called()
 
 

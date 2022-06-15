@@ -72,13 +72,6 @@ class SetActiveLayerTool(QgsMapToolIdentify):
                 tr("Error occurred: {}", str(e)), tr("Check log for more details.")
             )
 
-        if self.previous_map_tool is None:
-            LOGGER.info(
-                tr("Previous map tool not found: Set Active Layer tool remains active.")
-            )
-            return
-        iface.mapCanvas().setMapTool(self.previous_map_tool)
-
     def set_active_layer_using_closest_feature(
         self, location: QgsPointXY, search_radius: Optional[float] = None
     ) -> None:
@@ -100,7 +93,18 @@ class SetActiveLayerTool(QgsMapToolIdentify):
 
         if layer_to_activate is not None:
             LOGGER.info(tr("Activating layer {}", layer_to_activate.name()))
-            iface.setActiveLayer(layer_to_activate)
+            self._activate_layer_and_previous_map_tool(layer_to_activate)
+
+    def _activate_layer_and_previous_map_tool(
+        self, layer_to_activate: QgsMapLayer
+    ) -> None:
+        iface.setActiveLayer(layer_to_activate)
+        if self.previous_map_tool is None:
+            LOGGER.info(
+                tr("Previous map tool not found: Set Active Layer tool remains active.")
+            )
+            return
+        iface.mapCanvas().setMapTool(self.previous_map_tool)
 
     def _get_default_search_radius(self) -> float:
         # For some reason overriding searchRadiusMM does not seem to affect
