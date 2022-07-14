@@ -13,92 +13,77 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/picklayer.py" line="104"/>
+        <location filename="../../core/picklayer.py" line="102"/>
         <source>Layer: {}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/picklayer.py" line="128"/>
+        <location filename="../../core/picklayer.py" line="126"/>
         <source>Lon: {}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/picklayer.py" line="131"/>
+        <location filename="../../core/picklayer.py" line="129"/>
         <source>Lat: {}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/picklayer.py" line="159"/>
+        <location filename="../../core/picklayer.py" line="157"/>
         <source>North: {}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/picklayer.py" line="162"/>
+        <location filename="../../core/picklayer.py" line="160"/>
         <source>South: {}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/picklayer.py" line="165"/>
+        <location filename="../../core/picklayer.py" line="163"/>
         <source>East: {}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/picklayer.py" line="168"/>
+        <location filename="../../core/picklayer.py" line="166"/>
         <source>West: {}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/picklayer.py" line="151"/>
+        <location filename="../../core/picklayer.py" line="149"/>
         <source>Length: {}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/picklayer.py" line="171"/>
+        <location filename="../../core/picklayer.py" line="169"/>
         <source>Perimeter: {}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/picklayer.py" line="175"/>
+        <location filename="../../core/picklayer.py" line="173"/>
         <source>Area: {}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/picklayer.py" line="180"/>
-        <source>Set current layer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../core/picklayer.py" line="184"/>
-        <source>Hide</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../core/picklayer.py" line="188"/>
-        <source>Open properties dialog</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../core/picklayer.py" line="192"/>
+        <location filename="../../core/picklayer.py" line="190"/>
         <source>Zoom to layer extension</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/picklayer.py" line="201"/>
+        <location filename="../../core/picklayer.py" line="199"/>
         <source>Open attribute table</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/picklayer.py" line="209"/>
+        <location filename="../../core/picklayer.py" line="207"/>
         <source>Stop editing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/picklayer.py" line="220"/>
+        <location filename="../../core/picklayer.py" line="218"/>
         <source>Start editing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/picklayer.py" line="226"/>
+        <location filename="../../core/picklayer.py" line="224"/>
         <source>Zoom to feature</source>
         <translation type="unfinished"></translation>
     </message>
@@ -198,7 +183,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugin.py" line="119"/>
+        <location filename="../../core/picklayer.py" line="178"/>
         <source>Set active layer</source>
         <translation type="unfinished"></translation>
     </message>
@@ -250,6 +235,26 @@
     <message>
         <location filename="../../qgis_plugin_tools/widgets/progress_dialog.py" line="41"/>
         <source>Abort</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../core/picklayer.py" line="182"/>
+        <source>Hide layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../core/picklayer.py" line="186"/>
+        <source>Open layer properties</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../core/picklayer.py" line="236"/>
+        <source>Enable snapping</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../core/picklayer.py" line="236"/>
+        <source>Disable snapping</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

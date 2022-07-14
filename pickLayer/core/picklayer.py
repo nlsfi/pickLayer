@@ -34,8 +34,6 @@ from pickLayer.qgis_plugin_tools.tools.i18n import tr
 from pickLayer.qgis_plugin_tools.tools.messages import MsgBar
 from pickLayer.qgis_plugin_tools.tools.resources import plugin_name, resources_path
 
-enable_disable = {True: "Enable", False: "Disable"}
-
 LOGGER = logging.getLogger(plugin_name())
 
 
@@ -177,23 +175,23 @@ class PickLayer:
                 )
                 self.clipboard_area_action.triggered.connect(self.clipboard_area_func)
         context_menu.addSeparator()
-        self.set_current_action = context_menu.addAction(
+        self.set_active_action = context_menu.addAction(
             QtGui.QIcon(resources_path("icons", "mSetCurrentLayer.png")),
-            tr("Set current layer"),
+            tr("Set active layer"),
         )
         self.hide_action = context_menu.addAction(
             QtGui.QIcon(resources_path("icons", "off.png")),
-            tr("Hide"),
+            tr("Hide layer"),
         )
         self.open_properties_action = context_menu.addAction(
             QtGui.QIcon(resources_path("icons", "settings.svg")),
-            tr("Open properties dialog"),
+            tr("Open layer properties"),
         )
         self.zoom_to_layer_action = context_menu.addAction(
             QtGui.QIcon(resources_path("icons", "zoomToLayer.png")),
             tr("Zoom to layer extension"),
         )
-        self.set_current_action.triggered.connect(self.set_current_func)
+        self.set_active_action.triggered.connect(self.set_active_func)
         self.hide_action.triggered.connect(self.hide_func)
         self.open_properties_action.triggered.connect(self.open_properties_func)
         self.zoom_to_layer_action.triggered.connect(self.zoom_to_layer_func)
@@ -237,7 +235,9 @@ class PickLayer:
                 )
                 self.snapping_options_action = context_menu.addAction(
                     QtGui.QIcon(resources_path("icons", "snapIcon.png")),
-                    enable_disable[self.snap_control] + " snap",
+                    tr("Enable snapping")
+                    if self.snap_control
+                    else tr("Disable snapping"),
                 )
                 self.snapping_options_action.triggered.connect(
                     self.snapping_options_func
@@ -345,7 +345,7 @@ class PickLayer:
         self.map_canvas.setExtent(core.QgsRectangle(p1.x(), p1.y(), p2.x(), p2.y()))
         self.map_canvas.refresh()
 
-    def set_current_func(self) -> None:
+    def set_active_func(self) -> None:
         iface.setActiveLayer(self.selected_layer)
 
     def custom_action(self, action_id: QUuid) -> None:
