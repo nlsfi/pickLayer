@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 3.6.0 - 2022-09-17
 
 - add default shortcut for pick active layer action
 
