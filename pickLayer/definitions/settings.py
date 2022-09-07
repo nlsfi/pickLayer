@@ -53,3 +53,11 @@ class Settings(enum.Enum):
         if self == Settings.identify_tool_search_radius:
             return set_setting(self.value, value, internal=False)
         return set_setting(self.name, value)
+
+
+class KeyboardShortcut(enum.Enum):
+    """
+    Keyboard shortcuts.
+    """
+
+    PICK_ACTIVE_LAYER = "Shift+P"

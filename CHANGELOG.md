@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
+- add default shortcut for pick active layer action
+
 ## 3.5.0 - 2022-07-19
 
 - add finnish translations

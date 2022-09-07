@@ -29,6 +29,7 @@ from qgis.utils import iface
 
 from pickLayer.core.picklayer import PickLayer
 from pickLayer.core.set_active_layer_tool import SetActiveLayerTool
+from pickLayer.definitions.settings import KeyboardShortcut
 from pickLayer.qgis_plugin_tools.tools.custom_logging import (
     setup_logger,
     teardown_logger,
@@ -105,7 +106,7 @@ class Plugin:
             parent=iface.mainWindow(),
             set_checkable=True,
             add_to_toolbar=True,
-            add_keyboard_shortcut=True,
+            keyboard_shortcut=None,
         )
         self._add_action(
             "",
@@ -124,7 +125,7 @@ class Plugin:
             parent=iface.mainWindow(),
             set_checkable=True,
             add_to_toolbar=True,
-            add_keyboard_shortcut=True,
+            keyboard_shortcut=KeyboardShortcut.PICK_ACTIVE_LAYER,
         )
 
         self.set_active_layer_tool.setAction(self.set_active_layer_action)
@@ -158,7 +159,7 @@ class Plugin:
         whats_this: Optional[str] = None,
         parent: Optional[QWidget] = None,
         icon: Optional[QIcon] = None,
-        add_keyboard_shortcut: bool = False,
+        keyboard_shortcut: Optional[KeyboardShortcut] = None,
     ) -> QAction:
         """Add a toolbar icon to the toolbar.
 
@@ -215,8 +216,8 @@ class Plugin:
         if add_to_menu is True:
             iface.addPluginToMenu(self.menu, action)
 
-        if add_keyboard_shortcut is True:
-            QgsGui.shortcutsManager().registerAction(action, None)
+        if keyboard_shortcut is not None:
+            QgsGui.shortcutsManager().registerAction(action, keyboard_shortcut.value)
 
         self.actions.append(action)
 
