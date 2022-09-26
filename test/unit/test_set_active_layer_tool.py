@@ -138,6 +138,71 @@ def test_set_active_layer_using_closest_feature(
     assert len(identify_results) == expected_num_results
 
 
+@pytest.mark.parametrize(
+    argnames=(
+        "search_layers",
+        "expected_num_results",
+    ),
+    argvalues=[
+        ([0], 2),
+        ([0, 1], 4),
+        ([0, 1, 2], 6),
+    ],
+    ids=[
+        "features-from-one-layer-found",
+        "features-from-two-layers-found",
+        "features-from-three-layers-found",
+    ],
+)
+def test_set_active_layer_using_closest_feature_with_search_layers(
+    map_tool,
+    test_layers,
+    search_layers,
+    expected_num_results,
+    mocker,
+):
+    map_tool.search_layer_ids = ["these-should-be-overridden", "id2"]
+
+    layer_ids = []
+
+    for index in search_layers:
+        layer_ids.append(test_layers[index].id())
+
+    m_choose_layer_from_identify_results = mocker.patch.object(
+        map_tool,
+        "_choose_layer_from_identify_results",
+        return_value=None,
+        autospec=True,
+    )
+
+    map_tool.set_active_layer_using_closest_feature(
+        MOUSE_LOCATION, search_radius=2.5, search_layer_ids=layer_ids
+    )
+
+    identify_results = m_choose_layer_from_identify_results.call_args.args[0]
+    assert len(identify_results) == expected_num_results
+
+
+def test_set_active_layer_using_closest_feature_with_search_layers_set_to_none_should_find_all(
+    map_tool,
+    test_layers,
+    mocker,
+):
+    m_choose_layer_from_identify_results = mocker.patch.object(
+        map_tool,
+        "_choose_layer_from_identify_results",
+        return_value=None,
+        autospec=True,
+    )
+
+    map_tool.set_active_layer_using_closest_feature(
+        MOUSE_LOCATION, search_radius=2.5, search_layer_ids=None
+    )
+
+    identify_results = m_choose_layer_from_identify_results.call_args.args[0]
+    assert len(identify_results) == 6
+
+
 def test_get_default_search_radius_changes_if_settings_changed(
     map_tool,
 ):

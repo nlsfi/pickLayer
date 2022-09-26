@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with PickLayer. If not, see <https://www.gnu.org/licenses/>.
 import pytest
-from qgis.core import QgsPointXY
+from qgis.core import QgsPointXY, QgsSettings
 from qgis.gui import QgsMapTool
 
 from pickLayer import classFactory
@@ -25,6 +25,10 @@ from pickLayer import classFactory
 
 @pytest.fixture()
 def plugin_initialized(mock_iface, qgis_iface):
+    settings = QgsSettings()
+    settings.setValue("locale/userLocale", "en_US")
+    settings.sync()
+
     plugin = classFactory(qgis_iface)
     plugin.initGui()
 
@@ -62,6 +66,64 @@ def test_set_active_layer_using_closest_feature_called(plugin_initialized, mocke
     )
 
     m_choose_layer_from_identify_results.assert_called_once()
+
+
+@pytest.mark.parametrize(
+    argnames=("search_radius"),
+    argvalues=[
+        (0.5),
+        (None),
+    ],
+    ids=[
+        "custom-search-radius",
+        "default-search-radius",
+    ],
+)
+@pytest.mark.parametrize(
+    argnames=("layer_ids"),
+    argvalues=[
+        (["test-layer-1", "test-layer-2"]),
+        (None),
+    ],
+    ids=[
+        "custom-layers",
+        "default-layers",
+    ],
+)
+def test_set_active_layer_using_closest_feature_called_with_search_radius_and_layer_ids(
+    plugin_initialized, mocker, search_radius, layer_ids
+):
+    m_choose_layer_from_identify_results = mocker.patch.object(
+        plugin_initialized.set_active_layer_tool,
+        "_choose_layer_from_identify_results",
+        return_value=None,
+        autospec=True,
+    )
+
+    plugin_initialized.set_active_layer_using_closest_feature(
+        QgsPointXY(100000, 200000), search_radius, layer_ids
+    )
+
+    m_choose_layer_from_identify_results.assert_called_once()
+
+
+@pytest.mark.parametrize(
+    argnames=("layer_ids"),
+    argvalues=[
+        (["test-layer-1", "test-layer-2"]),
+        (None),
+    ],
+    ids=[
+        "custom-layers",
+        "default-layers",
+    ],
+)
+def test_set_search_layers_for_set_active_layer_tool(plugin_initialized, layer_ids):
+    assert plugin_initialized.set_active_layer_tool.search_layer_ids is None
+
+    plugin_initialized.set_search_layers_for_set_active_layer_tool(layer_ids)
+
+    assert plugin_initialized.set_active_layer_tool.search_layer_ids == layer_ids
 
 
 def test_set_active_layer_tool_selected_saves_current_map_tool_if_tool_present(
