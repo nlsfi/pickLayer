@@ -26,6 +26,7 @@ from qgis.core import (
     QgsGeometry,
     QgsMapLayer,
     QgsPointXY,
+    QgsProject,
     QgsRenderContext,
     QgsVectorLayer,
     QgsWkbTypes,
@@ -61,6 +62,7 @@ class SetActiveLayerTool(QgsMapToolIdentify):
         super().__init__(canvas)
         self.setCursor(QCursor())
         self.previous_map_tool: Optional[QgsMapTool] = None
+        self.search_layer_ids: Optional[List[str]] = None
 
     def canvasReleaseEvent(self, mouse_event: QgsMapMouseEvent) -> None:  # noqa N802
         try:
@@ -73,7 +75,10 @@ class SetActiveLayerTool(QgsMapToolIdentify):
             )
 
     def set_active_layer_using_closest_feature(
-        self, location: QgsPointXY, search_radius: Optional[float] = None
+        self,
+        location: QgsPointXY,
+        search_radius: Optional[float] = None,
+        search_layer_ids: Optional[List[str]] = None,
     ) -> None:
 
         if search_radius is None:
@@ -81,11 +86,7 @@ class SetActiveLayerTool(QgsMapToolIdentify):
 
         self.setCanvasPropertiesOverrides(search_radius)
 
-        results = self.identify(
-            geometry=QgsGeometry.fromPointXY(location),
-            mode=QgsMapToolIdentify.TopDownAll,
-            layerType=QgsMapToolIdentify.VectorLayer,
-        )
+        results = self._get_identify_results(location, search_layer_ids)
 
         self.restoreCanvasPropertiesOverrides()
 
@@ -94,6 +95,32 @@ class SetActiveLayerTool(QgsMapToolIdentify):
         if layer_to_activate is not None:
             LOGGER.info(tr("Activating layer {}", layer_to_activate.name()))
             self._activate_layer_and_previous_map_tool(layer_to_activate)
+
+    def _get_identify_results(
+        self, location: QgsPointXY, search_layer_ids: Optional[List[str]] = None
+    ) -> List[QgsMapToolIdentify.IdentifyResult]:
+        layer_ids = self.search_layer_ids or []
+        if search_layer_ids is not None:
+            layer_ids = search_layer_ids
+
+        layers = [
+            layer
+            for layer in QgsProject.instance().mapLayers().values()
+            if isinstance(layer, QgsVectorLayer) and layer.id() in layer_ids
+        ]
+
+        if len(layers) > 0:
+            return self.identify(
+                geometry=QgsGeometry.fromPointXY(location),
+                mode=QgsMapToolIdentify.TopDownAll,
+                layerList=layers,
+                layerType=QgsMapToolIdentify.VectorLayer,
+            )
+        return self.identify(
+            geometry=QgsGeometry.fromPointXY(location),
+            mode=QgsMapToolIdentify.TopDownAll,
+            layerType=QgsMapToolIdentify.VectorLayer,
+        )
 
     def _activate_layer_and_previous_map_tool(
         self, layer_to_activate: QgsMapLayer

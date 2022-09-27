@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
+- add possibility to define layers to search from for set active layer tool
+
 ## 3.6.0 - 2022-09-17
 
 - add default shortcut for pick active layer action

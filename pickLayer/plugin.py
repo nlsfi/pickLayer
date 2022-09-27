@@ -73,8 +73,26 @@ class Plugin:
         """
         return self.set_active_layer_action
 
+    def set_search_layers_for_set_active_layer_tool(
+        self, search_layers: Optional[List[str]] = None
+    ) -> None:
+        """
+        Public method for setting search layers for set active layer tool.
+
+        Can be used to set layers from another plugin.
+
+        Args:
+            search_layers: Layers to search features from. If None, all vector
+              layers in project are used.
+        """
+
+        self.set_active_layer_tool.search_layer_ids = search_layers
+
     def set_active_layer_using_closest_feature(
-        self, point_xy: QgsPointXY, search_radius: Optional[float] = None
+        self,
+        point_xy: QgsPointXY,
+        search_radius: Optional[float] = None,
+        search_layers: Optional[List[str]] = None,
     ) -> None:
         """
         Public method for setting layer active based on given map coordinates.
@@ -87,10 +105,12 @@ class Plugin:
             point_xy: Map coordinates
             search_radius: Search radius to use in map units. By default uses
               search radius defined in PickLayer settings.
+            search_layers: Layers to search features from. By default searches all
+              vector layers in project.
         """
 
         self.set_active_layer_tool.set_active_layer_using_closest_feature(
-            point_xy, search_radius
+            point_xy, search_radius, search_layers
         )
 
     def initGui(self) -> None:  # noqa N802
