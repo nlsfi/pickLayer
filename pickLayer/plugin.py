@@ -120,7 +120,7 @@ class Plugin:
         self.toolbar.setObjectName(plugin_name())
 
         self.pick_layer_action = self._add_action(
-            resources_path("icons", "pickLayer.png"),
+            resources_path("icons", "pick_layer.svg"),
             text=plugin_name(),
             callback=self._activate_pick_layer,
             parent=iface.mainWindow(),
@@ -138,7 +138,7 @@ class Plugin:
         )
 
         self.set_active_layer_action = self._add_action(
-            resources_path("icons", "setActiveLayer.png"),
+            resources_path("icons", "pick_layer_lite.svg"),
             text=tr("Set active layer"),
             status_tip=tr("Set layer active based on closest feature"),
             callback=self._set_active_layer_tool_selected,

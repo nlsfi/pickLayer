@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
+- update icons
+
 ## 3.7.0 - 2022-09-27
 
 - add possibility to define layers to search from for set active layer tool
