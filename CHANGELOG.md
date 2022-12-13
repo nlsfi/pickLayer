@@ -3,6 +3,8 @@
 ## Unreleased
 
 - update icons
+- add pre-commit hooks for markdown files' style checks and for checking that commit
+  messages follow convention
 
 ## 3.7.0 - 2022-09-27
 
@@ -24,7 +26,8 @@
 ## 3.3.0 - 2022-04-04
 
 - adds a new tool to set active layer by clicking features on map
-- if multiple layers are found, active layer is chosen in this order: point layer, line layer, polygon layer, other map layers
+- if multiple layers are found, active layer is chosen in this order: point layer, line
+  layer, polygon layer, other map layers
 
 ## 3.2.0 - 2021-06-29
 
