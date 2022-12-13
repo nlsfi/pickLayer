@@ -437,7 +437,8 @@ class PickLayer:
     def edit_feature(self, layer: core.QgsMapLayer, feature: core.QgsFeature) -> None:
         self.selected_layer = layer
         self.selected_feature = feature
-        self.highlight(feature.geometry())
+        if feature.hasGeometry():
+            self.highlight(feature.geometry())
         self.context_menu_request()
 
     def set_map_tool(self) -> None:
