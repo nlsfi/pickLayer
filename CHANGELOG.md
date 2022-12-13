@@ -5,6 +5,7 @@
 - update icons
 - add pre-commit hooks for markdown files' style checks and for checking that commit
   messages follow convention
+- allow user to click on raster file without python error being launched
 
 ## 3.7.0 - 2022-09-27
 
