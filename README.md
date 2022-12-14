@@ -8,14 +8,16 @@
 [![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
 
-Set layer properties and options straight from map canvas. Activate layer by clicking features on map.
+Set layer properties and options straight from map canvas. Activate layer by clicking
+features on map.
 
 Originally created and maintained by [enricofer](https://github.com/enricofer)
-in https://github.com/enricofer/pickLayer.
+in <https://github.com/enricofer/pickLayer>.
 
 ## Usage from other plugins
 
-It is possible to control SetActiveLayerTool programmatically using public methods defined in Plugin-class.
+It is possible to control SetActiveLayerTool programmatically using public methods
+defined in Plugin-class.
 
 ```python
 from qgis.core import QgsPointXY
@@ -30,10 +32,10 @@ plugins["pickLayer"].set_active_layer_using_closest_feature(point_xy=some_point)
 plugins["pickLayer"].set_active_layer_using_closest_feature(point_xy=some_point, search_radius=100)
 
 # Activates layer using subset of layers (expects layer ids)
-plugins["pickLayer"].set_active_layer_using_closest_feature(point_xy=some_point, search_layers=["layer-1", "layer-2"])
+plugins["pickLayer"].set_active_layer_using_closest_feature(point_xy=some_point, search_layers=["layer-1", "layer-2"]) <!-- markdownlint-disable-line MD013 -->
 
 # Set search layers for set active layer map tool (expects layer ids)
-plugins["pickLayer"].set_search_layers_for_set_active_layer_tool_action(search_layers=["layer-1", "layer-2"])
+plugins["pickLayer"].set_search_layers_for_set_active_layer_tool_action(search_layers=["layer-1", "layer-2"]) <!-- markdownlint-disable-line MD013 -->
 
 # Reset search layers for set active layer map tool (will use all vector layers in project)
 plugins["pickLayer"].set_search_layers_for_set_active_layer_tool_action(search_layers=None)

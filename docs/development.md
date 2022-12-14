@@ -143,7 +143,7 @@ Follow these steps to create a release
 * Push tag to Github using `git push --follow-tags`
 * Create Github release
 * [qgis-plugin-ci](https://github.com/opengisch/qgis-plugin-ci) adds release zip
-* automatically as an asset
+  automatically as an asset
 
 Modify [release](../.github/workflows/release.yml) workflow according to its comments
 if you want to upload the plugin to QGIS plugin repository.
