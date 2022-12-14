@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 3.8.0 - 2022-12-14
+
 - update icons
 - add pre-commit hooks for markdown files' style checks and for checking that commit
   messages follow convention
