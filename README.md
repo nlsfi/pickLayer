@@ -32,10 +32,10 @@ plugins["pickLayer"].set_active_layer_using_closest_feature(point_xy=some_point)
 plugins["pickLayer"].set_active_layer_using_closest_feature(point_xy=some_point, search_radius=100)
 
 # Activates layer using subset of layers (expects layer ids)
-plugins["pickLayer"].set_active_layer_using_closest_feature(point_xy=some_point, search_layers=["layer-1", "layer-2"]) <!-- markdownlint-disable-line MD013 -->
+plugins["pickLayer"].set_active_layer_using_closest_feature(point_xy=some_point, search_layers=["layer-1", "layer-2"])
 
 # Set search layers for set active layer map tool (expects layer ids)
-plugins["pickLayer"].set_search_layers_for_set_active_layer_tool_action(search_layers=["layer-1", "layer-2"]) <!-- markdownlint-disable-line MD013 -->
+plugins["pickLayer"].set_search_layers_for_set_active_layer_tool_action(search_layers=["layer-1", "layer-2"])
 
 # Reset search layers for set active layer map tool (will use all vector layers in project)
 plugins["pickLayer"].set_search_layers_for_set_active_layer_tool_action(search_layers=None)
