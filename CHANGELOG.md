@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- update icons (in order to increase distinguishability)
+
 ## 3.8.0 - 2022-12-14
 
 - update icons
