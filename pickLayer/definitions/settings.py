@@ -21,7 +21,7 @@
 import enum
 from typing import Any, Union
 
-from pickLayer.qgis_plugin_tools.tools.settings import get_setting, set_setting
+from qgis_plugin_tools.tools.settings import get_setting, set_setting
 
 
 class Settings(enum.Enum):

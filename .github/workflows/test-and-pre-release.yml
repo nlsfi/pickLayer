@@ -16,7 +16,7 @@ jobs:
     strategy:
       matrix:
         # Remove unsupported versions and add more versions. Use LTR version in the cov_tests job
-        docker_tags: [release-3_18, release-3_22, latest]
+        docker_tags: [release-3_22, latest]
       fail-fast: false
 
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -33,7 +33,7 @@ jobs:
       - name: Run tests
         run: >
           docker run --rm --net=host --volume `pwd`:/app -w=/app -e QGIS_PLUGIN_IN_CI=1 qgis/qgis:${{ matrix.docker_tags }} sh -c
-          "pip3 install -qr requirements-dev.txt && xvfb-run -s '+extension GLX -screen 0 1024x768x24'
+          "pip3 install -q -r requirements.txt -r requirements-dev.txt --no-deps --only-binary=:all: && xvfb-run -s '+extension GLX -screen 0 1024x768x24'
           pytest -v --cov=pickLayer --cov-report=xml test"
 
       # Upload coverage report. Will not work if the repo is private
@@ -66,7 +66,7 @@ jobs:
           $env:QGIS_PATH = (Get-ChildItem "C:\Program Files\QGIS *\bin" | Select-Object -First 1 -ExpandProperty FullName)
           $env:PATH="$env:QGIS_PATH;$env:PATH"
           $env:QGIS_PLUGIN_IN_CI=1
-          python-qgis-ltr.bat -m pip install -qr requirements-dev.txt
+          python-qgis-ltr.bat -m pip install -q -r requirements.txt -r requirements-dev.txt --no-deps --only-binary=:all:
           python-qgis-ltr.bat -m pytest -v test
 
   pre-release:

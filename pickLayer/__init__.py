@@ -22,7 +22,7 @@
 import os
 import sys
 
-from pickLayer.qgis_plugin_tools.infrastructure.debugging import (  # noqa F401
+from qgis_plugin_tools.infrastructure.debugging import (  # noqa F401
     setup_debugpy,
     setup_ptvsd,
     setup_pydevd,

@@ -35,10 +35,10 @@ from qgis.core import (
     QgsVectorLayerUtils,
 )
 from qgis.gui import QgsMapTool, QgsMapToolIdentify
+from qgis_plugin_tools.tools.resources import plugin_test_data_path
 
 from pickLayer.core.set_active_layer_tool import SetActiveLayerTool
 from pickLayer.definitions.settings import Settings
-from pickLayer.qgis_plugin_tools.tools.resources import plugin_test_data_path
 
 MOUSE_LOCATION = QgsPointXY(0, 0)
 
