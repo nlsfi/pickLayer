@@ -1,2 +1,5 @@
 [tool.qgis_plugin_dev_tools]
 plugin_package_name = "pickLayer"
+runtime_requires = [
+	"qgis_plugin_tools"
+]

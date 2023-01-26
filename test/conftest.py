@@ -21,13 +21,12 @@
 # flake8: noqa ANN201
 import pytest
 from qgis.PyQt.QtWidgets import QToolBar
-
-from pickLayer.qgis_plugin_tools.tools.messages import MsgBar
+from qgis_plugin_tools.tools.messages import MsgBar
 
 
 @pytest.fixture()
 def initialize_ui(mocker) -> None:
-    """ Throws unhandled exception even though it is caught with log_if_fails """
+    """Throws unhandled exception even though it is caught with log_if_fails"""
 
     def mock_msg_bar(*args, **kwargs):
         if len(args) > 1 and isinstance(args[1], Exception):

@@ -1,18 +1,5 @@
 # Development of pickLayer plugin
 
-This project uses [qgis_plugin_tools](https://github.com/nlsfi/qgis_plugin_tools) submodule,
-so set git setting value: `git config --global submodule.recurse true`.
-
-When cloning use `--recurse-submodules` like so:
-`git clone --recurse-submodules https://github.com/nlsfi/pickLayer.git`
-
-When pulling from existing repo:
-
-```sh
-git submodule init
-git submodule update
-```
-
 The code for the plugin is in the [pickLayer](../pickLayer) folder. Make sure you have
 required tools, such as
 Qt with Qt Editor and Qt Linquist installed by following this
@@ -27,7 +14,7 @@ For building the plugin use platform independent [build.py](../pickLayer/build.p
   with [necessary patches](./osgeo-python-patch.md)
 * Activate the venv
 * Install the dependencies for runtime and development (testing & linting):
-  `pip install -r requirements.txt -r requirements-dev.txt`
+  `pip install -r requirements.txt -r requirements-dev.txt --no-deps --only-binary=:all:`
 * Install pre-commit: `pre-commit install` and  `pre-commit install --hook-type commit-msg`
 * Create a `.env` from `.env.example`, and configure at least the QGIS executable path
 * Launch development QGIS: `qpdt s`

@@ -28,11 +28,11 @@ from qgis.gui import QgsRubberBand
 from qgis.PyQt import QtGui, QtWidgets
 from qgis.PyQt.QtCore import QUuid
 from qgis.utils import iface, plugins
+from qgis_plugin_tools.tools.i18n import tr
+from qgis_plugin_tools.tools.messages import MsgBar
+from qgis_plugin_tools.tools.resources import plugin_name, resources_path
 
 from pickLayer.core.identifygeometry import IdentifyGeometry
-from pickLayer.qgis_plugin_tools.tools.i18n import tr
-from pickLayer.qgis_plugin_tools.tools.messages import MsgBar
-from pickLayer.qgis_plugin_tools.tools.resources import plugin_name, resources_path
 
 LOGGER = logging.getLogger(plugin_name())
 
