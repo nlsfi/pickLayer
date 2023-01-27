@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 3.9.0 - 2023-01-27
+
 - update icons (in order to increase distinguishability)
 - remove qgis plugin tools git submodule and use it as python dependency
 - update python dependencies
