@@ -35,11 +35,11 @@ from qgis.gui import QgsMapCanvas, QgsMapMouseEvent, QgsMapTool, QgsMapToolIdent
 from qgis.PyQt.QtCore import QPoint
 from qgis.PyQt.QtGui import QCursor
 from qgis.utils import iface
+from qgis_plugin_tools.tools.i18n import tr
+from qgis_plugin_tools.tools.messages import MsgBar
+from qgis_plugin_tools.tools.resources import plugin_name
 
 from pickLayer.definitions.settings import Settings
-from pickLayer.qgis_plugin_tools.tools.i18n import tr
-from pickLayer.qgis_plugin_tools.tools.messages import MsgBar
-from pickLayer.qgis_plugin_tools.tools.resources import plugin_name
 
 LOGGER = logging.getLogger(plugin_name())
 

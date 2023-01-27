@@ -26,16 +26,13 @@ from qgis.PyQt.QtCore import QCoreApplication, QTranslator
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction, QToolBar, QToolButton, QWidget
 from qgis.utils import iface
+from qgis_plugin_tools.tools.custom_logging import setup_logger, teardown_logger
+from qgis_plugin_tools.tools.i18n import setup_translation, tr
+from qgis_plugin_tools.tools.resources import plugin_name, resources_path
 
 from pickLayer.core.picklayer import PickLayer
 from pickLayer.core.set_active_layer_tool import SetActiveLayerTool
 from pickLayer.definitions.settings import KeyboardShortcut
-from pickLayer.qgis_plugin_tools.tools.custom_logging import (
-    setup_logger,
-    teardown_logger,
-)
-from pickLayer.qgis_plugin_tools.tools.i18n import setup_translation, tr
-from pickLayer.qgis_plugin_tools.tools.resources import plugin_name, resources_path
 from pickLayer.ui.settings_dialog import SettingsDialog
 
 LOGGER = logging.getLogger(plugin_name())

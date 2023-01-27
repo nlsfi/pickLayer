@@ -17,14 +17,14 @@
 #  You should have received a copy of the GNU General Public License
 #  along with PickLayer. If not, see <https://www.gnu.org/licenses/>.
 import pytest
-
-from pickLayer.definitions.settings import Settings
-from pickLayer.qgis_plugin_tools.tools.custom_logging import (
+from qgis_plugin_tools.tools.custom_logging import (
     LogTarget,
     get_log_level_key,
     get_log_level_name,
 )
-from pickLayer.qgis_plugin_tools.tools.settings import set_setting
+from qgis_plugin_tools.tools.settings import set_setting
+
+from pickLayer.definitions.settings import Settings
 from pickLayer.ui.settings_dialog import SettingsDialog
 
 ORIGINAL_RADIUS = 1.5

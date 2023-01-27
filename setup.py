@@ -13,4 +13,7 @@ setup(
             "*.ui",
         ],
     },
+    install_requires=[
+        "qgis_plugin_tools>=0.2.0",
+    ],
 )

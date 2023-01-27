@@ -22,16 +22,16 @@ from typing import Optional
 
 from qgis.core import QgsApplication
 from qgis.PyQt.QtWidgets import QDialog, QWidget
-
-from pickLayer.definitions.settings import Settings
-from pickLayer.qgis_plugin_tools.tools.custom_logging import (
+from qgis_plugin_tools.tools.custom_logging import (
     LogTarget,
     get_log_folder,
     get_log_level_key,
     get_log_level_name,
 )
-from pickLayer.qgis_plugin_tools.tools.resources import load_ui, plugin_name
-from pickLayer.qgis_plugin_tools.tools.settings import set_setting
+from qgis_plugin_tools.tools.resources import load_ui, plugin_name
+from qgis_plugin_tools.tools.settings import set_setting
+
+from pickLayer.definitions.settings import Settings
 
 FORM_CLASS: QWidget = load_ui("settings_dialog.ui")
 
