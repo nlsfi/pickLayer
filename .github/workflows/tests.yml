@@ -21,7 +21,7 @@ jobs:
       - run: |
           pip3 install virtualenv && virtualenv .venv --system-site-packages
       - run: |
-          .venv/bin/pip3 install -q -r requirements.txt -r requirements-dev.txt --no-deps --only-binary=:all: && xvfb-run --server-args="+extension GLX -screen 0 1024x768x24" pytest -v --cov=pickLayer --cov-report=xml test
+          .venv/bin/pip3 install -q -r requirements.txt -r requirements-dev.txt --no-deps --only-binary=:all: && xvfb-run --server-args="+extension GLX -screen 0 1024x768x24" .venv/bin/pytest -v --cov=pickLayer --cov-report=xml test
       # Upload coverage report. Will not work if the repo is private
       - if: ${{ matrix.docker_tags == 'latest' && !github.event.repository.private }}
         uses: codecov/codecov-action@v1
