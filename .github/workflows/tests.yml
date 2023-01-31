@@ -21,7 +21,7 @@ jobs:
       - run: |
           pip3 install virtualenv && virtualenv .venv --system-site-packages
       - run: |
-          .venv/bin/pip3 install -q -r requirements.txt -r requirements-dev.txt --no-deps --only-binary=:all: && xvfb-run -s '+extension GLX -screen 0 1024x768x24'
+          .venv/bin/pip3 install -q -r requirements.txt -r requirements-dev.txt --no-deps --only-binary=:all: && xvfb-run -s "+extension GLX -screen 0 1024x768x24"
           .venv/bin/pip3 install . --no-deps
       - run: |
           .venv/bin/pytest -v --cov=pickLayer --cov-report=xml test
