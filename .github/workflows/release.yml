@@ -7,30 +7,24 @@ on:
 jobs:
   plugin_dst:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
         with:
-          submodules: true
-
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v1
+          python-version: '3.9'
+      # Use extra pip install . to do a non-editable install,
+      # so that .dist-info will go the package instead of .egg-info
+      - run: |
+          pip install -r requirements.txt --no-deps --only-binary=:all:
+          pip install . --no-deps
+      - run: |
+          qgis-plugin-dev-tools build
+      - run: |
+          qgis-plugin-dev-tools publish dist/*.zip
+        env:
+          QPDT_PUBLISH_USERNAME: ${{ secrets.QGIS_REPO_USERNAME }}
+          QPDT_PUBLISH_PASSWORD: ${{ secrets.QGIS_REPO_PASSWORD }}
+      - uses: svenstaro/GITHUB_TOKENupload-release-action@2.3.0
         with:
-          python-version: 3.8
-
-      #    Needed if the plugin is using Transifex, to have the lrelease command
-      #    - name: Install Qt lrelease
-      #      run: sudo apt-get update && sudo apt-get install qt5-default qttools5-dev-tools
-
-      - name: Install qgis-plugin-ci
-        run: pip3 install qgis-plugin-ci
-
-      # When osgeo upload is wanted: --osgeo-username usrname --osgeo-password ${{ secrets.OSGEO_PASSWORD }}
-      # When Transifex is wanted: --transifex-token ${{ secrets.TRANSIFEX_TOKEN }}
-      - name: Deploy plugin
-        run: >
-          qgis-plugin-ci release ${GITHUB_REF/refs\/tags\//}
-          --github-token ${{ secrets.GITHUB_TOKEN }}
-          --osgeo-username ${{ secrets.OSGEO_USERNAME }}
-          --osgeo-password ${{ secrets.OSGEO_PASSWORD }}
-          --disable-submodule-update
+          file: dist/*
+          file_glob: true

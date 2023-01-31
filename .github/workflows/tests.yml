@@ -1,0 +1,53 @@
+name: Tests
+
+on:
+  pull_request:
+  push:
+    branches: [master, main]
+
+jobs:
+  linux-tests:
+    runs-on: ubuntu-latest
+    container:
+      image: qgis/qgis:${{ matrix.qgis-image-tag }}
+    strategy:
+      matrix:
+        qgis-image-tag:
+          - release-3_22
+          # - release-3_26
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v3
+      - run: |
+          pip3 install virtualenv && virtualenv .venv --system-site-packages
+      - run: |
+          .venv/bin/pip3 install -r requirements.txt --no-deps --only-binary=:all:
+          .venv/bin/pip3 install . --no-deps
+      - run: |
+          .venv/bin/pytest -v --cov=pickLayer --cov-report=xml test
+      # Upload coverage report. Will not work if the repo is private
+      - if: ${{ matrix.docker_tags == 'latest' && !github.event.repository.private }}
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./coverage.xml
+          flags: unittests
+          fail_ci_if_error: true
+          verbose: false
+        env:
+          QT_QPA_PLATFORM: offscreen
+
+  windows_tests:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: crazy-max/ghaction-chocolatey@v1
+        with:
+          args: install qgis-ltr -y
+      - shell: pwsh
+        run: |
+          $env:QGIS_PATH = (Get-ChildItem "C:\Program Files\QGIS *\bin" | Select-Object -First 1 -ExpandProperty FullName)
+          $env:PATH="$env:QGIS_PATH;$env:PATH"
+          $env:QGIS_PLUGIN_IN_CI=1
+          python-qgis-ltr.bat -m pip install -q -r requirements.txt -r requirements-dev.txt --no-deps --only-binary=:all:
+          python-qgis-ltr.bat -m pytest -v test
