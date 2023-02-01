@@ -3,6 +3,7 @@
 ## Unreleased
 
 - fix release workflow and create separate workflows for running tests and creating draft releases
+- set development.md up-to-date
 
 ## 3.9.0 - 2023-01-27
 

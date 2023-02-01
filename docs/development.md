@@ -5,8 +5,6 @@ required tools, such as
 Qt with Qt Editor and Qt Linquist installed by following this
 [tutorial](https://www.qgistutorials.com/en/docs/3/building_a_python_plugin.html#get-the-tools).
 
-For building the plugin use platform independent [build.py](../pickLayer/build.py) script.
-
 ## Setting up development environment
 
 * Create a venv that is aware of system QGIS libraries: `python -m venv .venv --system-site-packages`
@@ -15,9 +13,13 @@ For building the plugin use platform independent [build.py](../pickLayer/build.p
 * Activate the venv
 * Install the dependencies for runtime and development (testing & linting):
   `pip install -r requirements.txt -r requirements-dev.txt --no-deps --only-binary=:all:`
-* Install pre-commit: `pre-commit install` and  `pre-commit install --hook-type commit-msg`
+* Install pre-commit: `pre-commit install`
 * Create a `.env` from `.env.example`, and configure at least the QGIS executable path
 * Launch development QGIS: `qpdt s`
+
+## Commit message style
+
+Commit messages should follow [Conventional Commits notation](https://www.conventionalcommits.org/en/v1.0.0/#summary). Use `pre-commit install --hook-type commit-msg` to generate a git hook for checking commit messages.
 
 ## Adding or editing source files
 
@@ -34,24 +36,7 @@ If you create or edit source files make sure that:
 
     ```
 
-* they will be found by [build.py](../pickLayer/build.py) script (`py_files`
-  and `ui_files` values)
 * you consider adding test files for the new functionality
-
-## Deployment
-
-Edit [build.py](../pickLayer/build.py) to contain working values for *profile*,
-*lrelease* and *pyrcc*. If you are running on Windows, make sure the value
-*QGIS_INSTALLATION_DIR* points to right folder
-
-Run the deployment with:
-
-```shell script
-python build.py deploy
-```
-
-After deploying and restarting QGIS you should see the plugin in the QGIS installed
-plugins where you have to activate it.
 
 ## Testing
 
@@ -62,86 +47,19 @@ the virtual environment and run tests with:
 pytest
 ```
 
-## Translating
-
-### Translating with Transifex
-
-Fill in `transifex_coordinator` (Transifex username) and `transifex_organization`
-in [.qgis-plugin-ci](../.qgis-plugin-ci) to use Transifex translation.
-
-If you want to see the translations during development, add `i18n` to the `extra_dirs`
-in `build.py`:
-
-```python
-extra_dirs = ["resources", "i18n"]
-```
-
-#### Pushing / creating new translations
-
-For step-by-step instructions, read the [translation tutorial](./translation_tutorial.md#Tutorial).
-
-* First, install [Transifex CLI](https://docs.transifex.com/client/installing-the-client)
-  and [qgis-plugin-ci](https://github.com/opengisch/qgis-plugin-ci)
-* Make sure command `pylupdate5` works. Otherwise install it with `pip install pyqt5`
-* Run `qgis-plugin-ci push-translation <your-transifex-token>`
-* Go to your Transifex site, add some languages and start translating
-* Copy [push_translations.yml](push_translations.yml) file to
-  [workflows](../.github/workflows) folder to enable automatic pushing after commits to master
-* Add this badge
-  ![](https://github.com/nlsfi/pickLayer/workflows/Translations/badge.svg) <!-- markdownlint-disable-line MD045 -->
-  to the [README](../README.md)
-
-##### Pulling
-
-There is no need to pull if you configure `--transifex-token` into your
-[release](../.github/workflows/release.yml) workflow (remember to use Github Secrets).
-Remember to uncomment the lrelease section as well. You can however pull manually to
-test the process.
-
-* Run `qgis-plugin-ci pull-translation --compile <your-transifex-token>`
-
-#### Translating with QT Linguistic (if Transifex not available)
+## Translating with QT Linguistic
 
 The translation files are in [i18n](../pickLayer/resources/i18n) folder. Translatable
 content in python files is code such as `tr(u"Hello World")`.
 
-To update language *.ts* files to contain newest lines to translate, run
+You can open the .ts files you wish to translate with Qt Linguist, make the changes and compile the translations to .qm files.
 
-```shell script
-python build.py transup
-```
+## Release steps
 
-You can then open the *.ts* files you wish to translate with Qt Linguist and make the changes.
+When the branch is in a releasable state, trigger the `Create draft release` workflow from GitHub Actions. Pass the to-be-released version number as an input to the workflow.
 
-Compile the translations to *.qm* files with:
+Workflow creates two commits in the target branch, one with the release state and one with the post-release state. It also creates a draft release from the release state commit with auto-generated release notes. Check the draft release notes and modify those if needed. After the release is published, the tag will be created, release workflow will be triggered, and it publishes a new version to PyPI.
 
-```shell script
-python build.py transcompile
-```
+Note: if you created the release commits to a non-`main` branch (i.e. to a branch with an open pull request), only publish the release after the pull request has been merged to main branch. Change the commit hash on the draft release to point to the actual rebased commit on the main branch, instead of the now obsolete commit on the original branch. If the GUI dropdown selection won't show the new main branch commits, the release may need to be re-created manually to allow selecting the rebased commit hash.
 
-### Github Release
-
-Follow these steps to create a release
-
-* Add changelog information to [CHANGELOG.md](../CHANGELOG.md) using this
-  [format](https://raw.githubusercontent.com/opengisch/qgis-plugin-ci/master/CHANGELOG.md)
-* Make a new commit. (`git add -A && git commit -m "Release 0.1.0"`)
-* Create new tag for it (`git tag -a 0.1.0 -m "Version 0.1.0"`)
-* Push tag to Github using `git push --follow-tags`
-* Create Github release
-* [qgis-plugin-ci](https://github.com/opengisch/qgis-plugin-ci) adds release zip
-  automatically as an asset
-
-Modify [release](../.github/workflows/release.yml) workflow according to its comments
-if you want to upload the plugin to QGIS plugin repository.
-
-### Local release
-
-For local release install [qgis-plugin-ci](https://github.com/opengisch/qgis-plugin-ci)
-(possibly to different venv to avoid Qt related problems on some environments) and
-follow these steps:
-
-```shell
-cd pickLayer
-qgis-plugin-ci package --disable-submodule-update 0.1.0
-```
+[OSGeo4W issue]: <https://trac.osgeo.org/osgeo4w/ticket/692> <!-- markdownlint-disable MD053 -->
