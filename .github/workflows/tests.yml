@@ -12,18 +12,22 @@ jobs:
       image: qgis/qgis:${{ matrix.qgis-image-tag }}
     strategy:
       matrix:
-        qgis-image-tag:
-          - release-3_22
-          # - release-3_26
+        # When making chances here rememeber to update the tag also in line 31!
+        qgis-image-tags: [release-3_22]
       fail-fast: false
     steps:
       - uses: actions/checkout@v3
       - run: |
           pip3 install virtualenv && virtualenv .venv --system-site-packages
       - run: |
-          .venv/bin/pip3 install -q -r requirements.txt -r requirements-dev.txt --no-deps --only-binary=:all: && xvfb-run --server-args="+extension GLX -screen 0 1024x768x24" .venv/bin/pytest -v --cov=pickLayer --cov-report=xml test
+          .venv/bin/pip3 install -q -r requirements.txt -r requirements-dev.txt --no-deps --only-binary=:all:
+      - run: |
+          .venv/bin/pytest -v --cov=pickLayer --cov-report=xml test
+        env:
+          QT_QPA_PLATFORM: offscreen
       # Upload coverage report. Will not work if the repo is private
-      - if: ${{ matrix.docker_tags == 'latest' && !github.event.repository.private }}
+      # Rememeber to check that tag specified below can be found in the matrix created at line 16!
+      - if: ${{ matrix.qgis_image_tags == 'release-3_22' && !github.event.repository.private }}
         uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
