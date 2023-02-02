@@ -17,3 +17,6 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with PickLayer. If not, see <https://www.gnu.org/licenses/>.
+
+
+__version__ = "3.9.0.post0"
