@@ -9,7 +9,7 @@ jobs:
   linux-tests:
     runs-on: ubuntu-latest
     container:
-      image: qgis/qgis:${{ matrix.qgis-image-tag }}
+      image: qgis/qgis:${{ matrix.qgis-image-tags }}
     strategy:
       matrix:
         # When making chances here rememeber to update the tag also in line 31!
