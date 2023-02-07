@@ -10,7 +10,6 @@ on:
 jobs:
   create-release-commits:
     runs-on: ubuntu-latest
-    needs: [linux_tests, windows_tests]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v3
