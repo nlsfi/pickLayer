@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## [3.9.1] - 2023-02-07
 
 - fix release workflow and create separate workflows for running tests and creating draft releases
 - set development.md up-to-date
@@ -86,3 +86,4 @@
   - copy feature and paste geometries and attributes
 - other commands:
   - layer actions attached to context menu
+[3.9.1]: https://github.com/nlsfi/pickLayer/releases/tag/v3.9.1
