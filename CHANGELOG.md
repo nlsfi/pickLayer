@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## [3.9.1] - 2023-02-07
 
 ## [3.9.1] - 2023-02-07
 
@@ -88,4 +88,5 @@
   - copy feature and paste geometries and attributes
 - other commands:
   - layer actions attached to context menu
+[3.9.1]: https://github.com/nlsfi/pickLayer/releases/tag/v3.9.1
 [3.9.1]: https://github.com/nlsfi/pickLayer/releases/tag/v3.9.1
