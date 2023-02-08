@@ -1,5 +1,7 @@
 # CHANGELOG
 
+## Unreleased
+
 ## [3.9.2] - 2023-02-08
 
 - update qgis-plugin-dev-tools version in order to produce valid zip plugin
