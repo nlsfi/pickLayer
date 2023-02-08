@@ -15,7 +15,7 @@ jobs:
       # Use extra pip install . to do a non-editable install,
       # so that .dist-info will go the package instead of .egg-info
       - run: |
-          pip install -r requirements.txt -r requirements-dev.txt --no-deps --only-binary=:all:
+          pip install -r requirements.txt --no-deps --only-binary=:all:
           pip install . --no-deps
       - run: |
           qgis-plugin-dev-tools build
