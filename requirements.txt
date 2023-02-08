@@ -12,7 +12,7 @@ packaging==23.0
     # via qgis-plugin-dev-tools
 python-dotenv==0.21.1
     # via qgis-plugin-dev-tools
-qgis-plugin-dev-tools==0.1.1
+qgis-plugin-dev-tools==0.5.0
     # via -r requirements.in
 qgis-plugin-tools==0.2.0
     # via picklayer
