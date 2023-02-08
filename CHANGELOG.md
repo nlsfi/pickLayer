@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## [3.9.3] - 2023-02-08
 
 - update requirements to match qgis-plugin-dev-tools version
 
@@ -96,3 +96,4 @@
   - layer actions attached to context menu
 [3.9.1]: <https://github.com/nlsfi/pickLayer/releases/tag/v3.9.1>
 [3.9.2]: <https://github.com/nlsfi/pickLayer/releases/tag/v3.9.2>
+[3.9.3]: https://github.com/nlsfi/pickLayer/releases/tag/v3.9.3
