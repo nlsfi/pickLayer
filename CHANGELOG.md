@@ -1,5 +1,7 @@
 # CHANGELOG
 
+## Unreleased
+
 ## [3.9.3] - 2023-02-08
 
 - update requirements to match qgis-plugin-dev-tools version
