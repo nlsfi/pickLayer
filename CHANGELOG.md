@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- update requirements to match qgis-plugin-dev-tools version
+
 ## [3.9.2] - 2023-02-08
 
 - update qgis-plugin-dev-tools version in order to produce valid zip plugin
@@ -93,4 +95,4 @@
 - other commands:
   - layer actions attached to context menu
 [3.9.1]: <https://github.com/nlsfi/pickLayer/releases/tag/v3.9.1>
-[3.9.2]: https://github.com/nlsfi/pickLayer/releases/tag/v3.9.2
+[3.9.2]: <https://github.com/nlsfi/pickLayer/releases/tag/v3.9.2>
