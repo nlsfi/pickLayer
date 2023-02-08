@@ -19,21 +19,6 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with PickLayer. If not, see <https://www.gnu.org/licenses/>.
-import os
-import sys
-
-from qgis_plugin_tools.infrastructure.debugging import (  # noqa F401
-    setup_debugpy,
-    setup_ptvsd,
-    setup_pydevd,
-)
-
-debugger = os.environ.get("QGIS_PLUGIN_USE_DEBUGGER", "").lower()
-if debugger in {"debugpy", "ptvsd", "pydevd"}:
-    # provide the path to debugger dependencies (possibly venv site_packages)
-    if len(os.environ.get("QGIS_DEBUGGER_DEPENDENCY_PATH", "")) > 0:
-        sys.path.append(os.environ.get("QGIS_DEBUGGER_DEPENDENCY_PATH", ""))
-    locals()["setup_" + debugger]()
 
 
 # noinspection PyPep8Naming
