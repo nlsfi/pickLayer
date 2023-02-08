@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## [3.9.4] - 2023-02-08
 
 - fix plugin packaging
 
@@ -101,3 +101,4 @@
 [3.9.1]: <https://github.com/nlsfi/pickLayer/releases/tag/v3.9.1>
 [3.9.2]: <https://github.com/nlsfi/pickLayer/releases/tag/v3.9.2>
 [3.9.3]: <https://github.com/nlsfi/pickLayer/releases/tag/v3.9.3>
+[3.9.4]: https://github.com/nlsfi/pickLayer/releases/tag/v3.9.4
