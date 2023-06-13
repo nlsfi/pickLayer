@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## [3.9.5] - 2023-06-16
+
 - fix layer order in set active layer tool
 
 ## [3.9.4] - 2023-02-08
