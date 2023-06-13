@@ -53,7 +53,7 @@ class SetActiveLayerTool(QgsMapToolIdentify):
     from multiple layers the active layer is selected from the first
     identify result. Identify results are in same order as
     the search_layer_ids parameter. If search_layer_ids is empty then the
-    result list order is in same order as QgsProject.instance().mapLayers().
+    result list is in same order as iface.mapCanvas().layers().
 
     Map tool is automatically deactived and swapped to previous map tool
     after the new active layer is set.
@@ -103,14 +103,12 @@ class SetActiveLayerTool(QgsMapToolIdentify):
     def _get_identify_results(
         self, location: QgsPointXY, search_layer_ids: Optional[List[str]] = None
     ) -> List[QgsMapToolIdentify.IdentifyResult]:
+        layers = []
         if search_layer_ids:
-            layers = []
             for layer_id in search_layer_ids:
                 layer = QgsProject.instance().mapLayer(layer_id)
                 if isinstance(layer, QgsVectorLayer):
                     layers.append(layer)
-        else:
-            layers = QgsProject.instance().mapLayers().values()
 
         if len(layers) > 0:
             return self.identify(
