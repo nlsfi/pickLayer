@@ -49,7 +49,11 @@ class SetActiveLayerTool(QgsMapToolIdentify):
     Map tool that sets active layer by a click on the map canvas.
 
     New active layer is determined based on the feature that is closest
-    to the clicked coordinate.
+    to the clicked coordinate. If the identify query finds features
+    from multiple layers the active layer is selected from the first
+    identify result. Identify results are in same order as
+    the search_layer_ids parameter. If search_layer_ids is empty then the
+    result list order is in same order as QgsProject.instance().mapLayers().
 
     Map tool is automatically deactived and swapped to previous map tool
     after the new active layer is set.
@@ -99,15 +103,14 @@ class SetActiveLayerTool(QgsMapToolIdentify):
     def _get_identify_results(
         self, location: QgsPointXY, search_layer_ids: Optional[List[str]] = None
     ) -> List[QgsMapToolIdentify.IdentifyResult]:
-        layer_ids = self.search_layer_ids or []
-        if search_layer_ids is not None:
-            layer_ids = search_layer_ids
-
-        layers = [
-            layer
-            for layer in QgsProject.instance().mapLayers().values()
-            if isinstance(layer, QgsVectorLayer) and layer.id() in layer_ids
-        ]
+        if search_layer_ids:
+            layers = []
+            for layer_id in search_layer_ids:
+                layer = QgsProject.instance().mapLayer(layer_id)
+                if isinstance(layer, QgsVectorLayer):
+                    layers.append(layer)
+        else:
+            layers = QgsProject.instance().mapLayers().values()
 
         if len(layers) > 0:
             return self.identify(

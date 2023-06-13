@@ -182,6 +182,18 @@ def test_set_active_layer_using_closest_feature_with_search_layers(
     identify_results = m_choose_layer_from_identify_results.call_args.args[0]
     assert len(identify_results) == expected_num_results
 
+    # check that identify results are in same order
+    # as requested layer ids (result may contain multiple
+    # features from one layer)
+    identify_results_layer_ids = []
+    previous_id = ""
+    for result in identify_results:
+        if result.mLayer.id() != previous_id:
+            identify_results_layer_ids.append(result.mLayer.id())
+        previous_id = result.mLayer.id()
+
+    assert identify_results_layer_ids == layer_ids
+
 
 def test_set_active_layer_using_closest_feature_with_search_layers_set_to_none_should_find_all(
     map_tool,
