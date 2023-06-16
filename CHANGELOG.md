@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- fix plugin versioning
+
 ## [3.9.5] - 2023-06-16
 
 - fix layer order in set active layer tool
