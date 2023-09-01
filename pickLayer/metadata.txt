@@ -7,7 +7,7 @@ qgisMaximumVersion=3.99
 description=pick to feature on map canvas to perform layer and feature commands
 version=3.1
 author=National Land Survey of Finland
-email=sovellustuki@maanmittauslaitos.fi
+email=os@nls.fi
 
 about=The plugin allows to perform layer and features operations by a contextual menu clicking over features on map canvas. This is useful when many layers are loaded in the project and is difficult to find them in a crowded legend.
 
