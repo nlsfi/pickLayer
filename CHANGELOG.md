@@ -6,7 +6,7 @@
 
 - fix plugin versioning
 
-## [3.9.5] - 2023-06-16
+## 3.9.5 - 2023-06-16
 
 - fix layer order in set active layer tool
 
@@ -108,8 +108,9 @@
   - copy feature and paste geometries and attributes
 - other commands:
   - layer actions attached to context menu
+
 [3.9.1]: <https://github.com/nlsfi/pickLayer/releases/tag/v3.9.1>
 [3.9.2]: <https://github.com/nlsfi/pickLayer/releases/tag/v3.9.2>
 [3.9.3]: <https://github.com/nlsfi/pickLayer/releases/tag/v3.9.3>
 [3.9.4]: <https://github.com/nlsfi/pickLayer/releases/tag/v3.9.4>
-[3.9.6]: https://github.com/nlsfi/pickLayer/releases/tag/v3.9.6
+[3.9.6]: <https://github.com/nlsfi/pickLayer/releases/tag/v3.9.6>
