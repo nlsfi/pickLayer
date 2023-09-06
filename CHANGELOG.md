@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## [3.9.7] - 2023-09-06
 
 - update author email
 
@@ -116,3 +116,4 @@
 [3.9.3]: <https://github.com/nlsfi/pickLayer/releases/tag/v3.9.3>
 [3.9.4]: <https://github.com/nlsfi/pickLayer/releases/tag/v3.9.4>
 [3.9.6]: <https://github.com/nlsfi/pickLayer/releases/tag/v3.9.6>
+[3.9.7]: https://github.com/nlsfi/pickLayer/releases/tag/v3.9.7
