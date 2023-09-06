@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- update author email
+
 ## [3.9.6] - 2023-06-16
 
 - fix plugin versioning
