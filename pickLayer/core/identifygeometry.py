@@ -1,5 +1,5 @@
 #  Copyright (C) 2014-2019 Enrico Ferreguti (enricofer@gmail.com)
-#  Copyright (C) 2021-2022 National Land Survey of Finland
+#  Copyright (C) 2021-2023 National Land Survey of Finland
 #  (https://www.maanmittauslaitos.fi/en).
 #
 #
@@ -37,14 +37,14 @@ class IdentifyGeometry(QgsMapToolIdentify):
     geom_identified = pyqtSignal(QgsVectorLayer, QgsFeature)
 
     def __init__(
-        self, canvas: QgsMapCanvas, layerType: str = "AllLayers"  # noqa N803
+        self, canvas: QgsMapCanvas, layerType: str = "AllLayers"  # noqa: N803
     ) -> None:
         self.layer_type = getattr(QgsMapToolIdentify, layerType)
         self.canvas = canvas
         QgsMapToolIdentify.__init__(self, canvas)
         self.setCursor(QCursor())
 
-    def canvasReleaseEvent(self, mouse_event) -> None:  # noqa N802
+    def canvasReleaseEvent(self, mouse_event) -> None:  # noqa: ANN001, N802
         orig_search_radius = Settings.identify_tool_search_radius.get()
         try:
             search_radius = Settings.search_radius.get()

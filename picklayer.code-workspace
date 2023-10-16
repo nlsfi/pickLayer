@@ -1,0 +1,43 @@
+{
+    "extensions": {
+        "recommendations": [
+            "editorconfig.editorconfig",
+            "mikestead.dotenv",
+            "ms-python.python",
+            "ms-python.mypy-type-checker",
+            "ms-python.black-formatter",
+            "ms-python.flake8",
+            "charliermarsh.ruff",
+        ]
+    },
+    "folders": [
+        {
+            "path": "."
+        }
+    ],
+    "settings": {
+        "python.languageServer": "Pylance",
+        // Tests
+        "python.testing.pytestEnabled": true,
+        // Linting
+        "flake8.importStrategy": "fromEnvironment",
+        "ruff.importStrategy": "fromEnvironment",
+        "mypy-type-checker.importStrategy": "fromEnvironment",
+        // Formatting
+        "isort.check": false,
+        "black-formatter.importStrategy": "fromEnvironment",
+        "[python]": {
+            "editor.formatOnSave": true,
+            "editor.codeActionsOnSave": {
+                "source.organizeImports.ruff": true,
+                "source.fixAll": true
+            },
+            "editor.defaultFormatter": "ms-python.black-formatter",
+        },
+        "files.associations": {
+            "*.ts": "xml"
+        },
+        "editor.bracketPairColorization.enabled": true,
+        "editor.guides.bracketPairs": "active",
+    }
+}

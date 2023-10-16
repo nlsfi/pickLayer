@@ -1,7 +1,5 @@
-# -*- coding: utf-8 -*-
-
 #  Copyright (C) 2014-2019 Enrico Ferreguti (enricofer@gmail.com)
-#  Copyright (C) 2021-2022 National Land Survey of Finland
+#  Copyright (C) 2021-2023 National Land Survey of Finland
 #  (https://www.maanmittauslaitos.fi/en).
 #
 #
@@ -82,22 +80,22 @@ class PickLayer:
 
     def populate_attributes_menu(self, attribute_menu: QtWidgets.QMenu) -> None:
         field_names = [field.name() for field in self.selected_layer.fields()]
-        for n in range(0, len(field_names)):
+        for n in range(len(field_names)):
             field_name = field_names[n]
             attribute_value = self.selected_feature.attributes()[n]
             try:  # cut long strings
                 self.attribute_action = attribute_menu.addAction(
-                    "%s: %s" % (field_name, attribute_value[:40])
+                    f"{field_name}: {attribute_value[:40]}"
                 )
             except Exception:
                 self.attribute_action = attribute_menu.addAction(
-                    "%s: %s" % (field_name, attribute_value)
+                    f"{field_name}: {attribute_value}"
                 )
             self.attribute_action.triggered.connect(
                 partial(self.copy_to_clipboard, attribute_value)
             )
 
-    def context_menu_request(self) -> None:
+    def context_menu_request(self) -> None:  # noqa: C901, PLR0915
         context_menu = QtWidgets.QMenu()
         self.clipboard_layer_action = context_menu.addAction(
             tr("Layer: {}", self.selected_layer.name())
@@ -426,7 +424,7 @@ class PickLayer:
         self.selected_layer.triggerRepaint()
 
     def paste_attrs_func(self) -> None:
-        for attr_id in range(0, len(self.clip_attrs_values)):
+        for attr_id in range(len(self.clip_attrs_values)):
             if self.selected_layer.pendingFields().field(
                 str(self.clip_attrs_fieldnames[attr_id])
             ):

@@ -1,4 +1,4 @@
-#  Copyright (C) 2021-2022 National Land Survey of Finland
+#  Copyright (C) 2021-2023 National Land Survey of Finland
 #  (https://www.maanmittauslaitos.fi/en).
 #
 #
@@ -30,8 +30,8 @@ from pickLayer.ui.settings_dialog import SettingsDialog
 ORIGINAL_RADIUS = 1.5
 
 
-@pytest.fixture
-def settings_dialog(initialize_ui, qtbot):
+@pytest.fixture()
+def settings_dialog(_initialize_ui, qtbot):
     # Setup
     Settings.search_radius.set(ORIGINAL_RADIUS)
     set_setting(get_log_level_key(LogTarget.FILE), "INFO")

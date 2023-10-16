@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
-
-#  Copyright (C) 2022 National Land Survey of Finland
+#  Copyright (C) 2023 National Land Survey of Finland
 #  (https://www.maanmittauslaitos.fi/en).
 #
 #
@@ -19,7 +17,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with PickLayer. If not, see <https://www.gnu.org/licenses/>.
 import logging
-from typing import List, Optional
+from typing import Optional
 
 from qgis.core import (
     QgsFeature,
@@ -66,9 +64,9 @@ class SetActiveLayerTool(QgsMapToolIdentify):
         super().__init__(canvas)
         self.setCursor(QCursor())
         self.previous_map_tool: Optional[QgsMapTool] = None
-        self.search_layer_ids: Optional[List[str]] = None
+        self.search_layer_ids: Optional[list[str]] = None
 
-    def canvasReleaseEvent(self, mouse_event: QgsMapMouseEvent) -> None:  # noqa N802
+    def canvasReleaseEvent(self, mouse_event: QgsMapMouseEvent) -> None:  # noqa: N802
         try:
             self.set_active_layer_using_closest_feature(
                 self.toMapCoordinates(QPoint(mouse_event.x(), mouse_event.y()))
@@ -82,9 +80,8 @@ class SetActiveLayerTool(QgsMapToolIdentify):
         self,
         location: QgsPointXY,
         search_radius: Optional[float] = None,
-        search_layer_ids: Optional[List[str]] = None,
+        search_layer_ids: Optional[list[str]] = None,
     ) -> None:
-
         if search_radius is None:
             search_radius = self._get_default_search_radius()
 
@@ -101,8 +98,8 @@ class SetActiveLayerTool(QgsMapToolIdentify):
             self._activate_layer_and_previous_map_tool(layer_to_activate)
 
     def _get_identify_results(
-        self, location: QgsPointXY, search_layer_ids: Optional[List[str]] = None
-    ) -> List[QgsMapToolIdentify.IdentifyResult]:
+        self, location: QgsPointXY, search_layer_ids: Optional[list[str]] = None
+    ) -> list[QgsMapToolIdentify.IdentifyResult]:
         layers = []
         if search_layer_ids:
             for layer_id in search_layer_ids:
@@ -161,10 +158,9 @@ class SetActiveLayerTool(QgsMapToolIdentify):
 
     def _choose_layer_from_identify_results(
         self,
-        results: List[QgsMapToolIdentify.IdentifyResult],
+        results: list[QgsMapToolIdentify.IdentifyResult],
         origin_map_coordinates: QgsPointXY,
     ) -> Optional[QgsMapLayer]:
-
         geom_type_preference = {
             QgsWkbTypes.PointGeometry: 1,
             QgsWkbTypes.LineGeometry: 2,
