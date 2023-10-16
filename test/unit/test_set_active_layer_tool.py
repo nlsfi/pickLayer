@@ -1,4 +1,4 @@
-#  Copyright (C) 2022 National Land Survey of Finland
+#  Copyright (C) 2022-2023 National Land Survey of Finland
 #  (https://www.maanmittauslaitos.fi/en).
 #
 #
@@ -17,7 +17,6 @@
 #  You should have received a copy of the GNU General Public License
 #  along with PickLayer. If not, see <https://www.gnu.org/licenses/>.
 
-from typing import List, Tuple
 from unittest.mock import MagicMock
 
 import pytest
@@ -44,8 +43,8 @@ MOUSE_LOCATION = QgsPointXY(0, 0)
 
 
 def create_identify_result(
-    identified_feature_geom_wtks: List[Tuple[str, str, str]]
-) -> List[QgsMapToolIdentify.IdentifyResult]:
+    identified_feature_geom_wtks: list[tuple[str, str, str]]
+) -> list[QgsMapToolIdentify.IdentifyResult]:
     results = []
 
     for wkt, crs, layer_name in identified_feature_geom_wtks:
@@ -61,7 +60,9 @@ def create_identify_result(
 
         # using the actual QgsMapToolIdentify.IdentifyResult causes
         # fatal exceptions, mock probably is sufficient for testing
-        results.append(MagicMock(**{"mLayer": layer, "mFeature": feature}))
+        results.append(
+            MagicMock(**{"mLayer": layer, "mFeature": feature})  # noqa: PIE804
+        )
 
     return results
 

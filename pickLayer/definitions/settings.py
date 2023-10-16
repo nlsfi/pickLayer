@@ -1,5 +1,5 @@
 #  Copyright (C) 2014-2019 Enrico Ferreguti (enricofer@gmail.com)
-#  Copyright (C) 2021-2022 National Land Survey of Finland
+#  Copyright (C) 2021-2023 National Land Survey of Finland
 #  (https://www.maanmittauslaitos.fi/en).
 #
 #
@@ -29,7 +29,7 @@ class Settings(enum.Enum):
     # No default value, if this is not set, use the same value as identify tool
     search_radius = -1.0
 
-    def get(self, typehint: type = str) -> Any:
+    def get(self, typehint: type = str) -> Any:  # noqa: ANN401
         """Gets the value of the setting"""
         if self == Settings.identify_tool_search_radius:
             value = get_setting(self.value, internal=False)

@@ -1,5 +1,6 @@
+# noqa: N999
 #  Copyright (C) 2014-2019 Enrico Ferreguti (enricofer@gmail.com)
-#  Copyright (C) 2021-2022 National Land Survey of Finland
+#  Copyright (C) 2021-2023 National Land Survey of Finland
 #  (https://www.maanmittauslaitos.fi/en).
 #
 #

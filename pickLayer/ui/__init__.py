@@ -1,4 +1,5 @@
-#  Copyright (C) 2021-2022 National Land Survey of Finland
+# noqa: N999
+#  Copyright (C) 2021-2023 National Land Survey of Finland
 #  (https://www.maanmittauslaitos.fi/en).
 #
 #

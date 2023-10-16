@@ -1,4 +1,4 @@
-#  Copyright (C) 2021-2022 National Land Survey of Finland
+#  Copyright (C) 2021-2023 National Land Survey of Finland
 #  (https://www.maanmittauslaitos.fi/en).
 #
 #
@@ -24,7 +24,7 @@ from pickLayer import classFactory
 
 
 @pytest.fixture()
-def plugin_initialized(mock_iface, qgis_iface):
+def plugin_initialized(_mock_iface, qgis_iface):
     settings = QgsSettings()
     settings.setValue("locale/userLocale", "en_US")
     settings.sync()

@@ -1,4 +1,4 @@
-#  Copyright (C) 2021-2022 National Land Survey of Finland
+#  Copyright (C) 2021-2023 National Land Survey of Finland
 #  (https://www.maanmittauslaitos.fi/en).
 #
 #
@@ -18,7 +18,7 @@
 #  along with PickLayer. If not, see <https://www.gnu.org/licenses/>.
 
 import logging
-from typing import Callable, List, Optional
+from typing import Callable, Optional
 
 from qgis.core import QgsApplication, QgsPointXY
 from qgis.gui import QgsGui, QgsMapTool
@@ -54,7 +54,7 @@ class Plugin:
         else:
             pass
 
-        self.actions: List[QAction] = []
+        self.actions: list[QAction] = []
         self.toolbar: Optional[QToolBar] = None
         self.menu = plugin_name()
         self.pick_layer_tool: Optional[PickLayer] = None
@@ -71,7 +71,7 @@ class Plugin:
         return self.set_active_layer_action
 
     def set_search_layers_for_set_active_layer_tool(
-        self, search_layers: Optional[List[str]] = None
+        self, search_layers: Optional[list[str]] = None
     ) -> None:
         """
         Public method for setting search layers for set active layer tool.
@@ -89,7 +89,7 @@ class Plugin:
         self,
         point_xy: QgsPointXY,
         search_radius: Optional[float] = None,
-        search_layers: Optional[List[str]] = None,
+        search_layers: Optional[list[str]] = None,
     ) -> None:
         """
         Public method for setting layer active based on given map coordinates.
@@ -110,7 +110,7 @@ class Plugin:
             point_xy, search_radius, search_layers
         )
 
-    def initGui(self) -> None:  # noqa N802
+    def initGui(self) -> None:  # noqa: N802
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
 
         self.toolbar = iface.addToolBar(plugin_name())
@@ -147,9 +147,8 @@ class Plugin:
 
         self.set_active_layer_tool.setAction(self.set_active_layer_action)
 
-    def onClosePlugin(self) -> None:  # noqa N802
+    def onClosePlugin(self) -> None:  # noqa: N802
         """Cleanup necessary items here when plugin dockwidget is closed"""
-        pass
 
     def unload(self) -> None:
         """Removes the plugin menu item and icon from QGIS GUI."""
@@ -163,7 +162,7 @@ class Plugin:
         # Remove toolbar from QGIS by deleting it
         del self.toolbar
 
-    def _add_action(
+    def _add_action(  # noqa: PLR0913
         self,
         icon_path: str,
         text: str,

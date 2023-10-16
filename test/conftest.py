@@ -1,4 +1,4 @@
-#  Copyright (C) 2021-2022 National Land Survey of Finland
+#  Copyright (C) 2021-2023 National Land Survey of Finland
 #  (https://www.maanmittauslaitos.fi/en).
 #
 #
@@ -16,19 +16,15 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with PickLayer. If not, see <https://www.gnu.org/licenses/>.
-
-# type: ignore
-# flake8: noqa ANN201
 import pytest
-from qgis.PyQt.QtWidgets import QToolBar
 from qgis_plugin_tools.tools.messages import MsgBar
 
 
 @pytest.fixture()
-def initialize_ui(mocker) -> None:
+def _initialize_ui(mocker) -> None:
     """Throws unhandled exception even though it is caught with log_if_fails"""
 
-    def mock_msg_bar(*args, **kwargs):
+    def mock_msg_bar(*args, **kwargs):  # noqa: ANN003
         if len(args) > 1 and isinstance(args[1], Exception):
             raise args[1]
 
@@ -36,6 +32,6 @@ def initialize_ui(mocker) -> None:
 
 
 @pytest.fixture(scope="session")
-def mock_iface(session_mocker, qgis_iface, qgis_parent) -> None:
+def _mock_iface(session_mocker, qgis_iface, qgis_parent) -> None:
     qgis_iface.removePluginMenu = lambda *args: None
     qgis_iface.unregisterMainWindowAction = lambda *args: None

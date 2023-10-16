@@ -1,3 +1,7 @@
+# tools
 qgis-plugin-dev-tools==0.5.0
 
+# NOTE: Runtime requirements for QGIS plugin are defined in setup.cfg
+
+# repo itself
 -e file:.

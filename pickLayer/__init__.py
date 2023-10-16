@@ -1,7 +1,6 @@
-# -*- coding: utf-8 -*-
-
+# noqa: N999
 #  Copyright (C) 2014-2019 Enrico Ferreguti (enricofer@gmail.com)
-#  Copyright (C) 2021-2022 National Land Survey of Finland
+#  Copyright (C) 2021-2023 National Land Survey of Finland
 #  (https://www.maanmittauslaitos.fi/en).
 #
 #
@@ -21,8 +20,7 @@
 #  along with PickLayer. If not, see <https://www.gnu.org/licenses/>.
 
 
-# noinspection PyPep8Naming
-def classFactory(iface):  # noqa N802
+def classFactory(iface):  # noqa: ANN201, ANN001, N802
     """Load pickLayer class from file picklayer.
 
     :param iface: A QGIS interface instance.
