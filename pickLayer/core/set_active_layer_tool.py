@@ -141,12 +141,12 @@ class SetActiveLayerTool(QgsMapToolIdentify):
             * context.mapToPixel().mapUnitsPerPixel()
         )
 
-    def _get_distance_to_feature_on_layer(
+    def _get_distances_to_feature_on_layer(
         self,
         layer: QgsVectorLayer,
         feature: QgsFeature,
         origin_map_point: QgsPointXY,
-    ) -> float:
+    ) -> tuple[float, float]:
         # for unknown reasons saving all geoms to variables avoids fatal exs
         origin_layer_point = self.toLayerCoordinates(layer, origin_map_point)
         origin_geom = QgsGeometry.fromPointXY(origin_layer_point)
@@ -154,7 +154,11 @@ class SetActiveLayerTool(QgsMapToolIdentify):
         closest_geom = feature_geom.nearestPoint(origin_geom)
         closest_layer_point = closest_geom.asPoint()
         closest_map_point = self.toMapCoordinates(layer, closest_layer_point)
-        return origin_map_point.distance(closest_map_point)
+        distance_to_feature = origin_map_point.distance(closest_map_point)
+        centroid_geom = feature_geom.centroid().asPoint()
+        centroid_map_point = self.toMapCoordinates(layer, centroid_geom)
+        distance_to_centroid = centroid_map_point.distance(closest_map_point)
+        return distance_to_feature, distance_to_centroid
 
     def _choose_layer_from_identify_results(
         self,
@@ -170,11 +174,18 @@ class SetActiveLayerTool(QgsMapToolIdentify):
         best_match: Optional[QgsVectorLayer] = None
         best_match_geom_type_preference = 0
         best_match_distance = 0.0
+        best_match_distance_to_centroid = 0.0
 
         for result in results:
             if not isinstance(result.mLayer, QgsVectorLayer):
                 continue
 
+            (
+                distance_to_feature,
+                distance_to_centroid,
+            ) = self._get_distances_to_feature_on_layer(
+                result.mLayer, result.mFeature, origin_map_coordinates
+            )
             if (
                 best_match is None
                 or geom_type_preference.get(result.mLayer.geometryType(), 99)
@@ -182,20 +193,20 @@ class SetActiveLayerTool(QgsMapToolIdentify):
                 or (
                     geom_type_preference.get(result.mLayer.geometryType(), 99)
                     == best_match_geom_type_preference
-                    and self._get_distance_to_feature_on_layer(
-                        result.mLayer, result.mFeature, origin_map_coordinates
+                    and (
+                        (distance_to_feature < best_match_distance)
+                        or (
+                            distance_to_feature <= best_match_distance
+                            and distance_to_centroid < best_match_distance_to_centroid
+                        )
                     )
-                    < best_match_distance
                 )
             ):
                 best_match = result.mLayer
                 best_match_geom_type_preference = geom_type_preference.get(
                     result.mLayer.geometryType(), 99
                 )
-                best_match_distance = self._get_distance_to_feature_on_layer(
-                    result.mLayer,
-                    result.mFeature,
-                    origin_map_coordinates,
-                )
+                best_match_distance = distance_to_feature
+                best_match_distance_to_centroid = distance_to_centroid
 
         return best_match

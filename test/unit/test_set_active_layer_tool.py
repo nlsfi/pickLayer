@@ -435,6 +435,38 @@ def test_top_polygon_chosen_from_multiple_nested_even_if_top_not_closest(
     assert call_layer.name() == "polygon-0-10"
 
 
+def test_bottom_polygon_chosen_from_multiple_nested_when_bottom_closest(
+    map_tool: SetActiveLayerTool,
+    mocker: MockerFixture,
+    qgis_iface: QgisInterface,
+    qgis_new_project,
+):
+    results = create_identify_result(
+        [
+            ("POLYGON((0 0, 0 10, 10 10, 10 0, 0 0))", "EPSG:3067", "polygon-0-10"),
+            ("POLYGON((3 3, 3 5, 5 5, 5 3, 3 3))", "EPSG:3067", "polygon-3-5"),
+        ]
+    )
+
+    QgsProject.instance().setCrs(QgsCoordinateReferenceSystem("EPSG:3067"))
+    map_tool.canvas().setDestinationCrs(QgsCoordinateReferenceSystem("EPSG:3067"))
+
+    mocker.patch.object(map_tool, "identify", return_value=results)
+
+    m_set_active_layer = mocker.patch.object(
+        qgis_iface, "setActiveLayer", return_value=None
+    )
+
+    # emulate click near the center of 3-5
+    map_tool.set_active_layer_using_closest_feature(QgsPointXY(4.2, 4.2))
+
+    m_set_active_layer.assert_called_once()
+
+    args, _ = m_set_active_layer.call_args_list[0]
+    call_layer = args[0]
+    assert call_layer.name() == "polygon-3-5"
+
+
 def test_only_raster_present_no_change_active_layer(
     map_tool: SetActiveLayerTool,
     mocker: MockerFixture,
