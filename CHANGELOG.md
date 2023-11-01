@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## [3.9.9] - 2023-11-01
 
 - Find most logical closest feature from nested features with set active layer tool
 - Add qgis-plugin-dev-tools entry point to aid development with other plugins
@@ -127,3 +127,4 @@
 [3.9.6]: <https://github.com/nlsfi/pickLayer/releases/tag/v3.9.6>
 [3.9.7]: https://github.com/nlsfi/pickLayer/releases/tag/v3.9.7
 [3.9.8]: https://github.com/nlsfi/pickLayer/releases/tag/v3.9.8
+[3.9.9]: https://github.com/nlsfi/pickLayer/releases/tag/v3.9.9
