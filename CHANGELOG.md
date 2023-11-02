@@ -1,5 +1,7 @@
 # CHANGELOG
 
+## Unreleased
+
 ## [3.9.10] - 2023-11-02
 
 - Fix defining layers to search from for set active layer tool
