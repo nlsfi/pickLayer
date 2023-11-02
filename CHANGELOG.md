@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## [3.9.10] - 2023-11-02
 
 - Fix defining layers to search from for set active layer tool
 
@@ -132,3 +132,4 @@
 [3.9.7]: https://github.com/nlsfi/pickLayer/releases/tag/v3.9.7
 [3.9.8]: https://github.com/nlsfi/pickLayer/releases/tag/v3.9.8
 [3.9.9]: https://github.com/nlsfi/pickLayer/releases/tag/v3.9.9
+[3.9.10]: https://github.com/nlsfi/pickLayer/releases/tag/v3.9.10
