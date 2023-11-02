@@ -140,6 +140,65 @@ def test_set_active_layer_using_closest_feature(
 
 
 @pytest.mark.parametrize(
+    argnames=("search_layers", "expected_num_results", "search_layer_count"),
+    argvalues=[
+        ([0], 2, 1),
+        ([0, 1], 2, 1),
+        ([0, 1], 4, 2),
+        ([0, 1, 2], 2, 1),
+        ([0, 1, 2], 4, 2),
+        ([0, 1, 2], 6, 3),
+    ],
+    ids=[
+        "2-features-from-one-layer-found",
+        "2-features-from-two-layers-found",
+        "4-features-from-two-layers-found",
+        "2-features-from-three-layers-found",
+        "4-features-from-three-layers-found",
+        "6-features-from-three-layers-found",
+    ],
+)
+def test_set_active_layer_using_closest_feature_with_search_layer_ids(
+    map_tool,
+    test_layers,
+    search_layers,
+    expected_num_results,
+    search_layer_count,
+    mocker,
+):
+    map_tool.search_layer_ids = [test_layers[i].id() for i in range(search_layer_count)]
+
+    layer_ids = []
+
+    for index in search_layers:
+        layer_ids.append(test_layers[index].id())
+
+    m_choose_layer_from_identify_results = mocker.patch.object(
+        map_tool,
+        "_choose_layer_from_identify_results",
+        return_value=None,
+        autospec=True,
+    )
+
+    map_tool.set_active_layer_using_closest_feature(MOUSE_LOCATION, search_radius=2.5)
+
+    identify_results = m_choose_layer_from_identify_results.call_args.args[0]
+    assert len(identify_results) == expected_num_results
+
+    # check that identify results are in same order
+    # as requested layer ids (result may contain multiple
+    # features from one layer)
+    identify_results_layer_ids = []
+    previous_id = ""
+    for result in identify_results:
+        if result.mLayer.id() != previous_id:
+            identify_results_layer_ids.append(result.mLayer.id())
+        previous_id = result.mLayer.id()
+
+    assert identify_results_layer_ids == layer_ids[:search_layer_count]
+
+
+@pytest.mark.parametrize(
     argnames=(
         "search_layers",
         "expected_num_results",

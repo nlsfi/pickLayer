@@ -100,9 +100,10 @@ class SetActiveLayerTool(QgsMapToolIdentify):
     def _get_identify_results(
         self, location: QgsPointXY, search_layer_ids: Optional[list[str]] = None
     ) -> list[QgsMapToolIdentify.IdentifyResult]:
+        layer_ids = search_layer_ids or self.search_layer_ids or []
         layers = []
-        if search_layer_ids:
-            for layer_id in search_layer_ids:
+        if layer_ids:
+            for layer_id in layer_ids:
                 layer = QgsProject.instance().mapLayer(layer_id)
                 if isinstance(layer, QgsVectorLayer):
                     layers.append(layer)
