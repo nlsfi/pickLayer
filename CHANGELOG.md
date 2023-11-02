@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fix defining layers to search from for set active layer tool
+
 ## [3.9.9] - 2023-11-01
 
 - Find most logical closest feature from nested features with set active layer tool

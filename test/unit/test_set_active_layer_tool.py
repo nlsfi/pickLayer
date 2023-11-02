@@ -30,10 +30,11 @@ from qgis.core import (
     QgsPointXY,
     QgsProject,
     QgsRasterLayer,
+    QgsRectangle,
     QgsVectorLayer,
     QgsVectorLayerUtils,
 )
-from qgis.gui import QgsMapTool, QgsMapToolIdentify
+from qgis.gui import QgsMapTool
 from qgis_plugin_tools.tools.resources import plugin_test_data_path
 
 from pickLayer.core.set_active_layer_tool import SetActiveLayerTool
@@ -42,11 +43,9 @@ from pickLayer.definitions.settings import Settings
 MOUSE_LOCATION = QgsPointXY(0, 0)
 
 
-def create_identify_result(
+def create_identify_layers(
     identified_feature_geom_wtks: list[tuple[str, str, str]]
-) -> list[QgsMapToolIdentify.IdentifyResult]:
-    results = []
-
+) -> None:
     for wkt, crs, layer_name in identified_feature_geom_wtks:
         geometry = QgsGeometry.fromWkt(wkt)
         layer = QgsMemoryProviderUtils.createMemoryLayer(
@@ -57,22 +56,15 @@ def create_identify_result(
         )
         feature = QgsVectorLayerUtils.createFeature(layer, geometry, {})
         layer.dataProvider().addFeature(feature)
-
-        # using the actual QgsMapToolIdentify.IdentifyResult causes
-        # fatal exceptions, mock probably is sufficient for testing
-        results.append(
-            MagicMock(**{"mLayer": layer, "mFeature": feature})  # noqa: PIE804
-        )
-
-    return results
+        QgsProject.instance().addMapLayer(layer)
 
 
 @pytest.fixture()
-def map_tool(qgis_iface):
+def map_tool(qgis_iface, qgis_new_project):
     return SetActiveLayerTool(qgis_iface.mapCanvas())
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture()
 def test_layers():
     layers = [
         QgsVectorLayer("PointZ", "point_layer", "memory"),
@@ -137,6 +129,65 @@ def test_set_active_layer_using_closest_feature(
 
     identify_results = m_choose_layer_from_identify_results.call_args.args[0]
     assert len(identify_results) == expected_num_results
+
+
+@pytest.mark.parametrize(
+    argnames=("search_layers", "expected_num_results", "search_layer_count"),
+    argvalues=[
+        ([0], 2, 1),
+        ([0, 1], 2, 1),
+        ([0, 1], 4, 2),
+        ([0, 1, 2], 2, 1),
+        ([0, 1, 2], 4, 2),
+        ([0, 1, 2], 6, 3),
+    ],
+    ids=[
+        "2-features-from-one-layer-found",
+        "2-features-from-two-layers-found",
+        "4-features-from-two-layers-found",
+        "2-features-from-three-layers-found",
+        "4-features-from-three-layers-found",
+        "6-features-from-three-layers-found",
+    ],
+)
+def test_set_active_layer_using_closest_feature_with_search_layer_ids(
+    map_tool,
+    test_layers,
+    search_layers,
+    expected_num_results,
+    search_layer_count,
+    mocker,
+):
+    map_tool.search_layer_ids = [test_layers[i].id() for i in range(search_layer_count)]
+
+    layer_ids = []
+
+    for index in search_layers:
+        layer_ids.append(test_layers[index].id())
+
+    m_choose_layer_from_identify_results = mocker.patch.object(
+        map_tool,
+        "_choose_layer_from_identify_results",
+        return_value=None,
+        autospec=True,
+    )
+
+    map_tool.set_active_layer_using_closest_feature(MOUSE_LOCATION, search_radius=2.5)
+
+    identify_results = m_choose_layer_from_identify_results.call_args.args[0]
+    assert len(identify_results) == expected_num_results
+
+    # check that identify results are in same order
+    # as requested layer ids (result may contain multiple
+    # features from one layer)
+    identify_results_layer_ids = []
+    previous_id = ""
+    for result in identify_results:
+        if result.mLayer.id() != previous_id:
+            identify_results_layer_ids.append(result.mLayer.id())
+        previous_id = result.mLayer.id()
+
+    assert identify_results_layer_ids == layer_ids[:search_layer_count]
 
 
 @pytest.mark.parametrize(
@@ -283,7 +334,7 @@ def test_preferred_type_chosen_from_different_types(
     mocker: MockerFixture,
     qgis_iface: QgisInterface,
 ):
-    results = create_identify_result(
+    create_identify_layers(
         [
             ("POINT(3 3)", "EPSG:3067", "point"),
             ("LINESTRING(4 4, 5 5)", "EPSG:3067", "line"),
@@ -292,8 +343,6 @@ def test_preferred_type_chosen_from_different_types(
     )
 
     QgsProject.instance().setCrs(QgsCoordinateReferenceSystem("EPSG:3067"))
-
-    mocker.patch.object(map_tool, "identify", return_value=results)
 
     m_set_active_layer = mocker.patch.object(
         qgis_iface, "setActiveLayer", return_value=None
@@ -313,7 +362,7 @@ def test_closest_of_same_type_chosen(
     mocker: MockerFixture,
     qgis_iface: QgisInterface,
 ):
-    results = create_identify_result(
+    create_identify_layers(
         [
             ("POINT(3 3)", "EPSG:3067", "point-mid"),
             ("POINT(2 2)", "EPSG:3067", "point-close"),
@@ -323,8 +372,6 @@ def test_closest_of_same_type_chosen(
 
     QgsProject.instance().setCrs(QgsCoordinateReferenceSystem("EPSG:3067"))
     map_tool.canvas().setDestinationCrs(QgsCoordinateReferenceSystem("EPSG:3067"))
-
-    mocker.patch.object(map_tool, "identify", return_value=results)
 
     m_set_active_layer = mocker.patch.object(
         qgis_iface, "setActiveLayer", return_value=None
@@ -345,19 +392,32 @@ def test_closest_of_same_type_chosen_even_if_project_and_layer_crs_differs(
     qgis_iface: QgisInterface,
     qgis_new_project,
 ):
-    results = create_identify_result(
+    Settings.search_radius.set(2)
+    create_identify_layers(
         [
             # points close to 250000,6700000 in 3067 in different crs's
-            ("POINT(22.46220271 60.35440884)", "EPSG:4326", "point-far"),
-            ("POINT(2415468 6694753)", "EPSG:2392", "point-mid"),
-            ("POINT(2501177 8479351)", "EPSG:3857", "point-close"),
+            (
+                "POINT(22.46220271 60.35440884)",
+                "EPSG:4326",
+                "point-far",
+            ),
+            (
+                "POINT(2415468 6694753)",
+                "EPSG:2392",
+                "point-mid",
+            ),
+            (
+                "POINT(2501177 8479351)",
+                "EPSG:3857",
+                "point-close",
+            ),
         ]
     )
 
     QgsProject.instance().setCrs(QgsCoordinateReferenceSystem("EPSG:3067"))
     map_tool.canvas().setDestinationCrs(QgsCoordinateReferenceSystem("EPSG:3067"))
-
-    mocker.patch.object(map_tool, "identify", return_value=results)
+    map_tool.canvas().setExtent(QgsRectangle(249900, 6699000, 250100, 6701000))
+    map_tool.canvas().refreshAllLayers()
 
     m_set_active_layer = mocker.patch.object(
         qgis_iface, "setActiveLayer", return_value=None
@@ -378,7 +438,7 @@ def test_line_crossing_origin_chosen_as_closest(
     qgis_iface: QgisInterface,
     qgis_new_project,
 ):
-    results = create_identify_result(
+    create_identify_layers(
         [
             ("LINESTRING(1.1 1.1, 2 2)", "EPSG:3067", "line-not-crossing"),
             ("LINESTRING(0 2, 2 0)", "EPSG:3067", "line-crossing"),
@@ -387,8 +447,6 @@ def test_line_crossing_origin_chosen_as_closest(
 
     QgsProject.instance().setCrs(QgsCoordinateReferenceSystem("EPSG:3067"))
     map_tool.canvas().setDestinationCrs(QgsCoordinateReferenceSystem("EPSG:3067"))
-
-    mocker.patch.object(map_tool, "identify", return_value=results)
 
     m_set_active_layer = mocker.patch.object(
         qgis_iface, "setActiveLayer", return_value=None
@@ -409,7 +467,7 @@ def test_top_polygon_chosen_from_multiple_nested_even_if_top_not_closest(
     qgis_iface: QgisInterface,
     qgis_new_project,
 ):
-    results = create_identify_result(
+    create_identify_layers(
         [
             ("POLYGON((0 0, 0 10, 10 10, 10 0, 0 0))", "EPSG:3067", "polygon-0-10"),
             ("POLYGON((0 -5, 0 5, 5 5, 5 -5, 0 -5))", "EPSG:3067", "polygon-5-5"),
@@ -418,8 +476,6 @@ def test_top_polygon_chosen_from_multiple_nested_even_if_top_not_closest(
 
     QgsProject.instance().setCrs(QgsCoordinateReferenceSystem("EPSG:3067"))
     map_tool.canvas().setDestinationCrs(QgsCoordinateReferenceSystem("EPSG:3067"))
-
-    mocker.patch.object(map_tool, "identify", return_value=results)
 
     m_set_active_layer = mocker.patch.object(
         qgis_iface, "setActiveLayer", return_value=None
@@ -441,7 +497,7 @@ def test_bottom_polygon_chosen_from_multiple_nested_when_bottom_closest(
     qgis_iface: QgisInterface,
     qgis_new_project,
 ):
-    results = create_identify_result(
+    create_identify_layers(
         [
             ("POLYGON((0 0, 0 10, 10 10, 10 0, 0 0))", "EPSG:3067", "polygon-0-10"),
             ("POLYGON((3 3, 3 5, 5 5, 5 3, 3 3))", "EPSG:3067", "polygon-3-5"),
@@ -450,8 +506,6 @@ def test_bottom_polygon_chosen_from_multiple_nested_when_bottom_closest(
 
     QgsProject.instance().setCrs(QgsCoordinateReferenceSystem("EPSG:3067"))
     map_tool.canvas().setDestinationCrs(QgsCoordinateReferenceSystem("EPSG:3067"))
-
-    mocker.patch.object(map_tool, "identify", return_value=results)
 
     m_set_active_layer = mocker.patch.object(
         qgis_iface, "setActiveLayer", return_value=None
