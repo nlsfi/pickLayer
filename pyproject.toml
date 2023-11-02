@@ -4,6 +4,11 @@ ignore = [
     ]
 line-length = 88
 
+unfixable = [
+    "F401", # Unused imports
+    "F841", # Unused variables
+]
+
 # List of all rules https://docs.astral.sh/ruff/rules/
 select = [
     "ANN", # flake8-annotations
