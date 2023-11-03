@@ -1,5 +1,7 @@
 # CHANGELOG
 
+## Unreleased
+
 ## [3.9.11] - 2023-11-03
 
 - Release plugin to pypi as well for easier access for other plugins
