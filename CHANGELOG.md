@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Release plugin to pypi as well for easier access for other plugins
+
 ## [3.9.10] - 2023-11-02
 
 - Fix defining layers to search from for set active layer tool
