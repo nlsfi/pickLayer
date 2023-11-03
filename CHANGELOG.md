@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## [3.9.11] - 2023-11-03
 
 - Release plugin to pypi as well for easier access for other plugins
 
@@ -137,3 +137,4 @@
 [3.9.8]: https://github.com/nlsfi/pickLayer/releases/tag/v3.9.8
 [3.9.9]: https://github.com/nlsfi/pickLayer/releases/tag/v3.9.9
 [3.9.10]: https://github.com/nlsfi/pickLayer/releases/tag/v3.9.10
+[3.9.11]: https://github.com/nlsfi/pickLayer/releases/tag/v3.9.11
