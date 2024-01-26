@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## [3.9.12] - 2024-01-26
 
 - Upgrade qgis_plugin_tools to version that supports subplugins
 
@@ -142,3 +142,4 @@
 [3.9.9]: https://github.com/nlsfi/pickLayer/releases/tag/v3.9.9
 [3.9.10]: https://github.com/nlsfi/pickLayer/releases/tag/v3.9.10
 [3.9.11]: https://github.com/nlsfi/pickLayer/releases/tag/v3.9.11
+[3.9.12]: https://github.com/nlsfi/pickLayer/releases/tag/v3.9.12
