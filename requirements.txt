@@ -20,7 +20,7 @@ python-dotenv==1.0.0
     # via qgis-plugin-dev-tools
 qgis-plugin-dev-tools==0.5.0
     # via -r requirements.in
-qgis-plugin-tools==0.2.0
+qgis-plugin-tools==0.4.0
     # via picklayer
 requests==2.28.1
     # via qgis-plugin-dev-tools
