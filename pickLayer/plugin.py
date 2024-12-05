@@ -118,7 +118,7 @@ class Plugin:
 
         self.pick_layer_action = self._add_action(
             resources_path("icons", "pick_layer.svg"),
-            text=plugin_name(),
+            text=tr("Pick layer"),
             callback=self._activate_pick_layer,
             parent=iface.mainWindow(),
             set_checkable=True,
