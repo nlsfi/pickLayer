@@ -4,197 +4,162 @@
 <context>
     <name>@default</name>
     <message>
-        <location filename="../../core/set_active_layer_tool.py" line="71"/>
+        <location filename="../../core/set_active_layer_tool.py" line="75"/>
         <source>Error occurred: {}</source>
         <translation>Ilmaantui virhe: {}</translation>
     </message>
     <message>
-        <location filename="../../core/set_active_layer_tool.py" line="71"/>
+        <location filename="../../core/set_active_layer_tool.py" line="75"/>
         <source>Check log for more details.</source>
         <translation>Lue lokista lisätietoja.</translation>
     </message>
     <message>
-        <location filename="../../core/picklayer.py" line="102"/>
+        <location filename="../../core/picklayer.py" line="100"/>
         <source>Layer: {}</source>
         <translation>Taso: {}</translation>
     </message>
     <message>
-        <location filename="../../core/picklayer.py" line="126"/>
+        <location filename="../../core/picklayer.py" line="124"/>
         <source>Lon: {}</source>
         <translation>Pituuaste: {}</translation>
     </message>
     <message>
-        <location filename="../../core/picklayer.py" line="129"/>
+        <location filename="../../core/picklayer.py" line="127"/>
         <source>Lat: {}</source>
         <translation>Leveysaste: {}</translation>
     </message>
     <message>
-        <location filename="../../core/picklayer.py" line="157"/>
+        <location filename="../../core/picklayer.py" line="155"/>
         <source>North: {}</source>
         <translation>Pohjoinen: {}</translation>
     </message>
     <message>
-        <location filename="../../core/picklayer.py" line="160"/>
+        <location filename="../../core/picklayer.py" line="158"/>
         <source>South: {}</source>
         <translation>Etelä: {}</translation>
     </message>
     <message>
-        <location filename="../../core/picklayer.py" line="163"/>
+        <location filename="../../core/picklayer.py" line="161"/>
         <source>East: {}</source>
         <translation>Itä: {}</translation>
     </message>
     <message>
-        <location filename="../../core/picklayer.py" line="166"/>
+        <location filename="../../core/picklayer.py" line="164"/>
         <source>West: {}</source>
         <translation>Länsi: {}</translation>
     </message>
     <message>
-        <location filename="../../core/picklayer.py" line="149"/>
+        <location filename="../../core/picklayer.py" line="147"/>
         <source>Length: {}</source>
         <translation>Pituus: {}</translation>
     </message>
     <message>
-        <location filename="../../core/picklayer.py" line="169"/>
+        <location filename="../../core/picklayer.py" line="167"/>
         <source>Perimeter: {}</source>
         <translation>Ympärysmitta: {}</translation>
     </message>
     <message>
-        <location filename="../../core/picklayer.py" line="173"/>
+        <location filename="../../core/picklayer.py" line="171"/>
         <source>Area: {}</source>
         <translation>Pinta-ala: {}</translation>
     </message>
     <message>
-        <location filename="../../core/picklayer.py" line="190"/>
+        <location filename="../../core/picklayer.py" line="188"/>
         <source>Zoom to layer extension</source>
         <translation>Tarkenna tason laajuuteen</translation>
     </message>
     <message>
-        <location filename="../../core/picklayer.py" line="199"/>
+        <location filename="../../core/picklayer.py" line="197"/>
         <source>Open attribute table</source>
         <translation>Avaa ominaisuustietotaulu</translation>
     </message>
     <message>
-        <location filename="../../core/picklayer.py" line="207"/>
+        <location filename="../../core/picklayer.py" line="205"/>
         <source>Stop editing</source>
         <translation>Lopeta muokkaaminen</translation>
     </message>
     <message>
-        <location filename="../../core/picklayer.py" line="218"/>
+        <location filename="../../core/picklayer.py" line="216"/>
         <source>Start editing</source>
         <translation>Aloita muokkaaminen</translation>
     </message>
     <message>
-        <location filename="../../core/picklayer.py" line="224"/>
+        <location filename="../../core/picklayer.py" line="222"/>
         <source>Zoom to feature</source>
         <translation>Tarkenna kohteeseen</translation>
     </message>
     <message>
-        <location filename="../../core/picklayer.py" line="260"/>
+        <location filename="../../core/picklayer.py" line="258"/>
         <source>Paste geometry on feature</source>
         <translation>Liitä geometria kohteeseen</translation>
     </message>
     <message>
-        <location filename="../../core/picklayer.py" line="265"/>
+        <location filename="../../core/picklayer.py" line="263"/>
         <source>Paste attributes on feature</source>
         <translation>Liitä ominaisuustiedot kohteeseen</translation>
     </message>
     <message>
-        <location filename="../../core/picklayer.py" line="270"/>
+        <location filename="../../core/picklayer.py" line="268"/>
         <source>Select feature and Subtract</source>
         <translation>Valitse kohde ja vähennä</translation>
     </message>
     <message>
-        <location filename="../../core/picklayer.py" line="276"/>
+        <location filename="../../core/picklayer.py" line="274"/>
         <source>Select feature and Merge</source>
         <translation>Valitse kohde ja yhdistä</translation>
     </message>
     <message>
-        <location filename="../../core/picklayer.py" line="282"/>
+        <location filename="../../core/picklayer.py" line="280"/>
         <source>Make Valid Geometry</source>
         <translation>Korjaa geometriat</translation>
     </message>
     <message>
-        <location filename="../../core/picklayer.py" line="290"/>
+        <location filename="../../core/picklayer.py" line="288"/>
         <source>Copy feature</source>
         <translation>Kopio kohde</translation>
     </message>
     <message>
-        <location filename="../../core/picklayer.py" line="295"/>
+        <location filename="../../core/picklayer.py" line="293"/>
         <source>Feature attributes view</source>
         <translation>Näytä kohteen ominaisuustiedot</translation>
     </message>
     <message>
-        <location filename="../../core/picklayer.py" line="300"/>
+        <location filename="../../core/picklayer.py" line="298"/>
         <source>Feature attributes edit</source>
         <translation>Muokkaa kohteen ominaisuustietoja</translation>
     </message>
     <message>
-        <location filename="../../core/picklayer.py" line="490"/>
+        <location filename="../../core/picklayer.py" line="489"/>
         <source>Can&apos;t perform spatial function on different geometry types</source>
         <translation>Spatiaalista toimintoa ei voida suorittaa eri tyyppisille geometrioille</translation>
     </message>
     <message>
-        <location filename="../../core/picklayer.py" line="501"/>
+        <location filename="../../core/picklayer.py" line="500"/>
         <source>Source Geometry succesfully clipped: {}</source>
         <translation>Alkuperäisen geometrian leikkaaminen onnistui: {}</translation>
     </message>
     <message>
-        <location filename="../../core/picklayer.py" line="510"/>
+        <location filename="../../core/picklayer.py" line="509"/>
         <source>Invalid processed geometry</source>
         <translation>Kelvottomasti käsitelty geometria</translation>
     </message>
     <message>
-        <location filename="../../qgis_plugin_tools/tools/tasks.py" line="75"/>
-        <source>Unhandled exception occurred</source>
-        <translation>Käsittelemätön poikkeus ilmaantui</translation>
-    </message>
-    <message>
-        <location filename="../../qgis_plugin_tools/tools/network.py" line="156"/>
-        <source>Request failed with status code {}</source>
-        <translation>Pyyntö epäonnistui tilakoodilla {}</translation>
-    </message>
-    <message>
-        <location filename="../../qgis_plugin_tools/tools/network.py" line="170"/>
-        <source>Request failed</source>
-        <translation>Pyyntö epäonnistui</translation>
-    </message>
-    <message>
-        <location filename="../../qgis_plugin_tools/tools/custom_logging.py" line="108"/>
-        <source>Due to memory limitations on this machine, the plugin {} can not handle the full log</source>
-        <translation>Tämän laitteen muistirajoitteista johtuen lisäosa {} ei pysty käsittelemään lokia kokonaan</translation>
-    </message>
-    <message>
-        <location filename="../../qgis_plugin_tools/tools/exceptions.py" line="35"/>
-        <source>A network error occurred.</source>
-        <translation>Yhteydessä ilmaantui häiriö.</translation>
-    </message>
-    <message>
-        <location filename="../../qgis_plugin_tools/tools/exceptions.py" line="65"/>
-        <source>There is an error in the expression</source>
-        <translation>Ilmauksessa on jokin virhe</translation>
-    </message>
-    <message>
-        <location filename="../../qgis_plugin_tools/tools/layers.py" line="143"/>
-        <source>Field name {} does not exist in layer {}</source>
-        <translation>Sarakkeen nimeä {} ei ole olemassa tasossa {}</translation>
-    </message>
-    <message>
-        <location filename="../../plugin.py" line="110"/>
+        <location filename="../../plugin.py" line="128"/>
         <source>Settings</source>
         <translation>Asetukset</translation>
     </message>
     <message>
-        <location filename="../../core/picklayer.py" line="178"/>
+        <location filename="../../core/picklayer.py" line="176"/>
         <source>Set active layer</source>
         <translation>Aseta taso aktiiviseksi</translation>
     </message>
     <message>
-        <location filename="../../plugin.py" line="119"/>
+        <location filename="../../plugin.py" line="137"/>
         <source>Set layer active based on closest feature</source>
         <translation>Aseta taso aktiiviseksi lähimmän kohteen mukaan</translation>
     </message>
     <message>
-        <location filename="../../plugin.py" line="235"/>
+        <location filename="../../plugin.py" line="252"/>
         <source>Current map tool before activating Set Active Layer tool is {}</source>
         <translation>Ennen Aseta taso aktiiviseksi työkalun aktivointia nykyinen käytössä oleva työkalu on {}</translation>
     </message>
@@ -204,68 +169,43 @@
         <translation>Kohde löytyi</translation>
     </message>
     <message>
-        <location filename="../../core/set_active_layer_tool.py" line="95"/>
+        <location filename="../../core/set_active_layer_tool.py" line="97"/>
         <source>Activating layer {}</source>
         <translation>Aktivoidaan taso {}</translation>
     </message>
     <message>
-        <location filename="../../core/set_active_layer_tool.py" line="103"/>
+        <location filename="../../core/set_active_layer_tool.py" line="129"/>
         <source>Previous map tool not found: Set Active Layer tool remains active.</source>
         <translation>Aikaisempaa karttatyökalua ei löytynyt: työkalu Aseta taso aktiiviseksi jää aktiiviseksi.</translation>
     </message>
     <message>
-        <location filename="../../qgis_plugin_tools/test/test_i18n.py" line="5"/>
-        <source>These are args {} {} and these are kwargs {foo} {bar}</source>
-        <translation>Nämä ovat argumentit {} {} ja nämä ovat avainsana-argumentit {foo} {bar}</translation>
-    </message>
-    <message>
-        <location filename="../../qgis_plugin_tools/tools/tasks.py" line="65"/>
-        <source>Task {} was not successful</source>
-        <translation>Tehtävä {} epäonnistui</translation>
-    </message>
-    <message>
-        <location filename="../../qgis_plugin_tools/tools/tasks.py" line="65"/>
-        <source>Task was cancelled by user or some dependency tasks failed</source>
-        <translation>Tehtävä joko peruutettiin onnistuneesti tai jokin siitä seurannut tehtävä epäonnistui</translation>
-    </message>
-    <message>
-        <location filename="../../qgis_plugin_tools/tools/tasks.py" line="98"/>
-        <source>Task canceled!</source>
-        <translation>Tehtävä peruutettu!</translation>
-    </message>
-    <message>
-        <location filename="../../qgis_plugin_tools/widgets/progress_dialog.py" line="41"/>
-        <source>Abort</source>
-        <translation>Hylkää</translation>
-    </message>
-    <message>
-        <location filename="../../core/picklayer.py" line="182"/>
+        <location filename="../../core/picklayer.py" line="180"/>
         <source>Hide layer</source>
         <translation>Piilota taso</translation>
     </message>
     <message>
-        <location filename="../../core/picklayer.py" line="186"/>
+        <location filename="../../core/picklayer.py" line="184"/>
         <source>Open layer properties</source>
         <translation>Avaa tason ominaisuudet</translation>
     </message>
     <message>
-        <location filename="../../core/picklayer.py" line="236"/>
+        <location filename="../../core/picklayer.py" line="234"/>
         <source>Enable snapping</source>
         <translation>Ota tarttuminen käyttöön</translation>
     </message>
     <message>
-        <location filename="../../core/picklayer.py" line="236"/>
+        <location filename="../../core/picklayer.py" line="234"/>
         <source>Disable snapping</source>
         <translation>Poista tarttuminen käytöstä</translation>
+    </message>
+    <message>
+        <location filename="../../plugin.py" line="119"/>
+        <source>Pick layer</source>
+        <translation>Valitse taso</translation>
     </message>
 </context>
 <context>
     <name>Dialog</name>
-    <message>
-        <location filename="../../qgis_plugin_tools/resources/ui/progress_dialog.ui" line="14"/>
-        <source>Processing...</source>
-        <translation>Käsitellään...</translation>
-    </message>
     <message>
         <location filename="../ui/settings_dialog.ui" line="14"/>
         <source>pickLayer Settings</source>

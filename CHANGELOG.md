@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Chore: Update tooltip for pick layer action
+
 ## [3.9.12] - 2024-01-26
 
 - Upgrade qgis_plugin_tools to version that supports subplugins
