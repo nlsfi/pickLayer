@@ -19,7 +19,7 @@ Qt with Qt Editor and Qt Linquist installed by following this
 
 ## Commit message style
 
-Commit messages should follow [Conventional Commits notation](https://www.conventionalcommits.org/en/v1.0.0/#summary). Use `pre-commit install --hook-type commit-msg` to generate a git hook for checking commit messages.
+Commit messages should follow [Conventional Commits notation](https://www.conventionalcommits.org/en/v1.0.0/#summary).
 
 ## Adding or editing source files
 
