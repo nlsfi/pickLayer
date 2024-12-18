@@ -12,13 +12,16 @@ jobs:
       image: qgis/qgis:${{ matrix.qgis-image-tags }}
     strategy:
       matrix:
-        # When making chances here rememeber to update the tag also in line 31!
-        qgis-image-tags: [release-3_22, release-3_34]
+        # When making chances here remember to update the tag also in line 31!
+        qgis-image-tags: [release-3_22, release-3_34, "3.40"]
       fail-fast: false
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - run: |
-          pip3 install virtualenv && virtualenv .venv --system-site-packages
+          apt update
+          apt install -y python3-venv
+      - run: |
+          python3 -m venv --system-site-packages .venv
       - run: |
           .venv/bin/pip3 install -q -r requirements.txt -r requirements-dev.txt --no-deps --only-binary=:all:
           .venv/bin/pip3 install . --no-deps
@@ -28,7 +31,7 @@ jobs:
           QT_QPA_PLATFORM: offscreen
       # Upload coverage report. Will not work if the repo is private
       # Rememeber to check that tag specified below can be found in the matrix created at line 16!
-      - if: ${{ matrix.qgis_image_tags == 'release-3_34' && !github.event.repository.private }}
+      - if: ${{ matrix.qgis_image_tags == '3.40' && !github.event.repository.private }}
         uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
