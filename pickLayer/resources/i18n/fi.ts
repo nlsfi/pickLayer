@@ -203,6 +203,11 @@
         <source>Pick layer</source>
         <translation>Valitse taso</translation>
     </message>
+    <message>
+        <location filename="../../plugin.py" line="116"/>
+        <source>Pick layer toolbar</source>
+        <translation>Tasonvalinnan työkalupalkki</translation>
+    </message>
 </context>
 <context>
     <name>Dialog</name>

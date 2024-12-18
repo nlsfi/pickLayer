@@ -113,7 +113,7 @@ class Plugin:
     def initGui(self) -> None:  # noqa: N802
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
 
-        self.toolbar = iface.addToolBar(plugin_name())
+        self.toolbar = iface.addToolBar(tr("Pick layer toolbar"))
         self.toolbar.setObjectName(plugin_name())
 
         self.pick_layer_action = self._add_action(
