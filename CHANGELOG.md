@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## [3.9.13] - 2025-01-02
 
 - Chore: Update tooltip for pick layer action
 
@@ -147,3 +147,4 @@
 [3.9.10]: https://github.com/nlsfi/pickLayer/releases/tag/v3.9.10
 [3.9.11]: https://github.com/nlsfi/pickLayer/releases/tag/v3.9.11
 [3.9.12]: https://github.com/nlsfi/pickLayer/releases/tag/v3.9.12
+[3.9.13]: https://github.com/nlsfi/pickLayer/releases/tag/v3.9.13
