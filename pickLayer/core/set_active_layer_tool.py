@@ -111,14 +111,14 @@ class SetActiveLayerTool(QgsMapToolIdentify):
         if len(layers) > 0:
             return self.identify(
                 geometry=QgsGeometry.fromPointXY(location),
-                mode=QgsMapToolIdentify.TopDownAll,
+                mode=QgsMapToolIdentify.IdentifyMode.TopDownAll,
                 layerList=layers,
-                layerType=QgsMapToolIdentify.VectorLayer,
+                layerType=QgsMapToolIdentify.Type.VectorLayer,
             )
         return self.identify(
             geometry=QgsGeometry.fromPointXY(location),
-            mode=QgsMapToolIdentify.TopDownAll,
-            layerType=QgsMapToolIdentify.VectorLayer,
+            mode=QgsMapToolIdentify.IdentifyMode.TopDownAll,
+            layerType=QgsMapToolIdentify.Type.VectorLayer,
         )
 
     def _activate_layer_and_previous_map_tool(
@@ -167,9 +167,9 @@ class SetActiveLayerTool(QgsMapToolIdentify):
         origin_map_coordinates: QgsPointXY,
     ) -> Optional[QgsMapLayer]:
         geom_type_preference = {
-            QgsWkbTypes.PointGeometry: 1,
-            QgsWkbTypes.LineGeometry: 2,
-            QgsWkbTypes.PolygonGeometry: 3,
+            QgsWkbTypes.GeometryType.PointGeometry: 1,
+            QgsWkbTypes.GeometryType.LineGeometry: 2,
+            QgsWkbTypes.GeometryType.PolygonGeometry: 3,
         }
 
         best_match: Optional[QgsVectorLayer] = None
