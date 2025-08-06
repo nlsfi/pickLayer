@@ -315,7 +315,7 @@ class PickLayer:
                         partial(self.custom_action, action.id())
                     )
                     action_order += 1
-        context_menu.exec_(QtGui.QCursor.pos())
+        context_menu.exec(QtGui.QCursor.pos())
 
     def zoom_to_feature_func(self) -> None:
         feature_box = self.selected_feature.geometry().boundingBox()
