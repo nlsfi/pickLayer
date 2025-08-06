@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add qt6 and QGIS 4 support
+
 ## [3.9.13] - 2025-01-02
 
 - Chore: Update tooltip for pick layer action
