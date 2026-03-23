@@ -23,7 +23,7 @@ from qgis.gui import QgsMapTool
 from pickLayer import classFactory
 
 
-@pytest.fixture()
+@pytest.fixture
 def plugin_initialized(_mock_iface, qgis_iface):
     settings = QgsSettings()
     settings.setValue("locale/userLocale", "en_US")

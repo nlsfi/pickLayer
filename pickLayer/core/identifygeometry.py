@@ -37,7 +37,9 @@ class IdentifyGeometry(QgsMapToolIdentify):
     geom_identified = pyqtSignal(QgsVectorLayer, QgsFeature)
 
     def __init__(
-        self, canvas: QgsMapCanvas, layerType: str = "AllLayers"  # noqa: N803
+        self,
+        canvas: QgsMapCanvas,
+        layerType: str = "AllLayers",  # noqa: N803
     ) -> None:
         self.layer_type = getattr(QgsMapToolIdentify, layerType)
         self.canvas = canvas
