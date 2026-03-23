@@ -85,7 +85,7 @@ pytest-qt==4.5.0
     # via -r requirements-dev.in
 pyyaml==6.0.1
     # via pre-commit
-ruff==0.0.292
+ruff==0.15.7
     # via -r requirements-dev.in
 toml==0.10.2
     # via pytest-cov

@@ -17,7 +17,7 @@ atomicwrites==1.4.0
 pre-commit==4.5.1
 mypy==1.19.1
 black==23.7.0
-ruff==0.0.292
+ruff==0.15.7
 
 # flake8 libraries not included in ruff
 flake8==7.3.0
