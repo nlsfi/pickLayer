@@ -1,18 +1,17 @@
 [tool.ruff]
-ignore = [
-    "ANN101", # Missing type annotation for self in method
-    ]
+
 line-length = 88
+target-version = "py39"
 
-external = ["QGS"]
+lint.external = ["QGS"]
 
-unfixable = [
+lint.unfixable = [
     "F401", # Unused imports
     "F841", # Unused variables
 ]
 
 # List of all rules https://docs.astral.sh/ruff/rules/
-select = [
+lint.select = [
     "ANN", # flake8-annotations
     "B", # flake8-bugbear
     "C", # flake8-comprehensions
@@ -36,12 +35,11 @@ select = [
     "UP", # pyupgrade
     ]
 
-target-version = "py39"
 
-[tool.ruff.flake8-tidy-imports]
+[tool.ruff.lint.flake8-tidy-imports]
 ban-relative-imports = "all"
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 "test*" = [
     "INP001",
     "ANN201",
@@ -52,6 +50,7 @@ ban-relative-imports = "all"
     "PLR2004", # Magic value used in comparison, consider replacing {value} with a constant variable
     "PLR0913", # Too many arguments to function call (len(args) > 5)
     ]
+".github/*.py" = ["ALL"]
 
 
 [tool.flake8]
@@ -61,6 +60,8 @@ dictionaries = "en_US,python,technical"
 extend-ignore = [
     "E203",  # whitespace before ':'
     "E501",  # line length (checked by ruff now, possible mismatches)
+    "QGS201", # Experimental return value check
+    "QGS202", # Experminetal return value check
 ]
 per-file-ignores = [
     "test/*:INP001,QGS105",
