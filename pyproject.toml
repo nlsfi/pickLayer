@@ -4,6 +4,8 @@ ignore = [
     ]
 line-length = 88
 
+external = ["QGS"]
+
 unfixable = [
     "F401", # Unused imports
     "F841", # Unused variables
