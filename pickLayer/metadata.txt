@@ -3,7 +3,7 @@
 [general]
 name=pickLayer
 qgisMinimumVersion=3.16
-qgisMaximumVersion=3.99
+qgisMaximumVersion=4.99
 description=pick to feature on map canvas to perform layer and feature commands
 version=3.1
 author=National Land Survey of Finland
@@ -30,4 +30,3 @@ experimental=False
 
 # deprecated flag (applies to the whole plugin, not just a single version)
 deprecated=False
-supportsQt6=True
