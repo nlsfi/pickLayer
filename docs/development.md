@@ -7,12 +7,15 @@ Qt with Qt Editor and Qt Linquist installed by following this
 
 ## Setting up development environment
 
-* Create a venv that is aware of system QGIS libraries: `python -m venv .venv --system-site-packages`
-  * On Windows OSGeo4W v2 installs use `<osgeo>/apps/PythonXX/python.exe`
-  with [necessary patches](./osgeo-python-patch.md)
+This project uses [uv](https://docs.astral.sh/uv/getting-started/installation/)
+to manage python packages. Make sure to have it installed first.
+
+*Create a venv that is aware of system QGIS libraries: `uv venv --system-site-packages`. Make sure to use same Python executable as QGIS.
+    * On Windows, maybe use a tool like [qgis-venv-creator](ttps://github.com/GispoCoding/qgis-venv-creator).
+
 * Activate the venv
 * Install the dependencies for runtime and development (testing & linting):
-  `pip install -r requirements.txt -r requirements-dev.txt --no-deps --only-binary=:all:`
+  `uv sync`
 * Install pre-commit: `pre-commit install`
 * Create a `.env` from `.env.example`, and configure at least the QGIS executable path
 * Launch development QGIS: `qpdt s`

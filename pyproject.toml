@@ -1,3 +1,88 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pickLayer"
+dynamic = ["version"]
+description = "QGIS plugin for setting layer properties and options straight from map canvas and for activating layer by clicking features on map."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "GNU GPL v3.0" }
+authors = [
+    { name = "National Land Survey of Finland", email = "os@nls.fi" }
+]
+keywords = ["qgis"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Topic :: Software Development :: Libraries",
+    "Typing :: Typed"
+]
+dependencies = [
+    "qgis_plugin_tools==0.4.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/nlsfi/pickLayer"
+Changelog = "https://github.com/nlsfi/pickLayer/blob/main/CHANGELOG.md"
+
+[project.entry-points."qgis_plugin_tools"]
+pickLayer = "pickLayer"
+
+[tool.setuptools]
+packages = [
+    "pickLayer",
+    "pickLayer.core",
+    "pickLayer.definitions",
+    "pickLayer.ui",
+    "pickLayer.resources"
+]
+
+[tool.setuptools.package-data]
+pickLayer = [
+    "metadata.txt",
+    "**/*.png",
+    "**/*.svg",
+    "**/*.ts",
+    "**/*.qm",
+    "**/*.ui"
+]
+
+[tool.setuptools.dynamic]
+version = { attr = "pickLayer.core.__version__" }
+
+[tool.uv]
+default-groups = ["dev", "lint"]
+
+[dependency-groups]
+dev = [
+    "qgis-plugin-dev-tools==0.5.0",
+    # testing
+    "pytest==6.2.5",
+    "pytest-qt==3.3.0",
+    "pytest-mock==3.7.0",
+    "pytest-cov==2.12.1",
+    "pytest-qgis==1.3.5",
+    ]
+lint = [
+    # stubs
+    "pyqt5-stubs==5.15.6.0",
+
+    "pre-commit==3.4.0",
+    "mypy==1.19.1",
+    "black==23.7.0",
+    "ruff==0.0.292",
+
+    # flake8 libraries not included in ruff
+    "flake8==7.3.0",
+    "flake8-pyproject==1.2.3",
+    "flake8-qgis==1.0.0"
+]
+
 [tool.ruff]
 ignore = [
     "ANN101", # Missing type annotation for self in method
@@ -70,3 +155,6 @@ runtime_requires = [
 	"qgis_plugin_tools"
 ]
 version_number_source = "distribution"
+
+[project.entry-points.qgis_plugin_dev_tools]
+pickLayer = "pickLayer"

@@ -23,10 +23,10 @@ jobs:
       - run: |
           python3 -m venv --system-site-packages .venv
       - run: |
-          .venv/bin/pip3 install -q -r requirements.txt -r requirements-dev.txt --no-deps --only-binary=:all:
-          .venv/bin/pip3 install . --no-deps
+          .venv/bin/pip3 install -q -U uv
+          .venv/bin/uv sync --all-packages --all-groups --locked --active
       - run: |
-          .venv/bin/pytest -v --cov=pickLayer --cov-report=xml test
+          .venv/bin/uv run pytest -v --cov=pickLayer --cov-report=xml test
         env:
           QT_QPA_PLATFORM: offscreen
       # Upload coverage report. Will not work if the repo is private
@@ -54,24 +54,25 @@ jobs:
           $env:QGIS_PATH = (Get-ChildItem "C:\Program Files\QGIS *\bin" | Select-Object -First 1 -ExpandProperty FullName)
           $env:PATH="$env:QGIS_PATH;$env:PATH"
           $env:QGIS_PLUGIN_IN_CI=1
-          python-qgis-ltr.bat -m pip install -q -r requirements.txt -r requirements-dev.txt --no-deps --only-binary=:all:
+          python-qgis-ltr.bat -m pip install -q -U uv
+          python-qgis-ltr.bat -m pip install -q -U uv
           python-qgis-ltr.bat -m pytest -v test
 
   plugin_zip:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v3
-        with:
-          python-version: '3.9'
-      # Use extra pip install . to do a non-editable install,
+      - uses: actions/checkout@v6
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+      - name: Install Python 3.12
+        run: uv python install 3.12
+      # Cannot be editable install
       # so that .dist-info will go the package instead of .egg-info
       - run: |
-          pip install -r requirements.txt --no-deps --only-binary=:all:
-          pip install . --no-deps
+          uv sync --no-editable --only-dev
       - run: |
           qgis-plugin-dev-tools build
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: plugin-zip
           path: dist/*.zip
