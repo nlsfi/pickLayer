@@ -20,7 +20,7 @@ import pytest
 from qgis_plugin_tools.tools.messages import MsgBar
 
 
-@pytest.fixture()
+@pytest.fixture
 def _initialize_ui(mocker) -> None:
     """Throws unhandled exception even though it is caught with log_if_fails"""
 

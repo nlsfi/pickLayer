@@ -314,7 +314,7 @@ class PickLayer:
                     new_action_item.triggered.connect(
                         partial(self.custom_action, action.id())
                     )
-                    action_order += 1
+                    action_order += 1  # noqa: SIM113
         context_menu.exec(QtGui.QCursor.pos())
 
     def zoom_to_feature_func(self) -> None:

@@ -44,7 +44,7 @@ MOUSE_LOCATION = QgsPointXY(0, 0)
 
 
 def create_identify_layers(
-    identified_feature_geom_wtks: list[tuple[str, str, str]]
+    identified_feature_geom_wtks: list[tuple[str, str, str]],
 ) -> None:
     for wkt, crs, layer_name in identified_feature_geom_wtks:
         geometry = QgsGeometry.fromWkt(wkt)
@@ -59,12 +59,12 @@ def create_identify_layers(
         QgsProject.instance().addMapLayer(layer)
 
 
-@pytest.fixture()
+@pytest.fixture
 def map_tool(qgis_iface, qgis_new_project):
     return SetActiveLayerTool(qgis_iface.mapCanvas())
 
 
-@pytest.fixture()
+@pytest.fixture
 def test_layers():
     layers = [
         QgsVectorLayer("PointZ", "point_layer", "memory"),

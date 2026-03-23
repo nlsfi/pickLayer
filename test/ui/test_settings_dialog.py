@@ -33,7 +33,7 @@ ORIGINAL_RADIUS = 1.5
 PLUGIN_NAME = "pickLayer"
 
 
-@pytest.fixture()
+@pytest.fixture
 def settings_dialog(_initialize_ui, qtbot):
     # Setup
     Settings.search_radius.set(ORIGINAL_RADIUS)

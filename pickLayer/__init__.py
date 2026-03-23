@@ -26,6 +26,6 @@ def classFactory(iface):  # noqa: ANN201, ANN001, N802
     :param iface: A QGIS interface instance.
     :type iface: QgsInterface
     """
-    from pickLayer.plugin import Plugin
+    from pickLayer.plugin import Plugin  # noqa: PLC0415
 
     return Plugin()
