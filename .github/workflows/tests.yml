@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         # When making chances here remember to update the tag also in line 34!
-        qgis-image-tags: [release-3_22, release-3_34, "3.44"]
+        qgis-image-tags: [release-3_34, "3.44", latest]
       fail-fast: false
     steps:
       - uses: actions/checkout@v4
@@ -26,7 +26,7 @@ jobs:
           .venv/bin/pip3 install -q -r requirements.txt -r requirements-dev.txt --no-deps --only-binary=:all:
           .venv/bin/pip3 install . --no-deps
       - run: |
-          .venv/bin/pytest -v --cov=pickLayer --cov-report=xml test
+          .venv/bin/python -m pytest -v --cov=pickLayer --cov-report=xml test
         env:
           QT_QPA_PLATFORM: offscreen
       # Upload coverage report. Will not work if the repo is private
@@ -63,7 +63,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v3
         with:
-          python-version: '3.9'
+          python-version: '3.10'
       # Use extra pip install . to do a non-editable install,
       # so that .dist-info will go the package instead of .egg-info
       - run: |
