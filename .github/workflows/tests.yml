@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         # When making chances here remember to update the tag also in line 34!
-        qgis-image-tags: [release-3_34, "3.44", latest]
+        qgis-image-tags: ["3.40", "3.44", "4.0-questing", latest]
       fail-fast: false
     steps:
       - uses: actions/checkout@v4
