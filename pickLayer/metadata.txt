@@ -2,7 +2,7 @@
 
 [general]
 name=pickLayer
-qgisMinimumVersion=3.16
+qgisMinimumVersion=3.40
 qgisMaximumVersion=4.99
 description=pick to feature on map canvas to perform layer and feature commands
 version=3.1
