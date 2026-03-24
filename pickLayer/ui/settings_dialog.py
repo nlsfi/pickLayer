@@ -68,11 +68,15 @@ class SettingsDialog(QDialog, FORM_CLASS):
         )
 
         self.combo_box_log_level_file.currentTextChanged.connect(
-            lambda level: set_setting(get_log_level_key(LogTarget.FILE), level)
+            lambda level: set_setting(
+                get_log_level_key(LogTarget.FILE), level, internal=False
+            )
         )
 
         self.combo_box_log_level_console.currentTextChanged.connect(
-            lambda level: set_setting(get_log_level_key(LogTarget.STREAM), level)
+            lambda level: set_setting(
+                get_log_level_key(LogTarget.STREAM), level, internal=False
+            )
         )
 
         self.btn_open_log.clicked.connect(
