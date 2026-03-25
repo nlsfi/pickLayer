@@ -30,7 +30,6 @@ from qgis.core import (
     QgsWkbTypes,
 )
 from qgis.gui import QgsMapCanvas, QgsMapMouseEvent, QgsMapTool, QgsMapToolIdentify
-from qgis.PyQt.QtCore import QPoint
 from qgis.PyQt.QtGui import QCursor
 from qgis.utils import iface
 from qgis_plugin_tools.tools.i18n import tr
@@ -69,7 +68,7 @@ class SetActiveLayerTool(QgsMapToolIdentify):
     def canvasReleaseEvent(self, mouse_event: QgsMapMouseEvent) -> None:  # noqa: N802
         try:
             self.set_active_layer_using_closest_feature(
-                self.toMapCoordinates(QPoint(mouse_event.x(), mouse_event.y()))
+                self.toMapCoordinates(mouse_event.pos())
             )
         except Exception as e:
             MsgBar.exception(
