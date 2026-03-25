@@ -1,5 +1,7 @@
 # CHANGELOG
 
+## Unreleased
+
 ## [3.10.0] - 2026-03-25
 
 - Add qt6 and QGIS 4 support
