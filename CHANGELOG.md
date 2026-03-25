@@ -1,5 +1,7 @@
 # CHANGELOG
 
+## Unreleased
+
 ## [3.10.1] - 2026-03-25
 
 - Fix release pipeline
