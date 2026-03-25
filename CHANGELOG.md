@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## [3.10.0] - 2026-03-25
 
 - Add qt6 and QGIS 4 support
 
@@ -152,3 +152,4 @@
 [3.9.11]: https://github.com/nlsfi/pickLayer/releases/tag/v3.9.11
 [3.9.12]: https://github.com/nlsfi/pickLayer/releases/tag/v3.9.12
 [3.9.13]: https://github.com/nlsfi/pickLayer/releases/tag/v3.9.13
+[3.10.0]: https://github.com/nlsfi/pickLayer/releases/tag/v3.10.0
