@@ -21,7 +21,7 @@
 import logging
 
 from qgis.core import QgsFeature, QgsVectorLayer
-from qgis.gui import QgsMapCanvas, QgsMapToolIdentify
+from qgis.gui import QgsMapCanvas, QgsMapMouseEvent, QgsMapToolIdentify
 from qgis.PyQt.QtCore import pyqtSignal
 from qgis.PyQt.QtGui import QCursor
 from qgis_plugin_tools.tools.i18n import tr
@@ -46,14 +46,17 @@ class IdentifyGeometry(QgsMapToolIdentify):
         QgsMapToolIdentify.__init__(self, canvas)
         self.setCursor(QCursor())
 
-    def canvasReleaseEvent(self, mouse_event) -> None:  # noqa: ANN001, N802
+    def canvasReleaseEvent(self, mouse_event: "QgsMapMouseEvent") -> None:  # noqa: N802
         orig_search_radius = Settings.identify_tool_search_radius.get()
         try:
             search_radius = Settings.search_radius.get()
             LOGGER.debug(f"Setting search radius to {search_radius}")
             Settings.identify_tool_search_radius.set(search_radius)
             results = self.identify(
-                mouse_event.x(), mouse_event.y(), self.LayerSelection, self.layer_type
+                mouse_event.pos().x(),
+                mouse_event.pos().y(),
+                self.LayerSelection,
+                self.layer_type,
             )
         except Exception as e:
             MsgBar.exception(
