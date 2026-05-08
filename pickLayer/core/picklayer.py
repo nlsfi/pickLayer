@@ -233,9 +233,11 @@ class PickLayer:
                 )
                 self.snapping_options_action = context_menu.addAction(
                     QtGui.QIcon(resources_path("icons", "snapIcon.png")),
-                    tr("Enable snapping")
-                    if self.snap_control
-                    else tr("Disable snapping"),
+                    (
+                        tr("Enable snapping")
+                        if self.snap_control
+                        else tr("Disable snapping")
+                    ),
                 )
                 self.snapping_options_action.triggered.connect(
                     self.snapping_options_func
