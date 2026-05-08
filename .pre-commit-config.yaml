@@ -1,49 +1,49 @@
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
-default_stages: [commit]
+default_stages: [pre-commit]
 default_install_hook_types: [pre-commit, commit-msg, pre-push]
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v3.4.0
+    rev: 3e8a8703264a2f4a69428a0aa4dcb512790b2c8c  # frozen: v6.0.0
     hooks:
       - id: trailing-whitespace
-        stages: ["commit"]
+        stages: ["pre-commit"]
       - id: end-of-file-fixer
-        stages: ["commit"]
+        stages: ["pre-commit"]
       - id: mixed-line-ending
         name: LF for all files
         args: [--fix=lf]
       - id: check-added-large-files
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.7
+    rev: e05c5c0818279e5ac248ac9e954431ba58865e61  # frozen: v0.15.7
     hooks:
       - id: ruff
         args: [ --fix, --exit-non-zero-on-fix, --extend-fixable=F401 ]
   - repo: https://github.com/psf/black
-    rev: 23.7.0
+    rev: c6755bb741b6481d6b3d3bb563c83fa060db96c9  # frozen: 26.3.1
     hooks:
       - id: black
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.19.1
+    rev: a9d9ff50af0432cbb950856daf08082fa51cbfa2  # frozen: v2.0.0
     hooks:
       - id: mypy
   - repo: https://github.com/PyCQA/flake8
-    rev: 7.3.0
+    rev: d93590f5be797aabb60e3b09f2f52dddb02f349f  # frozen: 7.3.0
     hooks:
       - id: flake8
         additional_dependencies:
           - flake8-pyproject==1.2.3
           - flake8-qgis==2.0.1
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.48.0
+    rev: e72a3ca1632f0b11a07d171449fe447a7ff6795e  # frozen: v0.48.0
     hooks:
       - id: markdownlint
         args: ["--fix"]
 
   # commit-msg hooks
   - repo: https://github.com/jorisroovers/gitlint
-    rev: v0.18.0
+    rev: acc9d9de6369b76d22cb4167029d2035e8730b98  # frozen: v0.19.1
     hooks:
       - id: gitlint
         stages: [commit-msg]
