@@ -20,6 +20,7 @@ import logging
 from typing import Optional
 
 from qgis.core import (
+    Qgis,
     QgsFeature,
     QgsGeometry,
     QgsMapLayer,
@@ -84,11 +85,19 @@ class SetActiveLayerTool(QgsMapToolIdentify):
         if search_radius is None:
             search_radius = self._get_default_search_radius()
 
-        self.setCanvasPropertiesOverrides(search_radius)
+        if Qgis.QGIS_VERSION_INT >= 34200:  # noqa: PLR2004
+            overrides = QgsMapToolIdentify.IdentifyProperties()
+            overrides.searchRadiusMapUnits = search_radius
+            self.setPropertiesOverrides(overrides)
+        else:
+            self.setCanvasPropertiesOverrides(search_radius)
 
         results = self._get_identify_results(location, search_layer_ids)
 
-        self.restoreCanvasPropertiesOverrides()
+        if Qgis.QGIS_VERSION_INT >= 34200:  # noqa: PLR2004
+            self.restorePropertiesOverrides()
+        else:
+            self.restoreCanvasPropertiesOverrides()
 
         layer_to_activate = self._choose_layer_from_identify_results(results, location)
 
