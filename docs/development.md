@@ -7,15 +7,35 @@ Qt with Qt Editor and Qt Linquist installed by following this
 
 ## Setting up development environment
 
-* Create a venv that is aware of system QGIS libraries: `python -m venv .venv --system-site-packages`
-  * On Windows OSGeo4W v2 installs use `<osgeo>/apps/PythonXX/python.exe`
-  with [necessary patches](./osgeo-python-patch.md)
-* Activate the venv
-* Install the dependencies for runtime and development (testing & linting):
-  `pip install -r requirements.txt -r requirements-dev.txt --no-deps --only-binary=:all:`
+* Install [uv](https://docs.astral.sh/uv/) if not already available:
+  `pip install uv`
+* Create a venv that is aware of system QGIS libraries:
+  `uv venv .venv --system-site-packages`
+  * On Windows OSGeo4W v2 installs use `<osgeo>/apps/PythonXX/python.exe` as the base
+  with [necessary patches](./osgeo-python-patch.md): pass it via `uv venv --python <path>`
+* Install all dependencies (runtime + dev groups):
+  `uv sync`
 * Install pre-commit: `pre-commit install`
 * Create a `.env` from `.env.example`, and configure at least the QGIS executable path
 * Launch development QGIS: `qpdt s`
+
+### Managing dependencies
+
+All dependencies are declared in `pyproject.toml`. Use `uv` to update them — do not edit `uv.lock` by hand.
+
+```bash
+# Add a runtime dependency
+uv add <package>
+
+# Add a dev/test/lint dependency to the appropriate dependency group
+uv add --group <group> <package>
+
+# Update all dependencies
+uv lock --upgrade && uv sync
+
+# Update a single package
+uv lock --upgrade-package <package> && uv sync
+```
 
 ## Commit message style
 
@@ -27,23 +47,22 @@ If you create or edit source files make sure that:
 
 * they contain absolute imports:
 
-    ```python
+```python
 
-    from pickLayer.utils.exceptions import TestException # Good
+from pickLayer.utils.exceptions import TestException # Good
 
-    from ..utils.exceptions import TestException # Bad
+from ..utils.exceptions import TestException # Bad
 
 
-    ```
+```
 
 * you consider adding test files for the new functionality
 
 ## Testing
 
-Install python packages listed in [requirements-dev.txt](../requirements-dev.txt) to
-the virtual environment and run tests with:
+With the dev environment set up via `uv sync`, run tests with:
 
-```shell script
+```shell
 pytest
 ```
 
